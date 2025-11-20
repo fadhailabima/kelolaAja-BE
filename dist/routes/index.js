@@ -1,0 +1,32 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_routes_1 = __importDefault(require("./auth.routes"));
+const user_routes_1 = __importDefault(require("./user.routes"));
+const pricing_routes_1 = __importDefault(require("./pricing.routes"));
+const feature_routes_1 = __importDefault(require("./feature.routes"));
+const partner_routes_1 = __importDefault(require("./partner.routes"));
+const testimonial_routes_1 = require("./testimonial.routes");
+const faq_routes_1 = require("./faq.routes");
+const benefit_stat_routes_1 = __importDefault(require("./benefit-stat.routes"));
+const process_step_routes_1 = __importDefault(require("./process-step.routes"));
+const erp_benefit_routes_1 = __importDefault(require("./erp-benefit.routes"));
+const router = (0, express_1.Router)();
+router.use("/auth", auth_routes_1.default);
+router.use("/users", user_routes_1.default);
+router.use("/pricing-plans", pricing_routes_1.default);
+router.use("/features", feature_routes_1.default);
+router.use("/partners", partner_routes_1.default);
+router.use("/testimonials", testimonial_routes_1.testimonialRoutes);
+router.use("/faqs", faq_routes_1.faqRoutes);
+router.use("/benefit-stats", benefit_stat_routes_1.default);
+router.use("/process-steps", process_step_routes_1.default);
+router.use("/erp-benefits", erp_benefit_routes_1.default);
+router.use("/admin/testimonials", testimonial_routes_1.testimonialAdminRoutes);
+router.use("/admin/faq-categories", faq_routes_1.faqCategoryAdminRoutes);
+router.use("/admin/faqs", faq_routes_1.faqAdminRoutes);
+exports.default = router;
+//# sourceMappingURL=index.js.map

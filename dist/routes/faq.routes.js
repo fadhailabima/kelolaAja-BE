@@ -1,0 +1,27 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.faqAdminRoutes = exports.faqCategoryAdminRoutes = exports.faqRoutes = void 0;
+const express_1 = require("express");
+const faq_category_controller_1 = require("../controllers/faq-category.controller");
+const faq_controller_1 = require("../controllers/faq.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const locale_middleware_1 = require("../middlewares/locale.middleware");
+const router = (0, express_1.Router)();
+router.get('/categories', locale_middleware_1.detectLocale, faq_category_controller_1.FAQCategoryController.listPublicCategories);
+router.get('/', locale_middleware_1.detectLocale, faq_controller_1.FAQController.listPublicFAQs);
+router.get('/by-category', locale_middleware_1.detectLocale, faq_controller_1.FAQController.listPublicFAQsByCategory);
+router.get('/:id', locale_middleware_1.detectLocale, faq_controller_1.FAQController.getPublicFAQ);
+exports.faqRoutes = router;
+const categoryAdminRouter = (0, express_1.Router)();
+categoryAdminRouter.get('/', auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)('Admin', 'Editor'), faq_category_controller_1.FAQCategoryController.listAllCategories);
+categoryAdminRouter.post('/', auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)('Admin'), faq_category_controller_1.FAQCategoryController.createCategory);
+categoryAdminRouter.put('/:id', auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)('Admin'), faq_category_controller_1.FAQCategoryController.updateCategory);
+categoryAdminRouter.delete('/:id', auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)('Admin'), faq_category_controller_1.FAQCategoryController.deleteCategory);
+exports.faqCategoryAdminRoutes = categoryAdminRouter;
+const faqAdminRouter = (0, express_1.Router)();
+faqAdminRouter.get('/', auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)('Admin', 'Editor'), faq_controller_1.FAQController.listAllFAQs);
+faqAdminRouter.post('/', auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)('Admin'), faq_controller_1.FAQController.createFAQ);
+faqAdminRouter.put('/:id', auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)('Admin'), faq_controller_1.FAQController.updateFAQ);
+faqAdminRouter.delete('/:id', auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)('Admin'), faq_controller_1.FAQController.deleteFAQ);
+exports.faqAdminRoutes = faqAdminRouter;
+//# sourceMappingURL=faq.routes.js.map

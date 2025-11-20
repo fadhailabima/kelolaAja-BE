@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const pricing_controller_1 = require("../controllers/pricing.controller");
+const plan_feature_controller_1 = require("../controllers/plan-feature.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const locale_middleware_1 = require("../middlewares/locale.middleware");
+const router = (0, express_1.Router)();
+router.get("/", locale_middleware_1.detectLocale, pricing_controller_1.PricingController.listPublicPlans);
+router.get("/:id", locale_middleware_1.detectLocale, pricing_controller_1.PricingController.getPublicPlan);
+router.get("/:planId/features", locale_middleware_1.detectLocale, plan_feature_controller_1.PlanFeatureController.getPlanFeatures);
+router.get("/admin/all", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), pricing_controller_1.PricingController.listAllPlans);
+router.post("/admin", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), pricing_controller_1.PricingController.createPlan);
+router.put("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), pricing_controller_1.PricingController.updatePlan);
+router.delete("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), pricing_controller_1.PricingController.deletePlan);
+router.post("/admin/:planId/features", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), plan_feature_controller_1.PlanFeatureController.addFeatureToPlan);
+router.post("/admin/:planId/features/bulk", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), plan_feature_controller_1.PlanFeatureController.bulkAddFeatures);
+router.put("/admin/:planId/features/:featureId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), plan_feature_controller_1.PlanFeatureController.updatePlanFeature);
+router.delete("/admin/:planId/features/:featureId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), plan_feature_controller_1.PlanFeatureController.removeFeatureFromPlan);
+exports.default = router;
+//# sourceMappingURL=pricing.routes.js.map
