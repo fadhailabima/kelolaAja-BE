@@ -1,0 +1,173 @@
+{
+  "info": {
+    "name": "KelolaAja Landing APIs",
+    "description": "Koleksi pengujian cepat untuk modul landing (Industry, Feature Page, Analytics). Gunakan variable baseUrl & adminToken sebelum menjalankan.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Analytics - Track Visitor",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ipAddress\": \"127.0.0.1\",\n  \"userAgent\": \"Postman\",\n  \"referrer\": \"https://kelolaaja.com\",\n  \"countryCode\": \"ID\",\n  \"city\": \"Jakarta\",\n  \"deviceType\": \"desktop\",\n  \"browser\": \"Chrome\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/analytics/visitors",
+          "host": ["{{baseUrl}}"],
+          "path": ["analytics", "visitors"]
+        }
+      }
+    },
+    {
+      "name": "Analytics - Track Page View",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"visitorId\": 1,\n  \"pagePath\": \"/\",\n  \"pageTitle\": \"Homepage\",\n  \"durationSeconds\": 45,\n  \"scrollDepth\": 80,\n  \"events\": [\n    { \"eventType\": \"cta_click\", \"eventTarget\": \"demo_button\" }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/analytics/page-views",
+          "host": ["{{baseUrl}}"],
+          "path": ["analytics", "page-views"]
+        }
+      }
+    },
+    {
+      "name": "Analytics - Overview",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/admin/overview?rangeDays=7",
+          "host": ["{{baseUrl}}"],
+          "path": ["analytics", "admin", "overview"],
+          "query": [
+            { "key": "rangeDays", "value": "7" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Analytics - Visitors",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/admin/visitors?page=1&limit=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["analytics", "admin", "visitors"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "limit", "value": "20" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Analytics - Page Views",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/admin/page-views?page=1&limit=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["analytics", "admin", "page-views"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "limit", "value": "20" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Industries - List",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/industries?locale=id",
+          "host": ["{{baseUrl}}"],
+          "path": ["industries"],
+          "query": [
+            { "key": "locale", "value": "id" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Industries - Detail",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/industries/industri-manufaktur?locale=id",
+          "host": ["{{baseUrl}}"],
+          "path": ["industries", "industri-manufaktur"],
+          "query": [
+            { "key": "locale", "value": "id" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Feature Pages - List",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/feature-pages?locale=id",
+          "host": ["{{baseUrl}}"],
+          "path": ["feature-pages"],
+          "query": [
+            { "key": "locale", "value": "id" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Feature Pages - Detail",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/feature-pages/feature-user-management?locale=id",
+          "host": ["{{baseUrl}}"],
+          "path": ["feature-pages", "feature-user-management"],
+          "query": [
+            { "key": "locale", "value": "id" }
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api" },
+    { "key": "adminToken", "value": "" }
+  ]
+}

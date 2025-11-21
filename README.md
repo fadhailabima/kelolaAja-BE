@@ -112,6 +112,40 @@ Setelah menjalankan seeder, Anda akan mendapat 3 akun:
 | editor@kelolaaja.com | admin123 | Editor |
 | viewer@kelolaaja.com | admin123 | Viewer |
 
+## 🌐 Landing Page Modules
+
+Terdapat tiga ekosistem baru untuk kebutuhan landing page admin panel:
+
+- **Industry Ecosystem** – CRUD lengkap `Industry`, `IndustryProblem`, `IndustrySolution`, dan `IndustryMedia`. Endpoint publik tersedia di `/api/industries` dan `/api/industries/:slug` (dengan dukungan locale), sedangkan endpoint admin berada di `/api/industries/admin/*`.
+- **Feature Page Ecosystem** – Mengelola detail halaman fitur (hero/about/CTA) dan Item pendukung (`FeaturePageItem`). Endpoint publik: `/api/feature-pages` dan `/api/feature-pages/:slug`.
+- **Visitor & Analytics** – Tracking visitor (`/api/analytics/visitors`), page view (`/api/analytics/page-views`), serta dashboard admin untuk overview, daftar visitor, dan page view (`/api/analytics/admin/*`).
+
+## 🌱 Development Seed Data
+
+Tersedia seeder tambahan untuk mengisi contoh data Industry dan Feature Page saat development:
+
+```bash
+NODE_ENV=development npx ts-node prisma/seed-industries.ts
+NODE_ENV=development npx ts-node prisma/seed-feature-pages.ts
+```
+
+Kedua seed ini otomatis berhenti jika `NODE_ENV=production`, sehingga aman untuk deployment. Jalankan `npm run seed:all` bila ingin menggabungkan dengan seed utama lainnya.
+
+## 🧪 Manual Testing via Postman
+
+Folder `tests/postman/` menyertakan koleksi dan environment siap pakai:
+
+- `kelolaaja-landing.postman_collection.json`
+- `kelolaaja-landing.postman_environment.json`
+
+Langkah cepat:
+
+1. Import kedua file tersebut ke Postman.
+2. Isi variable environment `baseUrl`, `adminToken` (hasil login), dan `visitorId` bila dibutuhkan.
+3. Jalankan request sesuai README di folder `tests/postman` (mulai dari tracking visitor → page view → endpoint admin/publik).
+
+Anda juga bisa mengeksekusi koleksi melalui CLI menggunakan `newman` sesuai contoh pada dokumentasi tersebut.
+
 ## 📚 API Documentation
 
 ### Base URL
@@ -348,3 +382,4 @@ ISC
 ## 👨‍💻 Developer
 
 Bima Dharmawan
+Derva Anargya Ghaly
