@@ -10,7 +10,7 @@ class FeatureController {
             const locale = req.locale || client_1.Locale.id;
             const category = req.query.category;
             const features = await feature_service_1.FeatureService.getPublicFeatures(locale, category);
-            response_1.ResponseUtil.success(res, 'Features retrieved successfully', features);
+            response_1.ResponseUtil.success(res, "Features retrieved successfully", features);
         }
         catch (error) {
             next(error);
@@ -21,7 +21,7 @@ class FeatureController {
             const featureId = parseInt(req.params.id);
             const locale = req.locale || client_1.Locale.id;
             const feature = await feature_service_1.FeatureService.getPublicFeatureById(featureId, locale);
-            response_1.ResponseUtil.success(res, 'Feature retrieved successfully', feature);
+            response_1.ResponseUtil.success(res, "Feature retrieved successfully", feature);
         }
         catch (error) {
             next(error);
@@ -30,7 +30,7 @@ class FeatureController {
     static async getCategories(_req, res, next) {
         try {
             const categories = await feature_service_1.FeatureService.getCategories();
-            response_1.ResponseUtil.success(res, 'Categories retrieved successfully', categories);
+            response_1.ResponseUtil.success(res, "Categories retrieved successfully", categories);
         }
         catch (error) {
             next(error);
@@ -44,7 +44,7 @@ class FeatureController {
             const category = req.query.category;
             const isActive = req.query.isActive;
             const result = await feature_service_1.FeatureService.getAllFeatures(page, limit, search, category, isActive);
-            response_1.ResponseUtil.success(res, 'Features retrieved successfully', result.data, 200, result.pagination);
+            response_1.ResponseUtil.success(res, "Features retrieved successfully", result.data, 200, result.pagination);
         }
         catch (error) {
             next(error);
@@ -53,7 +53,7 @@ class FeatureController {
     static async createFeature(req, res, next) {
         try {
             const result = await feature_service_1.FeatureService.createFeature(req.body, req.user.userId);
-            response_1.ResponseUtil.created(res, 'Feature created successfully', result);
+            response_1.ResponseUtil.created(res, "Feature created successfully", result);
         }
         catch (error) {
             next(error);
@@ -63,7 +63,7 @@ class FeatureController {
         try {
             const featureId = parseInt(req.params.id);
             const result = await feature_service_1.FeatureService.updateFeature(featureId, req.body, req.user.userId);
-            response_1.ResponseUtil.success(res, 'Feature updated successfully', result);
+            response_1.ResponseUtil.success(res, "Feature updated successfully", result);
         }
         catch (error) {
             next(error);
@@ -73,7 +73,7 @@ class FeatureController {
         try {
             const featureId = parseInt(req.params.id);
             await feature_service_1.FeatureService.deleteFeature(featureId, req.user.userId);
-            response_1.ResponseUtil.success(res, 'Feature deleted successfully');
+            response_1.ResponseUtil.success(res, "Feature deleted successfully");
         }
         catch (error) {
             next(error);

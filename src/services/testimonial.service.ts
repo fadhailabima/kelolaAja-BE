@@ -1,7 +1,7 @@
-import { prisma } from '../utils/prisma';
-import { ValidationError, NotFoundError } from '../utils/errors';
-import { Locale } from '@prisma/client';
-import { mergeAllTranslations } from '../utils/translation';
+import { prisma } from "../utils/prisma";
+import { ValidationError, NotFoundError } from "../utils/errors";
+import { Locale } from "@prisma/client";
+import { mergeAllTranslations } from "../utils/translation";
 
 export class TestimonialService {
   /**
@@ -10,7 +10,7 @@ export class TestimonialService {
   static async getPublicTestimonials(locale: Locale, isFeatured?: boolean) {
     const where: any = {
       isActive: true,
-      deletedAt: null,
+      deletedAt: null
     };
 
     if (isFeatured !== undefined) {
@@ -21,17 +21,17 @@ export class TestimonialService {
       where,
       include: {
         translations: {
-          where: { locale },
+          where: { locale }
         },
         photoFile: {
           select: {
             fileId: true,
             filePath: true,
-            altText: true,
-          },
-        },
+            altText: true
+          }
+        }
       },
-      orderBy: { displayOrder: 'asc' },
+      orderBy: { displayOrder: "asc" }
     });
 
     return testimonials.map((testimonial: any) => {
@@ -44,14 +44,14 @@ export class TestimonialService {
         rating: testimonial.rating,
         isFeatured: testimonial.isFeatured,
         displayOrder: testimonial.displayOrder,
-        quote: translation.quote || '',
+        quote: translation.quote || "",
         photo: testimonial.photoFile
           ? {
               fileId: testimonial.photoFile.fileId,
               filePath: testimonial.photoFile.filePath,
-              altText: testimonial.photoFile.altText,
+              altText: testimonial.photoFile.altText
             }
-          : null,
+          : null
       };
     });
   }
@@ -64,24 +64,24 @@ export class TestimonialService {
       where: {
         testimonialId,
         isActive: true,
-        deletedAt: null,
+        deletedAt: null
       },
       include: {
         translations: {
-          where: { locale },
+          where: { locale }
         },
         photoFile: {
           select: {
             fileId: true,
             filePath: true,
-            altText: true,
-          },
-        },
-      },
+            altText: true
+          }
+        }
+      }
     });
 
     if (!testimonial) {
-      throw new NotFoundError('Testimonial not found');
+      throw new NotFoundError("Testimonial not found");
     }
 
     const translation = testimonial.translations[0] || {};
@@ -93,44 +93,38 @@ export class TestimonialService {
       rating: testimonial.rating,
       isFeatured: testimonial.isFeatured,
       displayOrder: testimonial.displayOrder,
-      quote: translation.quote || '',
+      quote: translation.quote || "",
       photo: testimonial.photoFile
         ? {
             fileId: testimonial.photoFile.fileId,
             filePath: testimonial.photoFile.filePath,
-            altText: testimonial.photoFile.altText,
+            altText: testimonial.photoFile.altText
           }
-        : null,
+        : null
     };
   }
 
   /**
    * Get all testimonials with all translations (Admin)
    */
-  static async getAllTestimonials(
-    page: number,
-    limit: number,
-    search?: string,
-    isFeatured?: string,
-    isActive?: string
-  ) {
+  static async getAllTestimonials(page: number, limit: number, search?: string, isFeatured?: string, isActive?: string) {
     const skip = (page - 1) * limit;
     const where: any = { deletedAt: null };
 
     if (search) {
       where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { company: { contains: search, mode: 'insensitive' } },
-        { translations: { some: { quote: { contains: search, mode: 'insensitive' } } } },
+        { name: { contains: search, mode: "insensitive" } },
+        { company: { contains: search, mode: "insensitive" } },
+        { translations: { some: { quote: { contains: search, mode: "insensitive" } } } }
       ];
     }
 
     if (isFeatured !== undefined) {
-      where.isFeatured = isFeatured === 'true';
+      where.isFeatured = isFeatured === "true";
     }
 
     if (isActive !== undefined) {
-      where.isActive = isActive === 'true';
+      where.isActive = isActive === "true";
     }
 
     const [total, testimonials]: any = await Promise.all([
@@ -139,34 +133,34 @@ export class TestimonialService {
         where,
         include: {
           translations: {
-            orderBy: { locale: 'asc' },
+            orderBy: { locale: "asc" }
           },
           photoFile: {
             select: {
               fileId: true,
               filePath: true,
-              altText: true,
-            },
+              altText: true
+            }
           },
           creator: {
             select: {
               userId: true,
               username: true,
-              email: true,
-            },
+              email: true
+            }
           },
           updater: {
             select: {
               userId: true,
               username: true,
-              email: true,
-            },
-          },
+              email: true
+            }
+          }
         },
-        orderBy: { displayOrder: 'asc' },
+        orderBy: { displayOrder: "asc" },
         skip,
-        take: limit,
-      }),
+        take: limit
+      })
     ]);
 
     const result = testimonials.map((testimonial: any) => ({
@@ -184,7 +178,7 @@ export class TestimonialService {
       photo: testimonial.photoFile,
       creator: testimonial.creator,
       updater: testimonial.updater,
-      translations: mergeAllTranslations(testimonial.translations),
+      translations: mergeAllTranslations(testimonial.translations)
     }));
 
     return {
@@ -193,8 +187,8 @@ export class TestimonialService {
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / limit),
-      },
+        totalPages: Math.ceil(total / limit)
+      }
     };
   }
 
@@ -202,32 +196,31 @@ export class TestimonialService {
    * Create new testimonial
    */
   static async createTestimonial(data: any, userId: number) {
-    const { name, title, company, photoFileId, rating, isFeatured, displayOrder, translations } =
-      data;
+    const { name, title, company, photoFileId, rating, isFeatured, displayOrder, translations } = data;
 
     // Validation
     if (!name || displayOrder === undefined) {
-      throw new ValidationError('name and displayOrder are required');
+      throw new ValidationError("name and displayOrder are required");
     }
 
     if (!translations || !translations.id) {
-      throw new ValidationError('Indonesian translation (id) is required');
+      throw new ValidationError("Indonesian translation (id) is required");
     }
 
     // Verify photo file exists if provided
     if (photoFileId) {
       const photoFile = await prisma.mediaFile.findUnique({
-        where: { fileId: photoFileId },
+        where: { fileId: photoFileId }
       });
 
       if (!photoFile) {
-        throw new NotFoundError('Photo file not found');
+        throw new NotFoundError("Photo file not found");
       }
     }
 
     // Validate rating
     if (rating !== undefined && (rating < 1 || rating > 5)) {
-      throw new ValidationError('Rating must be between 1 and 5');
+      throw new ValidationError("Rating must be between 1 and 5");
     }
 
     // Create testimonial
@@ -247,18 +240,18 @@ export class TestimonialService {
           create: [
             {
               locale: Locale.id,
-              quote: translations.id.quote,
+              quote: translations.id.quote
             },
             ...(translations.en
               ? [
                   {
                     locale: Locale.en,
-                    quote: translations.en.quote,
-                  },
+                    quote: translations.en.quote
+                  }
                 ]
-              : []),
-          ],
-        },
+              : [])
+          ]
+        }
       },
       include: {
         translations: true,
@@ -266,22 +259,22 @@ export class TestimonialService {
           select: {
             fileId: true,
             filePath: true,
-            altText: true,
-          },
+            altText: true
+          }
         },
         creator: {
           select: {
             userId: true,
             username: true,
-            email: true,
-          },
-        },
-      },
+            email: true
+          }
+        }
+      }
     });
 
     return {
       ...testimonial,
-      translations: mergeAllTranslations(testimonial.translations),
+      translations: mergeAllTranslations(testimonial.translations)
     };
   }
 
@@ -289,37 +282,36 @@ export class TestimonialService {
    * Update testimonial
    */
   static async updateTestimonial(testimonialId: number, data: any, userId: number) {
-    const { name, title, company, photoFileId, rating, isFeatured, displayOrder, isActive, translations } =
-      data;
+    const { name, title, company, photoFileId, rating, isFeatured, displayOrder, isActive, translations } = data;
 
     // Check exists
     const existingTestimonial = await prisma.testimonial.findUnique({
-      where: { testimonialId },
+      where: { testimonialId }
     });
 
     if (!existingTestimonial || existingTestimonial.deletedAt) {
-      throw new NotFoundError('Testimonial not found');
+      throw new NotFoundError("Testimonial not found");
     }
 
     // Verify photo file exists if provided
     if (photoFileId) {
       const photoFile = await prisma.mediaFile.findUnique({
-        where: { fileId: photoFileId },
+        where: { fileId: photoFileId }
       });
 
       if (!photoFile) {
-        throw new NotFoundError('Photo file not found');
+        throw new NotFoundError("Photo file not found");
       }
     }
 
     // Validate rating
     if (rating !== undefined && rating !== null && (rating < 1 || rating > 5)) {
-      throw new ValidationError('Rating must be between 1 and 5');
+      throw new ValidationError("Rating must be between 1 and 5");
     }
 
     // Update testimonial
     const updateData: any = {
-      updatedBy: userId,
+      updatedBy: userId
     };
 
     if (name) updateData.name = name;
@@ -333,7 +325,7 @@ export class TestimonialService {
 
     await prisma.testimonial.update({
       where: { testimonialId },
-      data: updateData,
+      data: updateData
     });
 
     // Update translations if provided
@@ -344,17 +336,17 @@ export class TestimonialService {
             where: {
               testimonialId_locale: {
                 testimonialId,
-                locale,
-              },
+                locale
+              }
             },
             create: {
               testimonialId,
               locale,
-              quote: translations[locale].quote,
+              quote: translations[locale].quote
             },
             update: {
-              quote: translations[locale].quote,
-            },
+              quote: translations[locale].quote
+            }
           });
         }
       }
@@ -369,22 +361,22 @@ export class TestimonialService {
           select: {
             fileId: true,
             filePath: true,
-            altText: true,
-          },
+            altText: true
+          }
         },
         updater: {
           select: {
             userId: true,
             username: true,
-            email: true,
-          },
-        },
-      },
+            email: true
+          }
+        }
+      }
     });
 
     return {
       ...updatedTestimonial,
-      translations: mergeAllTranslations(updatedTestimonial.translations),
+      translations: mergeAllTranslations(updatedTestimonial.translations)
     };
   }
 
@@ -393,11 +385,11 @@ export class TestimonialService {
    */
   static async deleteTestimonial(testimonialId: number, userId: number) {
     const testimonial = await prisma.testimonial.findUnique({
-      where: { testimonialId },
+      where: { testimonialId }
     });
 
     if (!testimonial || testimonial.deletedAt) {
-      throw new NotFoundError('Testimonial not found');
+      throw new NotFoundError("Testimonial not found");
     }
 
     await prisma.testimonial.update({
@@ -405,8 +397,8 @@ export class TestimonialService {
       data: {
         deletedAt: new Date(),
         isActive: false,
-        updatedBy: userId,
-      },
+        updatedBy: userId
+      }
     });
   }
 }

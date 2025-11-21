@@ -296,7 +296,7 @@ model DetailFeatureSection {
 model DetailFeatureTranslation {
   translationId Int      @id @default(autoincrement()) @map("translation_id")
   sectionId     Int      @map("section_id")
-  locale        String   @db.VarChar(5)
+  locale        Locale   @default(id)
   title         String?  @db.VarChar(255)
   description   String?  @db.Text
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
@@ -338,7 +338,7 @@ model ContentSection {
 model ContentTranslation {
   translationId Int      @id @default(autoincrement()) @map("translation_id")
   sectionId     Int      @map("section_id")
-  locale        String   @db.VarChar(5)
+  locale        Locale   @default(id)
   title         String?  @db.VarChar(255)
   subtitle      String?  @db.VarChar(255)
   description   String?  @db.Text
@@ -716,7 +716,7 @@ model AboutCard {
 model AboutCardTranslation {
   translationId Int      @id @default(autoincrement()) @map("translation_id")
   cardId        Int      @map("card_id")
-  locale        String   @db.VarChar(5)
+  locale        Locale   @default(id)
   title         String?  @db.VarChar(255)
   description   String?  @db.Text
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
@@ -757,7 +757,7 @@ model AdvancedFeature {
 model AdvancedFeatureTranslation {
   translationId Int      @id @default(autoincrement()) @map("translation_id")
   featureId     Int      @map("feature_id")
-  locale        String   @db.VarChar(5)
+  locale        Locale   @default(id)
   title         String?  @db.VarChar(255)
   description   String?  @db.Text
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
@@ -869,7 +869,7 @@ model KelolaAjaFeature {
 model KelolaAjaFeatureTranslation {
   translationId Int      @id @default(autoincrement()) @map("translation_id")
   featureId     Int      @map("feature_id")
-  locale        String   @db.VarChar(5)
+  locale        Locale   @default(id)
   title         String?  @db.VarChar(255)
   description   String?  @db.Text
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)

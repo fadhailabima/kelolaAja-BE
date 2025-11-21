@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 export declare class BenefitStatController {
     static listPublicStats(req: Request, res: Response, next: NextFunction): Promise<void>;
     static listAllStats(req: Request, res: Response, next: NextFunction): Promise<void>;

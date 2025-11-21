@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 export declare class FeatureController {
     static listPublicFeatures(req: Request, res: Response, next: NextFunction): Promise<void>;
     static getPublicFeature(req: Request, res: Response, next: NextFunction): Promise<void>;

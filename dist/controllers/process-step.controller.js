@@ -9,7 +9,7 @@ class ProcessStepController {
         try {
             const locale = req.locale || client_1.Locale.id;
             const steps = await process_step_service_1.ProcessStepService.getPublicSteps(locale);
-            response_1.ResponseUtil.success(res, 'Process steps retrieved successfully', steps);
+            response_1.ResponseUtil.success(res, "Process steps retrieved successfully", steps);
         }
         catch (error) {
             next(error);
@@ -22,7 +22,7 @@ class ProcessStepController {
             const search = req.query.search;
             const isActive = req.query.is_active;
             const result = await process_step_service_1.ProcessStepService.getAllSteps(page, limit, search, isActive);
-            response_1.ResponseUtil.success(res, 'Steps retrieved successfully', result.data, 200, result.pagination);
+            response_1.ResponseUtil.success(res, "Steps retrieved successfully", result.data, 200, result.pagination);
         }
         catch (error) {
             next(error);
@@ -32,7 +32,7 @@ class ProcessStepController {
         try {
             const userId = req.user.userId;
             const step = await process_step_service_1.ProcessStepService.createStep(req.body, userId);
-            response_1.ResponseUtil.success(res, 'Step created successfully', step, 201);
+            response_1.ResponseUtil.success(res, "Step created successfully", step, 201);
         }
         catch (error) {
             next(error);
@@ -43,7 +43,7 @@ class ProcessStepController {
             const stepId = parseInt(req.params.id);
             const userId = req.user.userId;
             const step = await process_step_service_1.ProcessStepService.updateStep(stepId, req.body, userId);
-            response_1.ResponseUtil.success(res, 'Step updated successfully', step);
+            response_1.ResponseUtil.success(res, "Step updated successfully", step);
         }
         catch (error) {
             next(error);
@@ -54,7 +54,7 @@ class ProcessStepController {
             const stepId = parseInt(req.params.id);
             const userId = req.user.userId;
             await process_step_service_1.ProcessStepService.deleteStep(stepId, userId);
-            response_1.ResponseUtil.success(res, 'Step deleted successfully');
+            response_1.ResponseUtil.success(res, "Step deleted successfully");
         }
         catch (error) {
             next(error);

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 export declare class PricingController {
     static listPublicPlans(req: Request, res: Response, next: NextFunction): Promise<void>;
     static getPublicPlan(req: Request, res: Response, next: NextFunction): Promise<void>;

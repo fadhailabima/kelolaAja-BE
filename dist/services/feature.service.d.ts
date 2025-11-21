@@ -1,4 +1,4 @@
-import { Locale } from '@prisma/client';
+import { Locale } from "@prisma/client";
 export declare class FeatureService {
     static getPublicFeatures(locale: Locale, category?: string): Promise<any>;
     static getPublicFeatureById(featureId: number, locale: Locale): Promise<{

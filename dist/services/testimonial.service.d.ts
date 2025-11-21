@@ -1,4 +1,4 @@
-import { Locale } from '@prisma/client';
+import { Locale } from "@prisma/client";
 export declare class TestimonialService {
     static getPublicTestimonials(locale: Locale, isFeatured?: boolean): Promise<any>;
     static getPublicTestimonialById(testimonialId: number, locale: Locale): Promise<{

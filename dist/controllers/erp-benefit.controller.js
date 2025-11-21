@@ -9,7 +9,7 @@ class ERPBenefitController {
         try {
             const locale = req.locale || client_1.Locale.id;
             const benefits = await erp_benefit_service_1.ERPBenefitService.getPublicBenefits(locale);
-            response_1.ResponseUtil.success(res, 'ERP benefits retrieved successfully', benefits);
+            response_1.ResponseUtil.success(res, "ERP benefits retrieved successfully", benefits);
         }
         catch (error) {
             next(error);
@@ -22,7 +22,7 @@ class ERPBenefitController {
             const search = req.query.search;
             const isActive = req.query.is_active;
             const result = await erp_benefit_service_1.ERPBenefitService.getAllBenefits(page, limit, search, isActive);
-            response_1.ResponseUtil.success(res, 'Benefits retrieved successfully', result.data, 200, result.pagination);
+            response_1.ResponseUtil.success(res, "Benefits retrieved successfully", result.data, 200, result.pagination);
         }
         catch (error) {
             next(error);
@@ -32,7 +32,7 @@ class ERPBenefitController {
         try {
             const userId = req.user.userId;
             const benefit = await erp_benefit_service_1.ERPBenefitService.createBenefit(req.body, userId);
-            response_1.ResponseUtil.success(res, 'Benefit created successfully', benefit, 201);
+            response_1.ResponseUtil.success(res, "Benefit created successfully", benefit, 201);
         }
         catch (error) {
             next(error);
@@ -43,7 +43,7 @@ class ERPBenefitController {
             const benefitId = parseInt(req.params.id);
             const userId = req.user.userId;
             const benefit = await erp_benefit_service_1.ERPBenefitService.updateBenefit(benefitId, req.body, userId);
-            response_1.ResponseUtil.success(res, 'Benefit updated successfully', benefit);
+            response_1.ResponseUtil.success(res, "Benefit updated successfully", benefit);
         }
         catch (error) {
             next(error);
@@ -54,7 +54,7 @@ class ERPBenefitController {
             const benefitId = parseInt(req.params.id);
             const userId = req.user.userId;
             await erp_benefit_service_1.ERPBenefitService.deleteBenefit(benefitId, userId);
-            response_1.ResponseUtil.success(res, 'Benefit deleted successfully');
+            response_1.ResponseUtil.success(res, "Benefit deleted successfully");
         }
         catch (error) {
             next(error);

@@ -1,4 +1,4 @@
-import { Locale } from '@prisma/client';
+import { Locale } from "@prisma/client";
 
 /**
  * Extend Express Request interface to include custom properties
@@ -13,7 +13,7 @@ declare global {
         userId: number;
         username: string;
         email: string;
-        role: 'Admin' | 'Editor' | 'Viewer';
+        role: "Admin" | "Editor" | "Viewer";
       };
 
       /**

@@ -9,7 +9,7 @@ class BenefitStatController {
         try {
             const locale = req.locale || client_1.Locale.id;
             const stats = await benefit_stat_service_1.BenefitStatService.getPublicStats(locale);
-            response_1.ResponseUtil.success(res, 'Benefit stats retrieved successfully', stats);
+            response_1.ResponseUtil.success(res, "Benefit stats retrieved successfully", stats);
         }
         catch (error) {
             next(error);
@@ -22,7 +22,7 @@ class BenefitStatController {
             const search = req.query.search;
             const isActive = req.query.is_active;
             const result = await benefit_stat_service_1.BenefitStatService.getAllStats(page, limit, search, isActive);
-            response_1.ResponseUtil.success(res, 'Stats retrieved successfully', result.data, 200, result.pagination);
+            response_1.ResponseUtil.success(res, "Stats retrieved successfully", result.data, 200, result.pagination);
         }
         catch (error) {
             next(error);
@@ -32,7 +32,7 @@ class BenefitStatController {
         try {
             const userId = req.user.userId;
             const stat = await benefit_stat_service_1.BenefitStatService.createStat(req.body, userId);
-            response_1.ResponseUtil.success(res, 'Stat created successfully', stat, 201);
+            response_1.ResponseUtil.success(res, "Stat created successfully", stat, 201);
         }
         catch (error) {
             next(error);
@@ -43,7 +43,7 @@ class BenefitStatController {
             const statId = parseInt(req.params.id);
             const userId = req.user.userId;
             const stat = await benefit_stat_service_1.BenefitStatService.updateStat(statId, req.body, userId);
-            response_1.ResponseUtil.success(res, 'Stat updated successfully', stat);
+            response_1.ResponseUtil.success(res, "Stat updated successfully", stat);
         }
         catch (error) {
             next(error);
@@ -54,7 +54,7 @@ class BenefitStatController {
             const statId = parseInt(req.params.id);
             const userId = req.user.userId;
             await benefit_stat_service_1.BenefitStatService.deleteStat(statId, userId);
-            response_1.ResponseUtil.success(res, 'Stat deleted successfully');
+            response_1.ResponseUtil.success(res, "Stat deleted successfully");
         }
         catch (error) {
             next(error);

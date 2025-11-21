@@ -9,7 +9,7 @@ class FeatureService {
     static async getPublicFeatures(locale, category) {
         const where = {
             isActive: true,
-            deletedAt: null,
+            deletedAt: null
         };
         if (category) {
             where.category = category;
@@ -18,10 +18,10 @@ class FeatureService {
             where,
             include: {
                 translations: {
-                    where: { locale },
-                },
+                    where: { locale }
+                }
             },
-            orderBy: [{ category: 'asc' }, { displayOrder: 'asc' }],
+            orderBy: [{ category: "asc" }, { displayOrder: "asc" }]
         });
         return features.map((feature) => {
             const translation = feature.translations[0] || {};
@@ -30,8 +30,8 @@ class FeatureService {
                 featureCode: feature.featureCode,
                 category: feature.category,
                 displayOrder: feature.displayOrder,
-                featureName: translation.featureName || '',
-                description: translation.description || '',
+                featureName: translation.featureName || "",
+                description: translation.description || ""
             };
         });
     }
@@ -40,16 +40,16 @@ class FeatureService {
             where: {
                 featureId,
                 isActive: true,
-                deletedAt: null,
+                deletedAt: null
             },
             include: {
                 translations: {
-                    where: { locale },
-                },
-            },
+                    where: { locale }
+                }
+            }
         });
         if (!feature) {
-            throw new errors_1.NotFoundError('Feature not found');
+            throw new errors_1.NotFoundError("Feature not found");
         }
         const translation = feature.translations[0] || {};
         return {
@@ -57,40 +57,40 @@ class FeatureService {
             featureCode: feature.featureCode,
             category: feature.category,
             displayOrder: feature.displayOrder,
-            featureName: translation.featureName || '',
-            description: translation.description || '',
+            featureName: translation.featureName || "",
+            description: translation.description || ""
         };
     }
     static async getCategories() {
         const features = await prisma_1.prisma.featureMaster.findMany({
             where: {
                 isActive: true,
-                deletedAt: null,
+                deletedAt: null
             },
             select: {
-                category: true,
+                category: true
             },
-            distinct: ['category'],
+            distinct: ["category"],
             orderBy: {
-                category: 'asc',
-            },
+                category: "asc"
+            }
         });
-        return features.map((f) => f.category);
+        return features.map(f => f.category);
     }
     static async getAllFeatures(page, limit, search, category, isActive) {
         const skip = (page - 1) * limit;
         const where = { deletedAt: null };
         if (search) {
             where.OR = [
-                { featureCode: { contains: search, mode: 'insensitive' } },
-                { translations: { some: { featureName: { contains: search, mode: 'insensitive' } } } },
+                { featureCode: { contains: search, mode: "insensitive" } },
+                { translations: { some: { featureName: { contains: search, mode: "insensitive" } } } }
             ];
         }
         if (category) {
             where.category = category;
         }
         if (isActive !== undefined) {
-            where.isActive = isActive === 'true';
+            where.isActive = isActive === "true";
         }
         const [total, features] = await Promise.all([
             prisma_1.prisma.featureMaster.count({ where }),
@@ -98,27 +98,27 @@ class FeatureService {
                 where,
                 include: {
                     translations: {
-                        orderBy: { locale: 'asc' },
+                        orderBy: { locale: "asc" }
                     },
                     creator: {
                         select: {
                             userId: true,
                             username: true,
-                            email: true,
-                        },
+                            email: true
+                        }
                     },
                     updater: {
                         select: {
                             userId: true,
                             username: true,
-                            email: true,
-                        },
-                    },
+                            email: true
+                        }
+                    }
                 },
-                orderBy: [{ category: 'asc' }, { displayOrder: 'asc' }],
+                orderBy: [{ category: "asc" }, { displayOrder: "asc" }],
                 skip,
-                take: limit,
-            }),
+                take: limit
+            })
         ]);
         const result = features.map((feature) => ({
             featureId: feature.featureId,
@@ -130,7 +130,7 @@ class FeatureService {
             updatedAt: feature.updatedAt,
             creator: feature.creator,
             updater: feature.updater,
-            translations: (0, translation_1.mergeAllTranslations)(feature.translations),
+            translations: (0, translation_1.mergeAllTranslations)(feature.translations)
         }));
         return {
             data: result,
@@ -138,23 +138,23 @@ class FeatureService {
                 page,
                 limit,
                 total,
-                totalPages: Math.ceil(total / limit),
-            },
+                totalPages: Math.ceil(total / limit)
+            }
         };
     }
     static async createFeature(data, userId) {
         const { featureCode, category, displayOrder, translations } = data;
         if (!featureCode || !category || displayOrder === undefined) {
-            throw new errors_1.ValidationError('featureCode, category, and displayOrder are required');
+            throw new errors_1.ValidationError("featureCode, category, and displayOrder are required");
         }
         if (!translations || !translations.id) {
-            throw new errors_1.ValidationError('Indonesian translation (id) is required');
+            throw new errors_1.ValidationError("Indonesian translation (id) is required");
         }
         const existingFeature = await prisma_1.prisma.featureMaster.findUnique({
-            where: { featureCode },
+            where: { featureCode }
         });
         if (existingFeature) {
-            throw new errors_1.ValidationError('Feature code already exists');
+            throw new errors_1.ValidationError("Feature code already exists");
         }
         const feature = await prisma_1.prisma.featureMaster.create({
             data: {
@@ -169,19 +169,19 @@ class FeatureService {
                         {
                             locale: client_1.Locale.id,
                             featureName: translations.id.featureName,
-                            description: translations.id.description || null,
+                            description: translations.id.description || null
                         },
                         ...(translations.en
                             ? [
                                 {
                                     locale: client_1.Locale.en,
                                     featureName: translations.en.featureName,
-                                    description: translations.en.description || null,
-                                },
+                                    description: translations.en.description || null
+                                }
                             ]
-                            : []),
-                    ],
-                },
+                            : [])
+                    ]
+                }
             },
             include: {
                 translations: true,
@@ -189,34 +189,34 @@ class FeatureService {
                     select: {
                         userId: true,
                         username: true,
-                        email: true,
-                    },
-                },
-            },
+                        email: true
+                    }
+                }
+            }
         });
         return {
             ...feature,
-            translations: (0, translation_1.mergeAllTranslations)(feature.translations),
+            translations: (0, translation_1.mergeAllTranslations)(feature.translations)
         };
     }
     static async updateFeature(featureId, data, userId) {
         const { featureCode, category, displayOrder, isActive, translations } = data;
         const existingFeature = await prisma_1.prisma.featureMaster.findUnique({
-            where: { featureId },
+            where: { featureId }
         });
         if (!existingFeature || existingFeature.deletedAt) {
-            throw new errors_1.NotFoundError('Feature not found');
+            throw new errors_1.NotFoundError("Feature not found");
         }
         if (featureCode && featureCode !== existingFeature.featureCode) {
             const duplicateFeature = await prisma_1.prisma.featureMaster.findUnique({
-                where: { featureCode },
+                where: { featureCode }
             });
             if (duplicateFeature) {
-                throw new errors_1.ValidationError('Feature code already exists');
+                throw new errors_1.ValidationError("Feature code already exists");
             }
         }
         const updateData = {
-            updatedBy: userId,
+            updatedBy: userId
         };
         if (featureCode)
             updateData.featureCode = featureCode;
@@ -228,7 +228,7 @@ class FeatureService {
             updateData.isActive = isActive;
         await prisma_1.prisma.featureMaster.update({
             where: { featureId },
-            data: updateData,
+            data: updateData
         });
         if (translations) {
             for (const locale of Object.values(client_1.Locale)) {
@@ -237,19 +237,19 @@ class FeatureService {
                         where: {
                             featureId_locale: {
                                 featureId,
-                                locale,
-                            },
+                                locale
+                            }
                         },
                         create: {
                             featureId,
                             locale,
                             featureName: translations[locale].featureName,
-                            description: translations[locale].description || null,
+                            description: translations[locale].description || null
                         },
                         update: {
                             featureName: translations[locale].featureName,
-                            description: translations[locale].description || null,
-                        },
+                            description: translations[locale].description || null
+                        }
                     });
                 }
             }
@@ -262,30 +262,30 @@ class FeatureService {
                     select: {
                         userId: true,
                         username: true,
-                        email: true,
-                    },
-                },
-            },
+                        email: true
+                    }
+                }
+            }
         });
         return {
             ...updatedFeature,
-            translations: (0, translation_1.mergeAllTranslations)(updatedFeature.translations),
+            translations: (0, translation_1.mergeAllTranslations)(updatedFeature.translations)
         };
     }
     static async deleteFeature(featureId, userId) {
         const feature = await prisma_1.prisma.featureMaster.findUnique({
-            where: { featureId },
+            where: { featureId }
         });
         if (!feature || feature.deletedAt) {
-            throw new errors_1.NotFoundError('Feature not found');
+            throw new errors_1.NotFoundError("Feature not found");
         }
         await prisma_1.prisma.featureMaster.update({
             where: { featureId },
             data: {
                 deletedAt: new Date(),
                 isActive: false,
-                updatedBy: userId,
-            },
+                updatedBy: userId
+            }
         });
     }
 }

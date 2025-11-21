@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { ProcessStepService } from '../services/process-step.service';
-import { ResponseUtil } from '../utils/response';
-import { Locale } from '@prisma/client';
+import { Request, Response, NextFunction } from "express";
+import { ProcessStepService } from "../services/process-step.service";
+import { ResponseUtil } from "../utils/response";
+import { Locale } from "@prisma/client";
 
 export class ProcessStepController {
   /**
@@ -11,7 +11,7 @@ export class ProcessStepController {
     try {
       const locale = req.locale || Locale.id;
       const steps = await ProcessStepService.getPublicSteps(locale);
-      ResponseUtil.success(res, 'Process steps retrieved successfully', steps);
+      ResponseUtil.success(res, "Process steps retrieved successfully", steps);
     } catch (error) {
       next(error);
     }
@@ -28,7 +28,7 @@ export class ProcessStepController {
       const isActive = req.query.is_active as string;
 
       const result = await ProcessStepService.getAllSteps(page, limit, search, isActive);
-      ResponseUtil.success(res, 'Steps retrieved successfully', result.data, 200, result.pagination);
+      ResponseUtil.success(res, "Steps retrieved successfully", result.data, 200, result.pagination);
     } catch (error) {
       next(error);
     }
@@ -41,7 +41,7 @@ export class ProcessStepController {
     try {
       const userId = req.user!.userId;
       const step = await ProcessStepService.createStep(req.body, userId);
-      ResponseUtil.success(res, 'Step created successfully', step, 201);
+      ResponseUtil.success(res, "Step created successfully", step, 201);
     } catch (error) {
       next(error);
     }
@@ -55,7 +55,7 @@ export class ProcessStepController {
       const stepId = parseInt(req.params.id);
       const userId = req.user!.userId;
       const step = await ProcessStepService.updateStep(stepId, req.body, userId);
-      ResponseUtil.success(res, 'Step updated successfully', step);
+      ResponseUtil.success(res, "Step updated successfully", step);
     } catch (error) {
       next(error);
     }
@@ -69,7 +69,7 @@ export class ProcessStepController {
       const stepId = parseInt(req.params.id);
       const userId = req.user!.userId;
       await ProcessStepService.deleteStep(stepId, userId);
-      ResponseUtil.success(res, 'Step deleted successfully');
+      ResponseUtil.success(res, "Step deleted successfully");
     } catch (error) {
       next(error);
     }

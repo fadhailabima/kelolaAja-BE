@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { ResponseUtil } from '../utils/response';
-import { Locale } from '@prisma/client';
-import { PricingService } from '../services/pricing.service';
+import { Request, Response, NextFunction } from "express";
+import { ResponseUtil } from "../utils/response";
+import { Locale } from "@prisma/client";
+import { PricingService } from "../services/pricing.service";
 
 export class PricingController {
   /**
@@ -12,7 +12,7 @@ export class PricingController {
     try {
       const locale = req.locale || Locale.id;
       const plans = await PricingService.getPublicPlans(locale);
-      ResponseUtil.success(res, 'Pricing plans retrieved successfully', plans);
+      ResponseUtil.success(res, "Pricing plans retrieved successfully", plans);
     } catch (error) {
       next(error);
     }
@@ -27,7 +27,7 @@ export class PricingController {
       const planId = parseInt(req.params.id);
       const locale = req.locale || Locale.id;
       const plan = await PricingService.getPublicPlanById(planId, locale);
-      ResponseUtil.success(res, 'Pricing plan retrieved successfully', plan);
+      ResponseUtil.success(res, "Pricing plan retrieved successfully", plan);
     } catch (error) {
       next(error);
     }
@@ -46,13 +46,7 @@ export class PricingController {
 
       const result = await PricingService.getAllPlans(page, limit, search, isActive);
 
-      ResponseUtil.success(
-        res,
-        'Pricing plans retrieved successfully',
-        result.data,
-        200,
-        result.pagination
-      );
+      ResponseUtil.success(res, "Pricing plans retrieved successfully", result.data, 200, result.pagination);
     } catch (error) {
       next(error);
     }
@@ -65,7 +59,7 @@ export class PricingController {
   static async createPlan(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const result = await PricingService.createPlan(req.body, req.user!.userId);
-      ResponseUtil.created(res, 'Pricing plan created successfully', result);
+      ResponseUtil.created(res, "Pricing plan created successfully", result);
     } catch (error) {
       next(error);
     }
@@ -79,7 +73,7 @@ export class PricingController {
     try {
       const planId = parseInt(req.params.id);
       const result = await PricingService.updatePlan(planId, req.body, req.user!.userId);
-      ResponseUtil.success(res, 'Pricing plan updated successfully', result);
+      ResponseUtil.success(res, "Pricing plan updated successfully", result);
     } catch (error) {
       next(error);
     }
@@ -93,7 +87,7 @@ export class PricingController {
     try {
       const planId = parseInt(req.params.id);
       await PricingService.deletePlan(planId, req.user!.userId);
-      ResponseUtil.success(res, 'Pricing plan deleted successfully');
+      ResponseUtil.success(res, "Pricing plan deleted successfully");
     } catch (error) {
       next(error);
     }

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 export declare class PlanFeatureController {
     static getPlanFeatures(req: Request, res: Response, next: NextFunction): Promise<void>;
     static addFeatureToPlan(req: Request, res: Response, next: NextFunction): Promise<void>;

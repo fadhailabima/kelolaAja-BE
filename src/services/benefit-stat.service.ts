@@ -1,7 +1,7 @@
-import { prisma } from '../utils/prisma';
-import { ValidationError, NotFoundError } from '../utils/errors';
-import { Locale } from '@prisma/client';
-import { mergeAllTranslations } from '../utils/translation';
+import { prisma } from "../utils/prisma";
+import { ValidationError, NotFoundError } from "../utils/errors";
+import { Locale } from "@prisma/client";
+import { mergeAllTranslations } from "../utils/translation";
 
 export class BenefitStatService {
   /**
@@ -11,14 +11,14 @@ export class BenefitStatService {
     const stats: any = await prisma.benefitStat.findMany({
       where: {
         isActive: true,
-        deletedAt: null,
+        deletedAt: null
       },
       include: {
         translations: {
-          where: { locale },
-        },
+          where: { locale }
+        }
       },
-      orderBy: { displayOrder: 'asc' },
+      orderBy: { displayOrder: "asc" }
     });
 
     return stats.map((stat: any) => {
@@ -27,7 +27,7 @@ export class BenefitStatService {
         statId: stat.statId,
         value: stat.statValue,
         displayOrder: stat.displayOrder,
-        label: translation.label || '',
+        label: translation.label || ""
       };
     });
   }
@@ -41,13 +41,13 @@ export class BenefitStatService {
 
     if (search) {
       where.OR = [
-        { statValue: { contains: search, mode: 'insensitive' } },
-        { translations: { some: { label: { contains: search, mode: 'insensitive' } } } },
+        { statValue: { contains: search, mode: "insensitive" } },
+        { translations: { some: { label: { contains: search, mode: "insensitive" } } } }
       ];
     }
 
     if (isActive !== undefined) {
-      where.isActive = isActive === 'true';
+      where.isActive = isActive === "true";
     }
 
     const [total, stats]: any = await Promise.all([
@@ -56,27 +56,27 @@ export class BenefitStatService {
         where,
         include: {
           translations: {
-            orderBy: { locale: 'asc' },
+            orderBy: { locale: "asc" }
           },
           creator: {
             select: {
               userId: true,
               username: true,
-              email: true,
-            },
+              email: true
+            }
           },
           updater: {
             select: {
               userId: true,
               username: true,
-              email: true,
-            },
-          },
+              email: true
+            }
+          }
         },
-        orderBy: { displayOrder: 'asc' },
+        orderBy: { displayOrder: "asc" },
         skip,
-        take: limit,
-      }),
+        take: limit
+      })
     ]);
 
     const result = stats.map((stat: any) => ({
@@ -88,7 +88,7 @@ export class BenefitStatService {
       updatedAt: stat.updatedAt,
       creator: stat.creator,
       updater: stat.updater,
-      translations: mergeAllTranslations(stat.translations),
+      translations: mergeAllTranslations(stat.translations)
     }));
 
     return {
@@ -97,8 +97,8 @@ export class BenefitStatService {
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / limit),
-      },
+        totalPages: Math.ceil(total / limit)
+      }
     };
   }
 
@@ -109,11 +109,11 @@ export class BenefitStatService {
     const { statValue, displayOrder, translations } = data;
 
     if (!statValue || displayOrder === undefined) {
-      throw new ValidationError('statValue and displayOrder are required');
+      throw new ValidationError("statValue and displayOrder are required");
     }
 
     if (!translations || !translations.id) {
-      throw new ValidationError('Indonesian translation (id) is required');
+      throw new ValidationError("Indonesian translation (id) is required");
     }
 
     // Generate statCode
@@ -131,18 +131,18 @@ export class BenefitStatService {
           create: [
             {
               locale: Locale.id,
-              label: translations.id.label,
+              label: translations.id.label
             },
             ...(translations.en
               ? [
                   {
                     locale: Locale.en,
-                    label: translations.en.label,
-                  },
+                    label: translations.en.label
+                  }
                 ]
-              : []),
-          ],
-        },
+              : [])
+          ]
+        }
       },
       include: {
         translations: true,
@@ -150,15 +150,15 @@ export class BenefitStatService {
           select: {
             userId: true,
             username: true,
-            email: true,
-          },
-        },
-      },
+            email: true
+          }
+        }
+      }
     });
 
     return {
       ...stat,
-      translations: mergeAllTranslations(stat.translations),
+      translations: mergeAllTranslations(stat.translations)
     };
   }
 
@@ -169,11 +169,11 @@ export class BenefitStatService {
     const { statValue, displayOrder, isActive, translations } = data;
 
     const existing = await prisma.benefitStat.findUnique({
-      where: { statId },
+      where: { statId }
     });
 
     if (!existing || existing.deletedAt) {
-      throw new NotFoundError('Benefit stat not found');
+      throw new NotFoundError("Benefit stat not found");
     }
 
     const updateData: any = { updatedBy: userId };
@@ -184,7 +184,7 @@ export class BenefitStatService {
 
     await prisma.benefitStat.update({
       where: { statId },
-      data: updateData,
+      data: updateData
     });
 
     if (translations) {
@@ -194,17 +194,17 @@ export class BenefitStatService {
             where: {
               statId_locale: {
                 statId,
-                locale,
-              },
+                locale
+              }
             },
             create: {
               statId,
               locale,
-              label: translations[locale].label,
+              label: translations[locale].label
             },
             update: {
-              label: translations[locale].label,
-            },
+              label: translations[locale].label
+            }
           });
         }
       }
@@ -218,15 +218,15 @@ export class BenefitStatService {
           select: {
             userId: true,
             username: true,
-            email: true,
-          },
-        },
-      },
+            email: true
+          }
+        }
+      }
     });
 
     return {
       ...updated,
-      translations: mergeAllTranslations(updated.translations),
+      translations: mergeAllTranslations(updated.translations)
     };
   }
 
@@ -235,11 +235,11 @@ export class BenefitStatService {
    */
   static async deleteStat(statId: number, userId: number) {
     const stat = await prisma.benefitStat.findUnique({
-      where: { statId },
+      where: { statId }
     });
 
     if (!stat || stat.deletedAt) {
-      throw new NotFoundError('Benefit stat not found');
+      throw new NotFoundError("Benefit stat not found");
     }
 
     await prisma.benefitStat.update({
@@ -247,8 +247,8 @@ export class BenefitStatService {
       data: {
         deletedAt: new Date(),
         isActive: false,
-        updatedBy: userId,
-      },
+        updatedBy: userId
+      }
     });
   }
 }

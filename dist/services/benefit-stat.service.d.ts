@@ -1,4 +1,4 @@
-import { Locale } from '@prisma/client';
+import { Locale } from "@prisma/client";
 export declare class BenefitStatService {
     static getPublicStats(locale: Locale): Promise<any>;
     static getAllStats(page: number, limit: number, search?: string, isActive?: string): Promise<{

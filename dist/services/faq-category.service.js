@@ -10,23 +10,23 @@ class FAQCategoryService {
         const categories = await prisma_1.prisma.fAQCategory.findMany({
             where: {
                 isActive: true,
-                deletedAt: null,
+                deletedAt: null
             },
             include: {
                 translations: {
-                    where: { locale },
+                    where: { locale }
                 },
                 faqs: {
                     where: {
                         isActive: true,
-                        deletedAt: null,
+                        deletedAt: null
                     },
                     select: {
-                        faqId: true,
-                    },
-                },
+                        faqId: true
+                    }
+                }
             },
-            orderBy: { displayOrder: 'asc' },
+            orderBy: { displayOrder: "asc" }
         });
         return categories.map((category) => {
             const translation = category.translations[0] || {};
@@ -34,8 +34,8 @@ class FAQCategoryService {
                 categoryId: category.categoryId,
                 categoryCode: category.categoryCode,
                 displayOrder: category.displayOrder,
-                categoryName: translation.categoryName || '',
-                faqCount: category.faqs.length,
+                categoryName: translation.categoryName || "",
+                faqCount: category.faqs.length
             };
         });
     }
@@ -44,12 +44,12 @@ class FAQCategoryService {
         const where = { deletedAt: null };
         if (search) {
             where.OR = [
-                { categoryCode: { contains: search, mode: 'insensitive' } },
-                { translations: { some: { categoryName: { contains: search, mode: 'insensitive' } } } },
+                { categoryCode: { contains: search, mode: "insensitive" } },
+                { translations: { some: { categoryName: { contains: search, mode: "insensitive" } } } }
             ];
         }
         if (isActive !== undefined) {
-            where.isActive = isActive === 'true';
+            where.isActive = isActive === "true";
         }
         const [total, categories] = await Promise.all([
             prisma_1.prisma.fAQCategory.count({ where }),
@@ -57,32 +57,32 @@ class FAQCategoryService {
                 where,
                 include: {
                     translations: {
-                        orderBy: { locale: 'asc' },
+                        orderBy: { locale: "asc" }
                     },
                     faqs: {
                         select: {
-                            faqId: true,
-                        },
+                            faqId: true
+                        }
                     },
                     creator: {
                         select: {
                             userId: true,
                             username: true,
-                            email: true,
-                        },
+                            email: true
+                        }
                     },
                     updater: {
                         select: {
                             userId: true,
                             username: true,
-                            email: true,
-                        },
-                    },
+                            email: true
+                        }
+                    }
                 },
-                orderBy: { displayOrder: 'asc' },
+                orderBy: { displayOrder: "asc" },
                 skip,
-                take: limit,
-            }),
+                take: limit
+            })
         ]);
         const result = categories.map((category) => ({
             categoryId: category.categoryId,
@@ -94,7 +94,7 @@ class FAQCategoryService {
             creator: category.creator,
             updater: category.updater,
             faqCount: category.faqs.length,
-            translations: (0, translation_1.mergeAllTranslations)(category.translations),
+            translations: (0, translation_1.mergeAllTranslations)(category.translations)
         }));
         return {
             data: result,
@@ -102,23 +102,23 @@ class FAQCategoryService {
                 page,
                 limit,
                 total,
-                totalPages: Math.ceil(total / limit),
-            },
+                totalPages: Math.ceil(total / limit)
+            }
         };
     }
     static async createCategory(data, userId) {
         const { categoryCode, displayOrder, translations } = data;
         if (!categoryCode || displayOrder === undefined) {
-            throw new errors_1.ValidationError('categoryCode and displayOrder are required');
+            throw new errors_1.ValidationError("categoryCode and displayOrder are required");
         }
         if (!translations || !translations.id) {
-            throw new errors_1.ValidationError('Indonesian translation (id) is required');
+            throw new errors_1.ValidationError("Indonesian translation (id) is required");
         }
         const existing = await prisma_1.prisma.fAQCategory.findUnique({
-            where: { categoryCode },
+            where: { categoryCode }
         });
         if (existing) {
-            throw new errors_1.ValidationError('Category code already exists');
+            throw new errors_1.ValidationError("Category code already exists");
         }
         const category = await prisma_1.prisma.fAQCategory.create({
             data: {
@@ -131,18 +131,18 @@ class FAQCategoryService {
                     create: [
                         {
                             locale: client_1.Locale.id,
-                            categoryName: translations.id.categoryName,
+                            categoryName: translations.id.categoryName
                         },
                         ...(translations.en
                             ? [
                                 {
                                     locale: client_1.Locale.en,
-                                    categoryName: translations.en.categoryName,
-                                },
+                                    categoryName: translations.en.categoryName
+                                }
                             ]
-                            : []),
-                    ],
-                },
+                            : [])
+                    ]
+                }
             },
             include: {
                 translations: true,
@@ -150,30 +150,30 @@ class FAQCategoryService {
                     select: {
                         userId: true,
                         username: true,
-                        email: true,
-                    },
-                },
-            },
+                        email: true
+                    }
+                }
+            }
         });
         return {
             ...category,
-            translations: (0, translation_1.mergeAllTranslations)(category.translations),
+            translations: (0, translation_1.mergeAllTranslations)(category.translations)
         };
     }
     static async updateCategory(categoryId, data, userId) {
         const { categoryCode, displayOrder, isActive, translations } = data;
         const existing = await prisma_1.prisma.fAQCategory.findUnique({
-            where: { categoryId },
+            where: { categoryId }
         });
         if (!existing || existing.deletedAt) {
-            throw new errors_1.NotFoundError('FAQ category not found');
+            throw new errors_1.NotFoundError("FAQ category not found");
         }
         if (categoryCode && categoryCode !== existing.categoryCode) {
             const duplicate = await prisma_1.prisma.fAQCategory.findUnique({
-                where: { categoryCode },
+                where: { categoryCode }
             });
             if (duplicate) {
-                throw new errors_1.ValidationError('Category code already exists');
+                throw new errors_1.ValidationError("Category code already exists");
             }
         }
         const updateData = { updatedBy: userId };
@@ -185,7 +185,7 @@ class FAQCategoryService {
             updateData.isActive = isActive;
         await prisma_1.prisma.fAQCategory.update({
             where: { categoryId },
-            data: updateData,
+            data: updateData
         });
         if (translations) {
             for (const locale of Object.values(client_1.Locale)) {
@@ -194,17 +194,17 @@ class FAQCategoryService {
                         where: {
                             categoryId_locale: {
                                 categoryId,
-                                locale,
-                            },
+                                locale
+                            }
                         },
                         create: {
                             categoryId,
                             locale,
-                            categoryName: translations[locale].categoryName,
+                            categoryName: translations[locale].categoryName
                         },
                         update: {
-                            categoryName: translations[locale].categoryName,
-                        },
+                            categoryName: translations[locale].categoryName
+                        }
                     });
                 }
             }
@@ -217,14 +217,14 @@ class FAQCategoryService {
                     select: {
                         userId: true,
                         username: true,
-                        email: true,
-                    },
-                },
-            },
+                        email: true
+                    }
+                }
+            }
         });
         return {
             ...updated,
-            translations: (0, translation_1.mergeAllTranslations)(updated.translations),
+            translations: (0, translation_1.mergeAllTranslations)(updated.translations)
         };
     }
     static async deleteCategory(categoryId, userId) {
@@ -232,23 +232,23 @@ class FAQCategoryService {
             where: { categoryId },
             include: {
                 faqs: {
-                    where: { deletedAt: null },
-                },
-            },
+                    where: { deletedAt: null }
+                }
+            }
         });
         if (!category || category.deletedAt) {
-            throw new errors_1.NotFoundError('FAQ category not found');
+            throw new errors_1.NotFoundError("FAQ category not found");
         }
         if (category.faqs.length > 0) {
-            throw new errors_1.ValidationError('Cannot delete category with existing FAQs. Please delete or move FAQs first.');
+            throw new errors_1.ValidationError("Cannot delete category with existing FAQs. Please delete or move FAQs first.");
         }
         await prisma_1.prisma.fAQCategory.update({
             where: { categoryId },
             data: {
                 deletedAt: new Date(),
                 isActive: false,
-                updatedBy: userId,
-            },
+                updatedBy: userId
+            }
         });
     }
 }

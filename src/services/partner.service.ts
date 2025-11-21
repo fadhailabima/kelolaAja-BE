@@ -1,7 +1,7 @@
-import { prisma } from '../utils/prisma';
-import { ValidationError, NotFoundError } from '../utils/errors';
-import { Locale } from '@prisma/client';
-import { mergeAllTranslations } from '../utils/translation';
+import { prisma } from "../utils/prisma";
+import { ValidationError, NotFoundError } from "../utils/errors";
+import { Locale } from "@prisma/client";
+import { mergeAllTranslations } from "../utils/translation";
 
 export class PartnerService {
   /**
@@ -11,21 +11,21 @@ export class PartnerService {
     const partners: any = await prisma.partner.findMany({
       where: {
         isActive: true,
-        deletedAt: null,
+        deletedAt: null
       },
       include: {
         translations: {
-          where: { locale },
+          where: { locale }
         },
         logoFile: {
           select: {
             fileId: true,
             filePath: true,
-            altText: true,
-          },
-        },
+            altText: true
+          }
+        }
       },
-      orderBy: { displayOrder: 'asc' },
+      orderBy: { displayOrder: "asc" }
     });
 
     return partners.map((partner: any) => {
@@ -34,14 +34,14 @@ export class PartnerService {
         partnerId: partner.partnerId,
         partnerName: partner.partnerName,
         displayOrder: partner.displayOrder,
-        description: translation.description || '',
+        description: translation.description || "",
         logo: partner.logoFile
           ? {
               fileId: partner.logoFile.fileId,
               filePath: partner.logoFile.filePath,
-              altText: partner.logoFile.altText,
+              altText: partner.logoFile.altText
             }
-          : null,
+          : null
       };
     });
   }
@@ -55,13 +55,13 @@ export class PartnerService {
 
     if (search) {
       where.OR = [
-        { partnerName: { contains: search, mode: 'insensitive' } },
-        { translations: { some: { description: { contains: search, mode: 'insensitive' } } } },
+        { partnerName: { contains: search, mode: "insensitive" } },
+        { translations: { some: { description: { contains: search, mode: "insensitive" } } } }
       ];
     }
 
     if (isActive !== undefined) {
-      where.isActive = isActive === 'true';
+      where.isActive = isActive === "true";
     }
 
     const [total, partners]: any = await Promise.all([
@@ -70,34 +70,34 @@ export class PartnerService {
         where,
         include: {
           translations: {
-            orderBy: { locale: 'asc' },
+            orderBy: { locale: "asc" }
           },
           logoFile: {
             select: {
               fileId: true,
               filePath: true,
-              altText: true,
-            },
+              altText: true
+            }
           },
           creator: {
             select: {
               userId: true,
               username: true,
-              email: true,
-            },
+              email: true
+            }
           },
           updater: {
             select: {
               userId: true,
               username: true,
-              email: true,
-            },
-          },
+              email: true
+            }
+          }
         },
-        orderBy: { displayOrder: 'asc' },
+        orderBy: { displayOrder: "asc" },
         skip,
-        take: limit,
-      }),
+        take: limit
+      })
     ]);
 
     const result = partners.map((partner: any) => ({
@@ -111,7 +111,7 @@ export class PartnerService {
       logo: partner.logoFile,
       creator: partner.creator,
       updater: partner.updater,
-      translations: mergeAllTranslations(partner.translations),
+      translations: mergeAllTranslations(partner.translations)
     }));
 
     return {
@@ -120,8 +120,8 @@ export class PartnerService {
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / limit),
-      },
+        totalPages: Math.ceil(total / limit)
+      }
     };
   }
 
@@ -133,21 +133,21 @@ export class PartnerService {
 
     // Validation
     if (!partnerName || displayOrder === undefined) {
-      throw new ValidationError('partnerName and displayOrder are required');
+      throw new ValidationError("partnerName and displayOrder are required");
     }
 
     if (!translations || !translations.id) {
-      throw new ValidationError('Indonesian translation (id) is required');
+      throw new ValidationError("Indonesian translation (id) is required");
     }
 
     // Verify logo file exists if provided
     if (logoFileId) {
       const logoFile = await prisma.mediaFile.findUnique({
-        where: { fileId: logoFileId },
+        where: { fileId: logoFileId }
       });
 
       if (!logoFile) {
-        throw new NotFoundError('Logo file not found');
+        throw new NotFoundError("Logo file not found");
       }
     }
 
@@ -164,18 +164,18 @@ export class PartnerService {
           create: [
             {
               locale: Locale.id,
-              description: translations.id.description || null,
+              description: translations.id.description || null
             },
             ...(translations.en
               ? [
                   {
                     locale: Locale.en,
-                    description: translations.en.description || null,
-                  },
+                    description: translations.en.description || null
+                  }
                 ]
-              : []),
-          ],
-        },
+              : [])
+          ]
+        }
       },
       include: {
         translations: true,
@@ -183,22 +183,22 @@ export class PartnerService {
           select: {
             fileId: true,
             filePath: true,
-            altText: true,
-          },
+            altText: true
+          }
         },
         creator: {
           select: {
             userId: true,
             username: true,
-            email: true,
-          },
-        },
-      },
+            email: true
+          }
+        }
+      }
     });
 
     return {
       ...partner,
-      translations: mergeAllTranslations(partner.translations),
+      translations: mergeAllTranslations(partner.translations)
     };
   }
 
@@ -210,27 +210,27 @@ export class PartnerService {
 
     // Check exists
     const existingPartner = await prisma.partner.findUnique({
-      where: { partnerId },
+      where: { partnerId }
     });
 
     if (!existingPartner || existingPartner.deletedAt) {
-      throw new NotFoundError('Partner not found');
+      throw new NotFoundError("Partner not found");
     }
 
     // Verify logo file exists if provided
     if (logoFileId) {
       const logoFile = await prisma.mediaFile.findUnique({
-        where: { fileId: logoFileId },
+        where: { fileId: logoFileId }
       });
 
       if (!logoFile) {
-        throw new NotFoundError('Logo file not found');
+        throw new NotFoundError("Logo file not found");
       }
     }
 
     // Update partner
     const updateData: any = {
-      updatedBy: userId,
+      updatedBy: userId
     };
 
     if (partnerName) updateData.partnerName = partnerName;
@@ -240,7 +240,7 @@ export class PartnerService {
 
     await prisma.partner.update({
       where: { partnerId },
-      data: updateData,
+      data: updateData
     });
 
     // Update translations if provided
@@ -251,17 +251,17 @@ export class PartnerService {
             where: {
               partnerId_locale: {
                 partnerId,
-                locale,
-              },
+                locale
+              }
             },
             create: {
               partnerId,
               locale,
-              description: translations[locale].description || null,
+              description: translations[locale].description || null
             },
             update: {
-              description: translations[locale].description || null,
-            },
+              description: translations[locale].description || null
+            }
           });
         }
       }
@@ -276,22 +276,22 @@ export class PartnerService {
           select: {
             fileId: true,
             filePath: true,
-            altText: true,
-          },
+            altText: true
+          }
         },
         updater: {
           select: {
             userId: true,
             username: true,
-            email: true,
-          },
-        },
-      },
+            email: true
+          }
+        }
+      }
     });
 
     return {
       ...updatedPartner,
-      translations: mergeAllTranslations(updatedPartner.translations),
+      translations: mergeAllTranslations(updatedPartner.translations)
     };
   }
 
@@ -300,11 +300,11 @@ export class PartnerService {
    */
   static async deletePartner(partnerId: number, userId: number) {
     const partner = await prisma.partner.findUnique({
-      where: { partnerId },
+      where: { partnerId }
     });
 
     if (!partner || partner.deletedAt) {
-      throw new NotFoundError('Partner not found');
+      throw new NotFoundError("Partner not found");
     }
 
     await prisma.partner.update({
@@ -312,8 +312,8 @@ export class PartnerService {
       data: {
         deletedAt: new Date(),
         isActive: false,
-        updatedBy: userId,
-      },
+        updatedBy: userId
+      }
     });
   }
 }

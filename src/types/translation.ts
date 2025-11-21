@@ -1,4 +1,4 @@
-import { Locale } from '@prisma/client';
+import { Locale } from "@prisma/client";
 
 /**
  * Generic translation interface for all translation tables

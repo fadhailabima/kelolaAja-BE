@@ -9,7 +9,7 @@ class PricingController {
         try {
             const locale = req.locale || client_1.Locale.id;
             const plans = await pricing_service_1.PricingService.getPublicPlans(locale);
-            response_1.ResponseUtil.success(res, 'Pricing plans retrieved successfully', plans);
+            response_1.ResponseUtil.success(res, "Pricing plans retrieved successfully", plans);
         }
         catch (error) {
             next(error);
@@ -20,7 +20,7 @@ class PricingController {
             const planId = parseInt(req.params.id);
             const locale = req.locale || client_1.Locale.id;
             const plan = await pricing_service_1.PricingService.getPublicPlanById(planId, locale);
-            response_1.ResponseUtil.success(res, 'Pricing plan retrieved successfully', plan);
+            response_1.ResponseUtil.success(res, "Pricing plan retrieved successfully", plan);
         }
         catch (error) {
             next(error);
@@ -33,7 +33,7 @@ class PricingController {
             const search = req.query.search;
             const isActive = req.query.isActive;
             const result = await pricing_service_1.PricingService.getAllPlans(page, limit, search, isActive);
-            response_1.ResponseUtil.success(res, 'Pricing plans retrieved successfully', result.data, 200, result.pagination);
+            response_1.ResponseUtil.success(res, "Pricing plans retrieved successfully", result.data, 200, result.pagination);
         }
         catch (error) {
             next(error);
@@ -42,7 +42,7 @@ class PricingController {
     static async createPlan(req, res, next) {
         try {
             const result = await pricing_service_1.PricingService.createPlan(req.body, req.user.userId);
-            response_1.ResponseUtil.created(res, 'Pricing plan created successfully', result);
+            response_1.ResponseUtil.created(res, "Pricing plan created successfully", result);
         }
         catch (error) {
             next(error);
@@ -52,7 +52,7 @@ class PricingController {
         try {
             const planId = parseInt(req.params.id);
             const result = await pricing_service_1.PricingService.updatePlan(planId, req.body, req.user.userId);
-            response_1.ResponseUtil.success(res, 'Pricing plan updated successfully', result);
+            response_1.ResponseUtil.success(res, "Pricing plan updated successfully", result);
         }
         catch (error) {
             next(error);
@@ -62,7 +62,7 @@ class PricingController {
         try {
             const planId = parseInt(req.params.id);
             await pricing_service_1.PricingService.deletePlan(planId, req.user.userId);
-            response_1.ResponseUtil.success(res, 'Pricing plan deleted successfully');
+            response_1.ResponseUtil.success(res, "Pricing plan deleted successfully");
         }
         catch (error) {
             next(error);

@@ -1,4 +1,4 @@
-import { Locale } from '@prisma/client';
+import { Locale } from "@prisma/client";
 export declare class ERPBenefitService {
     static getPublicBenefits(locale: Locale): Promise<any>;
     static getAllBenefits(page: number, limit: number, search?: string, isActive?: string): Promise<{

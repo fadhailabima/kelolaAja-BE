@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 export declare class TestimonialController {
     static listPublicTestimonials(req: Request, res: Response, next: NextFunction): Promise<void>;
     static getPublicTestimonial(req: Request, res: Response, next: NextFunction): Promise<void>;

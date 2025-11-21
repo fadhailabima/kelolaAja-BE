@@ -8,9 +8,9 @@ class TestimonialController {
     static async listPublicTestimonials(req, res, next) {
         try {
             const locale = req.locale || client_1.Locale.id;
-            const isFeatured = req.query.featured === 'true' ? true : undefined;
+            const isFeatured = req.query.featured === "true" ? true : undefined;
             const testimonials = await testimonial_service_1.TestimonialService.getPublicTestimonials(locale, isFeatured);
-            response_1.ResponseUtil.success(res, 'Testimonials retrieved successfully', testimonials);
+            response_1.ResponseUtil.success(res, "Testimonials retrieved successfully", testimonials);
         }
         catch (error) {
             next(error);
@@ -21,7 +21,7 @@ class TestimonialController {
             const testimonialId = parseInt(req.params.id);
             const locale = req.locale || client_1.Locale.id;
             const testimonial = await testimonial_service_1.TestimonialService.getPublicTestimonialById(testimonialId, locale);
-            response_1.ResponseUtil.success(res, 'Testimonial retrieved successfully', testimonial);
+            response_1.ResponseUtil.success(res, "Testimonial retrieved successfully", testimonial);
         }
         catch (error) {
             next(error);
@@ -35,7 +35,7 @@ class TestimonialController {
             const isFeatured = req.query.featured;
             const isActive = req.query.isActive;
             const result = await testimonial_service_1.TestimonialService.getAllTestimonials(page, limit, search, isFeatured, isActive);
-            response_1.ResponseUtil.success(res, 'Testimonials retrieved successfully', result.data, 200, result.pagination);
+            response_1.ResponseUtil.success(res, "Testimonials retrieved successfully", result.data, 200, result.pagination);
         }
         catch (error) {
             next(error);
@@ -44,7 +44,7 @@ class TestimonialController {
     static async createTestimonial(req, res, next) {
         try {
             const result = await testimonial_service_1.TestimonialService.createTestimonial(req.body, req.user.userId);
-            response_1.ResponseUtil.created(res, 'Testimonial created successfully', result);
+            response_1.ResponseUtil.created(res, "Testimonial created successfully", result);
         }
         catch (error) {
             next(error);
@@ -54,7 +54,7 @@ class TestimonialController {
         try {
             const testimonialId = parseInt(req.params.id);
             const result = await testimonial_service_1.TestimonialService.updateTestimonial(testimonialId, req.body, req.user.userId);
-            response_1.ResponseUtil.success(res, 'Testimonial updated successfully', result);
+            response_1.ResponseUtil.success(res, "Testimonial updated successfully", result);
         }
         catch (error) {
             next(error);
@@ -64,7 +64,7 @@ class TestimonialController {
         try {
             const testimonialId = parseInt(req.params.id);
             await testimonial_service_1.TestimonialService.deleteTestimonial(testimonialId, req.user.userId);
-            response_1.ResponseUtil.success(res, 'Testimonial deleted successfully');
+            response_1.ResponseUtil.success(res, "Testimonial deleted successfully");
         }
         catch (error) {
             next(error);

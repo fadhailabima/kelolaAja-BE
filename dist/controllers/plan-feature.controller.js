@@ -10,7 +10,7 @@ class PlanFeatureController {
             const planId = parseInt(req.params.planId);
             const locale = req.locale || client_1.Locale.id;
             const features = await plan_feature_service_1.PlanFeatureService.getPlanFeatures(planId, locale);
-            response_1.ResponseUtil.success(res, 'Plan features retrieved successfully', features);
+            response_1.ResponseUtil.success(res, "Plan features retrieved successfully", features);
         }
         catch (error) {
             next(error);
@@ -19,7 +19,7 @@ class PlanFeatureController {
     static async addFeatureToPlan(req, res, next) {
         try {
             const result = await plan_feature_service_1.PlanFeatureService.addFeatureToPlan(req.body);
-            response_1.ResponseUtil.created(res, 'Feature added to plan successfully', result);
+            response_1.ResponseUtil.created(res, "Feature added to plan successfully", result);
         }
         catch (error) {
             next(error);
@@ -29,7 +29,7 @@ class PlanFeatureController {
         try {
             const listId = parseInt(req.params.id);
             const result = await plan_feature_service_1.PlanFeatureService.updatePlanFeature(listId, req.body);
-            response_1.ResponseUtil.success(res, 'Plan feature updated successfully', result);
+            response_1.ResponseUtil.success(res, "Plan feature updated successfully", result);
         }
         catch (error) {
             next(error);
@@ -39,7 +39,7 @@ class PlanFeatureController {
         try {
             const listId = parseInt(req.params.id);
             await plan_feature_service_1.PlanFeatureService.removeFeatureFromPlan(listId);
-            response_1.ResponseUtil.success(res, 'Feature removed from plan successfully');
+            response_1.ResponseUtil.success(res, "Feature removed from plan successfully");
         }
         catch (error) {
             next(error);

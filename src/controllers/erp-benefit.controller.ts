@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { ERPBenefitService } from '../services/erp-benefit.service';
-import { ResponseUtil } from '../utils/response';
-import { Locale } from '@prisma/client';
+import { Request, Response, NextFunction } from "express";
+import { ERPBenefitService } from "../services/erp-benefit.service";
+import { ResponseUtil } from "../utils/response";
+import { Locale } from "@prisma/client";
 
 export class ERPBenefitController {
   /**
@@ -11,7 +11,7 @@ export class ERPBenefitController {
     try {
       const locale = req.locale || Locale.id;
       const benefits = await ERPBenefitService.getPublicBenefits(locale);
-      ResponseUtil.success(res, 'ERP benefits retrieved successfully', benefits);
+      ResponseUtil.success(res, "ERP benefits retrieved successfully", benefits);
     } catch (error) {
       next(error);
     }
@@ -28,7 +28,7 @@ export class ERPBenefitController {
       const isActive = req.query.is_active as string;
 
       const result = await ERPBenefitService.getAllBenefits(page, limit, search, isActive);
-      ResponseUtil.success(res, 'Benefits retrieved successfully', result.data, 200, result.pagination);
+      ResponseUtil.success(res, "Benefits retrieved successfully", result.data, 200, result.pagination);
     } catch (error) {
       next(error);
     }
@@ -41,7 +41,7 @@ export class ERPBenefitController {
     try {
       const userId = req.user!.userId;
       const benefit = await ERPBenefitService.createBenefit(req.body, userId);
-      ResponseUtil.success(res, 'Benefit created successfully', benefit, 201);
+      ResponseUtil.success(res, "Benefit created successfully", benefit, 201);
     } catch (error) {
       next(error);
     }
@@ -55,7 +55,7 @@ export class ERPBenefitController {
       const benefitId = parseInt(req.params.id);
       const userId = req.user!.userId;
       const benefit = await ERPBenefitService.updateBenefit(benefitId, req.body, userId);
-      ResponseUtil.success(res, 'Benefit updated successfully', benefit);
+      ResponseUtil.success(res, "Benefit updated successfully", benefit);
     } catch (error) {
       next(error);
     }
@@ -69,7 +69,7 @@ export class ERPBenefitController {
       const benefitId = parseInt(req.params.id);
       const userId = req.user!.userId;
       await ERPBenefitService.deleteBenefit(benefitId, userId);
-      ResponseUtil.success(res, 'Benefit deleted successfully');
+      ResponseUtil.success(res, "Benefit deleted successfully");
     } catch (error) {
       next(error);
     }

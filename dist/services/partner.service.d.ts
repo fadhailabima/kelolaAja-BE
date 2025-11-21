@@ -1,4 +1,4 @@
-import { Locale } from '@prisma/client';
+import { Locale } from "@prisma/client";
 export declare class PartnerService {
     static getPublicPartners(locale: Locale): Promise<any>;
     static getAllPartners(page: number, limit: number, search?: string, isActive?: string): Promise<{

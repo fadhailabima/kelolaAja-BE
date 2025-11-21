@@ -1,4 +1,4 @@
-import { TranslationInput } from './translation';
+import { TranslationInput } from "./translation";
 
 /**
  * Base service method parameters

@@ -1,7 +1,7 @@
-import { prisma } from '../utils/prisma';
-import { ValidationError, NotFoundError } from '../utils/errors';
-import { Locale } from '@prisma/client';
-import { mergeAllTranslations } from '../utils/translation';
+import { prisma } from "../utils/prisma";
+import { ValidationError, NotFoundError } from "../utils/errors";
+import { Locale } from "@prisma/client";
+import { mergeAllTranslations } from "../utils/translation";
 
 export class FeatureService {
   /**
@@ -10,7 +10,7 @@ export class FeatureService {
   static async getPublicFeatures(locale: Locale, category?: string) {
     const where: any = {
       isActive: true,
-      deletedAt: null,
+      deletedAt: null
     };
 
     if (category) {
@@ -21,10 +21,10 @@ export class FeatureService {
       where,
       include: {
         translations: {
-          where: { locale },
-        },
+          where: { locale }
+        }
       },
-      orderBy: [{ category: 'asc' }, { displayOrder: 'asc' }],
+      orderBy: [{ category: "asc" }, { displayOrder: "asc" }]
     });
 
     return features.map((feature: any) => {
@@ -34,8 +34,8 @@ export class FeatureService {
         featureCode: feature.featureCode,
         category: feature.category,
         displayOrder: feature.displayOrder,
-        featureName: translation.featureName || '',
-        description: translation.description || '',
+        featureName: translation.featureName || "",
+        description: translation.description || ""
       };
     });
   }
@@ -48,17 +48,17 @@ export class FeatureService {
       where: {
         featureId,
         isActive: true,
-        deletedAt: null,
+        deletedAt: null
       },
       include: {
         translations: {
-          where: { locale },
-        },
-      },
+          where: { locale }
+        }
+      }
     });
 
     if (!feature) {
-      throw new NotFoundError('Feature not found');
+      throw new NotFoundError("Feature not found");
     }
 
     const translation = feature.translations[0] || {};
@@ -67,8 +67,8 @@ export class FeatureService {
       featureCode: feature.featureCode,
       category: feature.category,
       displayOrder: feature.displayOrder,
-      featureName: translation.featureName || '',
-      description: translation.description || '',
+      featureName: translation.featureName || "",
+      description: translation.description || ""
     };
   }
 
@@ -79,37 +79,31 @@ export class FeatureService {
     const features = await prisma.featureMaster.findMany({
       where: {
         isActive: true,
-        deletedAt: null,
+        deletedAt: null
       },
       select: {
-        category: true,
+        category: true
       },
-      distinct: ['category'],
+      distinct: ["category"],
       orderBy: {
-        category: 'asc',
-      },
+        category: "asc"
+      }
     });
 
-    return features.map((f) => f.category);
+    return features.map(f => f.category);
   }
 
   /**
    * Get all features with all translations (Admin)
    */
-  static async getAllFeatures(
-    page: number,
-    limit: number,
-    search?: string,
-    category?: string,
-    isActive?: string
-  ) {
+  static async getAllFeatures(page: number, limit: number, search?: string, category?: string, isActive?: string) {
     const skip = (page - 1) * limit;
     const where: any = { deletedAt: null };
 
     if (search) {
       where.OR = [
-        { featureCode: { contains: search, mode: 'insensitive' } },
-        { translations: { some: { featureName: { contains: search, mode: 'insensitive' } } } },
+        { featureCode: { contains: search, mode: "insensitive" } },
+        { translations: { some: { featureName: { contains: search, mode: "insensitive" } } } }
       ];
     }
 
@@ -118,7 +112,7 @@ export class FeatureService {
     }
 
     if (isActive !== undefined) {
-      where.isActive = isActive === 'true';
+      where.isActive = isActive === "true";
     }
 
     const [total, features]: any = await Promise.all([
@@ -127,27 +121,27 @@ export class FeatureService {
         where,
         include: {
           translations: {
-            orderBy: { locale: 'asc' },
+            orderBy: { locale: "asc" }
           },
           creator: {
             select: {
               userId: true,
               username: true,
-              email: true,
-            },
+              email: true
+            }
           },
           updater: {
             select: {
               userId: true,
               username: true,
-              email: true,
-            },
-          },
+              email: true
+            }
+          }
         },
-        orderBy: [{ category: 'asc' }, { displayOrder: 'asc' }],
+        orderBy: [{ category: "asc" }, { displayOrder: "asc" }],
         skip,
-        take: limit,
-      }),
+        take: limit
+      })
     ]);
 
     const result = features.map((feature: any) => ({
@@ -160,7 +154,7 @@ export class FeatureService {
       updatedAt: feature.updatedAt,
       creator: feature.creator,
       updater: feature.updater,
-      translations: mergeAllTranslations(feature.translations),
+      translations: mergeAllTranslations(feature.translations)
     }));
 
     return {
@@ -169,8 +163,8 @@ export class FeatureService {
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / limit),
-      },
+        totalPages: Math.ceil(total / limit)
+      }
     };
   }
 
@@ -182,20 +176,20 @@ export class FeatureService {
 
     // Validation
     if (!featureCode || !category || displayOrder === undefined) {
-      throw new ValidationError('featureCode, category, and displayOrder are required');
+      throw new ValidationError("featureCode, category, and displayOrder are required");
     }
 
     if (!translations || !translations.id) {
-      throw new ValidationError('Indonesian translation (id) is required');
+      throw new ValidationError("Indonesian translation (id) is required");
     }
 
     // Check duplicate
     const existingFeature = await prisma.featureMaster.findUnique({
-      where: { featureCode },
+      where: { featureCode }
     });
 
     if (existingFeature) {
-      throw new ValidationError('Feature code already exists');
+      throw new ValidationError("Feature code already exists");
     }
 
     // Create feature
@@ -212,19 +206,19 @@ export class FeatureService {
             {
               locale: Locale.id,
               featureName: translations.id.featureName,
-              description: translations.id.description || null,
+              description: translations.id.description || null
             },
             ...(translations.en
               ? [
                   {
                     locale: Locale.en,
                     featureName: translations.en.featureName,
-                    description: translations.en.description || null,
-                  },
+                    description: translations.en.description || null
+                  }
                 ]
-              : []),
-          ],
-        },
+              : [])
+          ]
+        }
       },
       include: {
         translations: true,
@@ -232,15 +226,15 @@ export class FeatureService {
           select: {
             userId: true,
             username: true,
-            email: true,
-          },
-        },
-      },
+            email: true
+          }
+        }
+      }
     });
 
     return {
       ...feature,
-      translations: mergeAllTranslations(feature.translations),
+      translations: mergeAllTranslations(feature.translations)
     };
   }
 
@@ -252,27 +246,27 @@ export class FeatureService {
 
     // Check exists
     const existingFeature = await prisma.featureMaster.findUnique({
-      where: { featureId },
+      where: { featureId }
     });
 
     if (!existingFeature || existingFeature.deletedAt) {
-      throw new NotFoundError('Feature not found');
+      throw new NotFoundError("Feature not found");
     }
 
     // Check duplicate featureCode
     if (featureCode && featureCode !== existingFeature.featureCode) {
       const duplicateFeature = await prisma.featureMaster.findUnique({
-        where: { featureCode },
+        where: { featureCode }
       });
 
       if (duplicateFeature) {
-        throw new ValidationError('Feature code already exists');
+        throw new ValidationError("Feature code already exists");
       }
     }
 
     // Update feature
     const updateData: any = {
-      updatedBy: userId,
+      updatedBy: userId
     };
 
     if (featureCode) updateData.featureCode = featureCode;
@@ -282,7 +276,7 @@ export class FeatureService {
 
     await prisma.featureMaster.update({
       where: { featureId },
-      data: updateData,
+      data: updateData
     });
 
     // Update translations if provided
@@ -293,19 +287,19 @@ export class FeatureService {
             where: {
               featureId_locale: {
                 featureId,
-                locale,
-              },
+                locale
+              }
             },
             create: {
               featureId,
               locale,
               featureName: translations[locale].featureName,
-              description: translations[locale].description || null,
+              description: translations[locale].description || null
             },
             update: {
               featureName: translations[locale].featureName,
-              description: translations[locale].description || null,
-            },
+              description: translations[locale].description || null
+            }
           });
         }
       }
@@ -320,15 +314,15 @@ export class FeatureService {
           select: {
             userId: true,
             username: true,
-            email: true,
-          },
-        },
-      },
+            email: true
+          }
+        }
+      }
     });
 
     return {
       ...updatedFeature,
-      translations: mergeAllTranslations(updatedFeature.translations),
+      translations: mergeAllTranslations(updatedFeature.translations)
     };
   }
 
@@ -337,11 +331,11 @@ export class FeatureService {
    */
   static async deleteFeature(featureId: number, userId: number) {
     const feature = await prisma.featureMaster.findUnique({
-      where: { featureId },
+      where: { featureId }
     });
 
     if (!feature || feature.deletedAt) {
-      throw new NotFoundError('Feature not found');
+      throw new NotFoundError("Feature not found");
     }
 
     await prisma.featureMaster.update({
@@ -349,8 +343,8 @@ export class FeatureService {
       data: {
         deletedAt: new Date(),
         isActive: false,
-        updatedBy: userId,
-      },
+        updatedBy: userId
+      }
     });
   }
 }

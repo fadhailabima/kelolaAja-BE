@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { ResponseUtil } from '../utils/response';
-import { Locale } from '@prisma/client';
-import { PlanFeatureService } from '../services/plan-feature.service';
+import { Request, Response, NextFunction } from "express";
+import { ResponseUtil } from "../utils/response";
+import { Locale } from "@prisma/client";
+import { PlanFeatureService } from "../services/plan-feature.service";
 
 export class PlanFeatureController {
   /**
@@ -14,7 +14,7 @@ export class PlanFeatureController {
       const locale = req.locale || Locale.id;
 
       const features = await PlanFeatureService.getPlanFeatures(planId, locale);
-      ResponseUtil.success(res, 'Plan features retrieved successfully', features);
+      ResponseUtil.success(res, "Plan features retrieved successfully", features);
     } catch (error) {
       next(error);
     }
@@ -27,7 +27,7 @@ export class PlanFeatureController {
   static async addFeatureToPlan(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const result = await PlanFeatureService.addFeatureToPlan(req.body);
-      ResponseUtil.created(res, 'Feature added to plan successfully', result);
+      ResponseUtil.created(res, "Feature added to plan successfully", result);
     } catch (error) {
       next(error);
     }
@@ -41,7 +41,7 @@ export class PlanFeatureController {
     try {
       const listId = parseInt(req.params.id);
       const result = await PlanFeatureService.updatePlanFeature(listId, req.body);
-      ResponseUtil.success(res, 'Plan feature updated successfully', result);
+      ResponseUtil.success(res, "Plan feature updated successfully", result);
     } catch (error) {
       next(error);
     }
@@ -55,7 +55,7 @@ export class PlanFeatureController {
     try {
       const listId = parseInt(req.params.id);
       await PlanFeatureService.removeFeatureFromPlan(listId);
-      ResponseUtil.success(res, 'Feature removed from plan successfully');
+      ResponseUtil.success(res, "Feature removed from plan successfully");
     } catch (error) {
       next(error);
     }

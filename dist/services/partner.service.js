@@ -10,21 +10,21 @@ class PartnerService {
         const partners = await prisma_1.prisma.partner.findMany({
             where: {
                 isActive: true,
-                deletedAt: null,
+                deletedAt: null
             },
             include: {
                 translations: {
-                    where: { locale },
+                    where: { locale }
                 },
                 logoFile: {
                     select: {
                         fileId: true,
                         filePath: true,
-                        altText: true,
-                    },
-                },
+                        altText: true
+                    }
+                }
             },
-            orderBy: { displayOrder: 'asc' },
+            orderBy: { displayOrder: "asc" }
         });
         return partners.map((partner) => {
             const translation = partner.translations[0] || {};
@@ -32,14 +32,14 @@ class PartnerService {
                 partnerId: partner.partnerId,
                 partnerName: partner.partnerName,
                 displayOrder: partner.displayOrder,
-                description: translation.description || '',
+                description: translation.description || "",
                 logo: partner.logoFile
                     ? {
                         fileId: partner.logoFile.fileId,
                         filePath: partner.logoFile.filePath,
-                        altText: partner.logoFile.altText,
+                        altText: partner.logoFile.altText
                     }
-                    : null,
+                    : null
             };
         });
     }
@@ -48,12 +48,12 @@ class PartnerService {
         const where = { deletedAt: null };
         if (search) {
             where.OR = [
-                { partnerName: { contains: search, mode: 'insensitive' } },
-                { translations: { some: { description: { contains: search, mode: 'insensitive' } } } },
+                { partnerName: { contains: search, mode: "insensitive" } },
+                { translations: { some: { description: { contains: search, mode: "insensitive" } } } }
             ];
         }
         if (isActive !== undefined) {
-            where.isActive = isActive === 'true';
+            where.isActive = isActive === "true";
         }
         const [total, partners] = await Promise.all([
             prisma_1.prisma.partner.count({ where }),
@@ -61,34 +61,34 @@ class PartnerService {
                 where,
                 include: {
                     translations: {
-                        orderBy: { locale: 'asc' },
+                        orderBy: { locale: "asc" }
                     },
                     logoFile: {
                         select: {
                             fileId: true,
                             filePath: true,
-                            altText: true,
-                        },
+                            altText: true
+                        }
                     },
                     creator: {
                         select: {
                             userId: true,
                             username: true,
-                            email: true,
-                        },
+                            email: true
+                        }
                     },
                     updater: {
                         select: {
                             userId: true,
                             username: true,
-                            email: true,
-                        },
-                    },
+                            email: true
+                        }
+                    }
                 },
-                orderBy: { displayOrder: 'asc' },
+                orderBy: { displayOrder: "asc" },
                 skip,
-                take: limit,
-            }),
+                take: limit
+            })
         ]);
         const result = partners.map((partner) => ({
             partnerId: partner.partnerId,
@@ -101,7 +101,7 @@ class PartnerService {
             logo: partner.logoFile,
             creator: partner.creator,
             updater: partner.updater,
-            translations: (0, translation_1.mergeAllTranslations)(partner.translations),
+            translations: (0, translation_1.mergeAllTranslations)(partner.translations)
         }));
         return {
             data: result,
@@ -109,24 +109,24 @@ class PartnerService {
                 page,
                 limit,
                 total,
-                totalPages: Math.ceil(total / limit),
-            },
+                totalPages: Math.ceil(total / limit)
+            }
         };
     }
     static async createPartner(data, userId) {
         const { partnerName, logoFileId, displayOrder, translations } = data;
         if (!partnerName || displayOrder === undefined) {
-            throw new errors_1.ValidationError('partnerName and displayOrder are required');
+            throw new errors_1.ValidationError("partnerName and displayOrder are required");
         }
         if (!translations || !translations.id) {
-            throw new errors_1.ValidationError('Indonesian translation (id) is required');
+            throw new errors_1.ValidationError("Indonesian translation (id) is required");
         }
         if (logoFileId) {
             const logoFile = await prisma_1.prisma.mediaFile.findUnique({
-                where: { fileId: logoFileId },
+                where: { fileId: logoFileId }
             });
             if (!logoFile) {
-                throw new errors_1.NotFoundError('Logo file not found');
+                throw new errors_1.NotFoundError("Logo file not found");
             }
         }
         const partner = await prisma_1.prisma.partner.create({
@@ -141,18 +141,18 @@ class PartnerService {
                     create: [
                         {
                             locale: client_1.Locale.id,
-                            description: translations.id.description || null,
+                            description: translations.id.description || null
                         },
                         ...(translations.en
                             ? [
                                 {
                                     locale: client_1.Locale.en,
-                                    description: translations.en.description || null,
-                                },
+                                    description: translations.en.description || null
+                                }
                             ]
-                            : []),
-                    ],
-                },
+                            : [])
+                    ]
+                }
             },
             include: {
                 translations: true,
@@ -160,41 +160,41 @@ class PartnerService {
                     select: {
                         fileId: true,
                         filePath: true,
-                        altText: true,
-                    },
+                        altText: true
+                    }
                 },
                 creator: {
                     select: {
                         userId: true,
                         username: true,
-                        email: true,
-                    },
-                },
-            },
+                        email: true
+                    }
+                }
+            }
         });
         return {
             ...partner,
-            translations: (0, translation_1.mergeAllTranslations)(partner.translations),
+            translations: (0, translation_1.mergeAllTranslations)(partner.translations)
         };
     }
     static async updatePartner(partnerId, data, userId) {
         const { partnerName, logoFileId, displayOrder, isActive, translations } = data;
         const existingPartner = await prisma_1.prisma.partner.findUnique({
-            where: { partnerId },
+            where: { partnerId }
         });
         if (!existingPartner || existingPartner.deletedAt) {
-            throw new errors_1.NotFoundError('Partner not found');
+            throw new errors_1.NotFoundError("Partner not found");
         }
         if (logoFileId) {
             const logoFile = await prisma_1.prisma.mediaFile.findUnique({
-                where: { fileId: logoFileId },
+                where: { fileId: logoFileId }
             });
             if (!logoFile) {
-                throw new errors_1.NotFoundError('Logo file not found');
+                throw new errors_1.NotFoundError("Logo file not found");
             }
         }
         const updateData = {
-            updatedBy: userId,
+            updatedBy: userId
         };
         if (partnerName)
             updateData.partnerName = partnerName;
@@ -206,7 +206,7 @@ class PartnerService {
             updateData.isActive = isActive;
         await prisma_1.prisma.partner.update({
             where: { partnerId },
-            data: updateData,
+            data: updateData
         });
         if (translations) {
             for (const locale of Object.values(client_1.Locale)) {
@@ -215,17 +215,17 @@ class PartnerService {
                         where: {
                             partnerId_locale: {
                                 partnerId,
-                                locale,
-                            },
+                                locale
+                            }
                         },
                         create: {
                             partnerId,
                             locale,
-                            description: translations[locale].description || null,
+                            description: translations[locale].description || null
                         },
                         update: {
-                            description: translations[locale].description || null,
-                        },
+                            description: translations[locale].description || null
+                        }
                     });
                 }
             }
@@ -238,37 +238,37 @@ class PartnerService {
                     select: {
                         fileId: true,
                         filePath: true,
-                        altText: true,
-                    },
+                        altText: true
+                    }
                 },
                 updater: {
                     select: {
                         userId: true,
                         username: true,
-                        email: true,
-                    },
-                },
-            },
+                        email: true
+                    }
+                }
+            }
         });
         return {
             ...updatedPartner,
-            translations: (0, translation_1.mergeAllTranslations)(updatedPartner.translations),
+            translations: (0, translation_1.mergeAllTranslations)(updatedPartner.translations)
         };
     }
     static async deletePartner(partnerId, userId) {
         const partner = await prisma_1.prisma.partner.findUnique({
-            where: { partnerId },
+            where: { partnerId }
         });
         if (!partner || partner.deletedAt) {
-            throw new errors_1.NotFoundError('Partner not found');
+            throw new errors_1.NotFoundError("Partner not found");
         }
         await prisma_1.prisma.partner.update({
             where: { partnerId },
             data: {
                 deletedAt: new Date(),
                 isActive: false,
-                updatedBy: userId,
-            },
+                updatedBy: userId
+            }
         });
     }
 }

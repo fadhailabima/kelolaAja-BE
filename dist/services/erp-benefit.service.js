@@ -10,36 +10,36 @@ class ERPBenefitService {
         const benefits = await prisma_1.prisma.eRPBenefit.findMany({
             where: {
                 isActive: true,
-                deletedAt: null,
+                deletedAt: null
             },
             include: {
                 translations: {
-                    where: { locale },
+                    where: { locale }
                 },
                 imageFile: {
                     select: {
                         fileId: true,
                         filePath: true,
-                        altText: true,
-                    },
-                },
+                        altText: true
+                    }
+                }
             },
-            orderBy: { displayOrder: 'asc' },
+            orderBy: { displayOrder: "asc" }
         });
         return benefits.map((benefit) => {
             const translation = benefit.translations[0] || {};
             return {
                 benefitId: benefit.benefitId,
                 displayOrder: benefit.displayOrder,
-                title: translation.title || '',
-                description: translation.description || '',
+                title: translation.title || "",
+                description: translation.description || "",
                 image: benefit.imageFile
                     ? {
                         fileId: benefit.imageFile.fileId,
                         filePath: benefit.imageFile.filePath,
-                        altText: benefit.imageFile.altText,
+                        altText: benefit.imageFile.altText
                     }
-                    : null,
+                    : null
             };
         });
     }
@@ -49,15 +49,12 @@ class ERPBenefitService {
         if (search) {
             where.translations = {
                 some: {
-                    OR: [
-                        { title: { contains: search, mode: 'insensitive' } },
-                        { description: { contains: search, mode: 'insensitive' } },
-                    ],
-                },
+                    OR: [{ title: { contains: search, mode: "insensitive" } }, { description: { contains: search, mode: "insensitive" } }]
+                }
             };
         }
         if (isActive !== undefined) {
-            where.isActive = isActive === 'true';
+            where.isActive = isActive === "true";
         }
         const [total, benefits] = await Promise.all([
             prisma_1.prisma.eRPBenefit.count({ where }),
@@ -65,34 +62,34 @@ class ERPBenefitService {
                 where,
                 include: {
                     translations: {
-                        orderBy: { locale: 'asc' },
+                        orderBy: { locale: "asc" }
                     },
                     imageFile: {
                         select: {
                             fileId: true,
                             filePath: true,
-                            altText: true,
-                        },
+                            altText: true
+                        }
                     },
                     creator: {
                         select: {
                             userId: true,
                             username: true,
-                            email: true,
-                        },
+                            email: true
+                        }
                     },
                     updater: {
                         select: {
                             userId: true,
                             username: true,
-                            email: true,
-                        },
-                    },
+                            email: true
+                        }
+                    }
                 },
-                orderBy: { displayOrder: 'asc' },
+                orderBy: { displayOrder: "asc" },
                 skip,
-                take: limit,
-            }),
+                take: limit
+            })
         ]);
         const result = benefits.map((benefit) => ({
             benefitId: benefit.benefitId,
@@ -104,7 +101,7 @@ class ERPBenefitService {
             image: benefit.imageFile,
             creator: benefit.creator,
             updater: benefit.updater,
-            translations: (0, translation_1.mergeAllTranslations)(benefit.translations),
+            translations: (0, translation_1.mergeAllTranslations)(benefit.translations)
         }));
         return {
             data: result,
@@ -112,25 +109,25 @@ class ERPBenefitService {
                 page,
                 limit,
                 total,
-                totalPages: Math.ceil(total / limit),
-            },
+                totalPages: Math.ceil(total / limit)
+            }
         };
     }
     static async createBenefit(data, userId) {
         const { displayOrder, imageFileId, translations } = data;
         if (displayOrder === undefined) {
-            throw new errors_1.ValidationError('displayOrder is required');
+            throw new errors_1.ValidationError("displayOrder is required");
         }
         if (!translations || !translations.id) {
-            throw new errors_1.ValidationError('Indonesian translation (id) is required');
+            throw new errors_1.ValidationError("Indonesian translation (id) is required");
         }
         const benefitCode = `BENEFIT_${Date.now()}`;
         if (imageFileId) {
             const imageFile = await prisma_1.prisma.mediaFile.findUnique({
-                where: { fileId: imageFileId },
+                where: { fileId: imageFileId }
             });
             if (!imageFile) {
-                throw new errors_1.NotFoundError('Image file not found');
+                throw new errors_1.NotFoundError("Image file not found");
             }
         }
         const benefit = await prisma_1.prisma.eRPBenefit.create({
@@ -146,19 +143,19 @@ class ERPBenefitService {
                         {
                             locale: client_1.Locale.id,
                             title: translations.id.title,
-                            description: translations.id.description || null,
+                            description: translations.id.description || null
                         },
                         ...(translations.en
                             ? [
                                 {
                                     locale: client_1.Locale.en,
                                     title: translations.en.title,
-                                    description: translations.en.description || null,
-                                },
+                                    description: translations.en.description || null
+                                }
                             ]
-                            : []),
-                    ],
-                },
+                            : [])
+                    ]
+                }
             },
             include: {
                 translations: true,
@@ -166,37 +163,37 @@ class ERPBenefitService {
                     select: {
                         fileId: true,
                         filePath: true,
-                        altText: true,
-                    },
+                        altText: true
+                    }
                 },
                 creator: {
                     select: {
                         userId: true,
                         username: true,
-                        email: true,
-                    },
-                },
-            },
+                        email: true
+                    }
+                }
+            }
         });
         return {
             ...benefit,
-            translations: (0, translation_1.mergeAllTranslations)(benefit.translations),
+            translations: (0, translation_1.mergeAllTranslations)(benefit.translations)
         };
     }
     static async updateBenefit(benefitId, data, userId) {
         const { displayOrder, imageFileId, isActive, translations } = data;
         const existing = await prisma_1.prisma.eRPBenefit.findUnique({
-            where: { benefitId },
+            where: { benefitId }
         });
         if (!existing || existing.deletedAt) {
-            throw new errors_1.NotFoundError('ERP benefit not found');
+            throw new errors_1.NotFoundError("ERP benefit not found");
         }
         if (imageFileId) {
             const imageFile = await prisma_1.prisma.mediaFile.findUnique({
-                where: { fileId: imageFileId },
+                where: { fileId: imageFileId }
             });
             if (!imageFile) {
-                throw new errors_1.NotFoundError('Image file not found');
+                throw new errors_1.NotFoundError("Image file not found");
             }
         }
         const updateData = { updatedBy: userId };
@@ -208,7 +205,7 @@ class ERPBenefitService {
             updateData.isActive = isActive;
         await prisma_1.prisma.eRPBenefit.update({
             where: { benefitId },
-            data: updateData,
+            data: updateData
         });
         if (translations) {
             for (const locale of Object.values(client_1.Locale)) {
@@ -217,19 +214,19 @@ class ERPBenefitService {
                         where: {
                             benefitId_locale: {
                                 benefitId,
-                                locale,
-                            },
+                                locale
+                            }
                         },
                         create: {
                             benefitId,
                             locale,
                             title: translations[locale].title,
-                            description: translations[locale].description || null,
+                            description: translations[locale].description || null
                         },
                         update: {
                             title: translations[locale].title,
-                            description: translations[locale].description || null,
-                        },
+                            description: translations[locale].description || null
+                        }
                     });
                 }
             }
@@ -242,37 +239,37 @@ class ERPBenefitService {
                     select: {
                         fileId: true,
                         filePath: true,
-                        altText: true,
-                    },
+                        altText: true
+                    }
                 },
                 updater: {
                     select: {
                         userId: true,
                         username: true,
-                        email: true,
-                    },
-                },
-            },
+                        email: true
+                    }
+                }
+            }
         });
         return {
             ...updated,
-            translations: (0, translation_1.mergeAllTranslations)(updated.translations),
+            translations: (0, translation_1.mergeAllTranslations)(updated.translations)
         };
     }
     static async deleteBenefit(benefitId, userId) {
         const benefit = await prisma_1.prisma.eRPBenefit.findUnique({
-            where: { benefitId },
+            where: { benefitId }
         });
         if (!benefit || benefit.deletedAt) {
-            throw new errors_1.NotFoundError('ERP benefit not found');
+            throw new errors_1.NotFoundError("ERP benefit not found");
         }
         await prisma_1.prisma.eRPBenefit.update({
             where: { benefitId },
             data: {
                 deletedAt: new Date(),
                 isActive: false,
-                updatedBy: userId,
-            },
+                updatedBy: userId
+            }
         });
     }
 }

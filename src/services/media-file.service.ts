@@ -1,0 +1,222 @@
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+export class MediaFileService {
+  /**
+   * Get all media files (with pagination and filtering)
+   */
+  static async getAllFiles(
+    page: number = 1,
+    limit: number = 20,
+    filters?: {
+      fileType?: string;
+      mimeType?: string;
+      isPublic?: boolean;
+      uploadedBy?: number;
+    }
+  ) {
+    const skip = (page - 1) * limit;
+
+    const where: any = {
+      deletedAt: null,
+    };
+
+    if (filters?.fileType) where.fileType = filters.fileType;
+    if (filters?.mimeType) where.mimeType = { contains: filters.mimeType };
+    if (filters?.isPublic !== undefined) where.isPublic = filters.isPublic;
+    if (filters?.uploadedBy) where.uploadedBy = filters.uploadedBy;
+
+    const [files, total] = await Promise.all([
+      prisma.mediaFile.findMany({
+        where,
+        include: {
+          uploader: {
+            select: {
+              userId: true,
+              username: true,
+              email: true,
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.mediaFile.count({ where }),
+    ]);
+
+    return {
+      data: files,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  /**
+   * Get a single media file by ID
+   */
+  static async getFileById(fileId: number) {
+    const file = await prisma.mediaFile.findUnique({
+      where: { fileId },
+      include: {
+        uploader: {
+          select: {
+            userId: true,
+            username: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!file || file.deletedAt) {
+      throw new Error('Media file not found');
+    }
+
+    return file;
+  }
+
+  /**
+   * Upload/Create a new media file
+   */
+  static async createFile(data: {
+    fileName: string;
+    filePath: string;
+    fileType?: string;
+    mimeType?: string;
+    fileSize?: bigint;
+    width?: number;
+    height?: number;
+    altText?: string;
+    storageType?: string;
+    storageUrl?: string;
+    isPublic?: boolean;
+    uploadedBy?: number;
+  }) {
+    const file = await prisma.mediaFile.create({
+      data: {
+        fileName: data.fileName,
+        filePath: data.filePath,
+        fileType: data.fileType,
+        mimeType: data.mimeType,
+        fileSize: data.fileSize,
+        width: data.width,
+        height: data.height,
+        altText: data.altText,
+        storageType: data.storageType || 'local',
+        storageUrl: data.storageUrl,
+        isPublic: data.isPublic ?? true,
+        uploadedBy: data.uploadedBy,
+      },
+      include: {
+        uploader: {
+          select: {
+            userId: true,
+            username: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return file;
+  }
+
+  /**
+   * Update media file metadata
+   */
+  static async updateFile(
+    fileId: number,
+    data: {
+      fileName?: string;
+      altText?: string;
+      isPublic?: boolean;
+    }
+  ) {
+    const file = await prisma.mediaFile.findUnique({
+      where: { fileId },
+    });
+
+    if (!file || file.deletedAt) {
+      throw new Error('Media file not found');
+    }
+
+    const updatedFile = await prisma.mediaFile.update({
+      where: { fileId },
+      data: {
+        fileName: data.fileName,
+        altText: data.altText,
+        isPublic: data.isPublic,
+      },
+      include: {
+        uploader: {
+          select: {
+            userId: true,
+            username: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return updatedFile;
+  }
+
+  /**
+   * Delete a media file (soft delete)
+   */
+  static async deleteFile(fileId: number) {
+    const file = await prisma.mediaFile.findUnique({
+      where: { fileId },
+    });
+
+    if (!file || file.deletedAt) {
+      throw new Error('Media file not found');
+    }
+
+    await prisma.mediaFile.update({
+      where: { fileId },
+      data: { deletedAt: new Date() },
+    });
+
+    return { message: 'Media file deleted successfully' };
+  }
+
+  /**
+   * Get file statistics
+   */
+  static async getFileStats() {
+    const [totalFiles, totalSize, filesByType] = await Promise.all([
+      prisma.mediaFile.count({
+        where: { deletedAt: null },
+      }),
+      prisma.mediaFile.aggregate({
+        where: { deletedAt: null },
+        _sum: {
+          fileSize: true,
+        },
+      }),
+      prisma.mediaFile.groupBy({
+        by: ['fileType'],
+        where: { deletedAt: null },
+        _count: {
+          fileId: true,
+        },
+      }),
+    ]);
+
+    return {
+      totalFiles,
+      totalSize: totalSize._sum.fileSize || BigInt(0),
+      filesByType: filesByType.map((item) => ({
+        fileType: item.fileType || 'unknown',
+        count: item._count.fileId,
+      })),
+    };
+  }
+}

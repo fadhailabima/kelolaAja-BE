@@ -9,7 +9,7 @@ class FAQCategoryController {
         try {
             const locale = req.locale || client_1.Locale.id;
             const categories = await faq_category_service_1.FAQCategoryService.getPublicCategories(locale);
-            response_1.ResponseUtil.success(res, 'FAQ categories retrieved successfully', categories);
+            response_1.ResponseUtil.success(res, "FAQ categories retrieved successfully", categories);
         }
         catch (error) {
             next(error);
@@ -22,7 +22,7 @@ class FAQCategoryController {
             const search = req.query.search;
             const isActive = req.query.isActive;
             const result = await faq_category_service_1.FAQCategoryService.getAllCategories(page, limit, search, isActive);
-            response_1.ResponseUtil.success(res, 'FAQ categories retrieved successfully', result.data, 200, result.pagination);
+            response_1.ResponseUtil.success(res, "FAQ categories retrieved successfully", result.data, 200, result.pagination);
         }
         catch (error) {
             next(error);
@@ -31,7 +31,7 @@ class FAQCategoryController {
     static async createCategory(req, res, next) {
         try {
             const result = await faq_category_service_1.FAQCategoryService.createCategory(req.body, req.user.userId);
-            response_1.ResponseUtil.created(res, 'FAQ category created successfully', result);
+            response_1.ResponseUtil.created(res, "FAQ category created successfully", result);
         }
         catch (error) {
             next(error);
@@ -41,7 +41,7 @@ class FAQCategoryController {
         try {
             const categoryId = parseInt(req.params.id);
             const result = await faq_category_service_1.FAQCategoryService.updateCategory(categoryId, req.body, req.user.userId);
-            response_1.ResponseUtil.success(res, 'FAQ category updated successfully', result);
+            response_1.ResponseUtil.success(res, "FAQ category updated successfully", result);
         }
         catch (error) {
             next(error);
@@ -51,7 +51,7 @@ class FAQCategoryController {
         try {
             const categoryId = parseInt(req.params.id);
             await faq_category_service_1.FAQCategoryService.deleteCategory(categoryId, req.user.userId);
-            response_1.ResponseUtil.success(res, 'FAQ category deleted successfully');
+            response_1.ResponseUtil.success(res, "FAQ category deleted successfully");
         }
         catch (error) {
             next(error);

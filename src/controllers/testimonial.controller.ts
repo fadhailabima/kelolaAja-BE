@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { ResponseUtil } from '../utils/response';
-import { Locale } from '@prisma/client';
-import { TestimonialService } from '../services/testimonial.service';
+import { Request, Response, NextFunction } from "express";
+import { ResponseUtil } from "../utils/response";
+import { Locale } from "@prisma/client";
+import { TestimonialService } from "../services/testimonial.service";
 
 export class TestimonialController {
   /**
@@ -11,10 +11,10 @@ export class TestimonialController {
   static async listPublicTestimonials(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const locale = req.locale || Locale.id;
-      const isFeatured = req.query.featured === 'true' ? true : undefined;
+      const isFeatured = req.query.featured === "true" ? true : undefined;
 
       const testimonials = await TestimonialService.getPublicTestimonials(locale, isFeatured);
-      ResponseUtil.success(res, 'Testimonials retrieved successfully', testimonials);
+      ResponseUtil.success(res, "Testimonials retrieved successfully", testimonials);
     } catch (error) {
       next(error);
     }
@@ -30,7 +30,7 @@ export class TestimonialController {
       const locale = req.locale || Locale.id;
 
       const testimonial = await TestimonialService.getPublicTestimonialById(testimonialId, locale);
-      ResponseUtil.success(res, 'Testimonial retrieved successfully', testimonial);
+      ResponseUtil.success(res, "Testimonial retrieved successfully", testimonial);
     } catch (error) {
       next(error);
     }
@@ -48,21 +48,9 @@ export class TestimonialController {
       const isFeatured = req.query.featured as string;
       const isActive = req.query.isActive as string;
 
-      const result = await TestimonialService.getAllTestimonials(
-        page,
-        limit,
-        search,
-        isFeatured,
-        isActive
-      );
+      const result = await TestimonialService.getAllTestimonials(page, limit, search, isFeatured, isActive);
 
-      ResponseUtil.success(
-        res,
-        'Testimonials retrieved successfully',
-        result.data,
-        200,
-        result.pagination
-      );
+      ResponseUtil.success(res, "Testimonials retrieved successfully", result.data, 200, result.pagination);
     } catch (error) {
       next(error);
     }
@@ -75,7 +63,7 @@ export class TestimonialController {
   static async createTestimonial(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const result = await TestimonialService.createTestimonial(req.body, req.user!.userId);
-      ResponseUtil.created(res, 'Testimonial created successfully', result);
+      ResponseUtil.created(res, "Testimonial created successfully", result);
     } catch (error) {
       next(error);
     }
@@ -88,12 +76,8 @@ export class TestimonialController {
   static async updateTestimonial(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const testimonialId = parseInt(req.params.id);
-      const result = await TestimonialService.updateTestimonial(
-        testimonialId,
-        req.body,
-        req.user!.userId
-      );
-      ResponseUtil.success(res, 'Testimonial updated successfully', result);
+      const result = await TestimonialService.updateTestimonial(testimonialId, req.body, req.user!.userId);
+      ResponseUtil.success(res, "Testimonial updated successfully", result);
     } catch (error) {
       next(error);
     }
@@ -107,7 +91,7 @@ export class TestimonialController {
     try {
       const testimonialId = parseInt(req.params.id);
       await TestimonialService.deleteTestimonial(testimonialId, req.user!.userId);
-      ResponseUtil.success(res, 'Testimonial deleted successfully');
+      ResponseUtil.success(res, "Testimonial deleted successfully");
     } catch (error) {
       next(error);
     }

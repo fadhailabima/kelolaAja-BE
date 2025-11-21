@@ -6,7 +6,7 @@ import { detectLocale } from "../middlewares/locale.middleware";
 const router = Router();
 
 // Public Routes
-router.get('/', detectLocale, PartnerController.listPublicPartners);
+router.get("/", detectLocale, PartnerController.listPublicPartners);
 
 // Admin routes
 router.get("/admin/all", authenticate, authorize("Admin", "Editor"), PartnerController.listAllPartners);

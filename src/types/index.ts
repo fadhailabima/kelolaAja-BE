@@ -3,16 +3,16 @@
  */
 
 // Express type extensions
-export * from './express';
+export * from "./express";
 
 // Translation types
-export * from './translation';
+export * from "./translation";
 
 // API types
-export * from './api';
+export * from "./api";
 
 // Auth types
-export * from './auth';
+export * from "./auth";
 
 // Service input types
-export * from './service';
+export * from "./service";

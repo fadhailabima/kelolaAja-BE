@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 export declare class FAQController {
     static listPublicFAQs(req: Request, res: Response, next: NextFunction): Promise<void>;
     static listPublicFAQsByCategory(req: Request, res: Response, next: NextFunction): Promise<void>;

@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { ResponseUtil } from '../utils/response';
-import { Locale } from '@prisma/client';
-import { FeatureService } from '../services/feature.service';
+import { Request, Response, NextFunction } from "express";
+import { ResponseUtil } from "../utils/response";
+import { Locale } from "@prisma/client";
+import { FeatureService } from "../services/feature.service";
 
 export class FeatureController {
   /**
@@ -14,7 +14,7 @@ export class FeatureController {
       const category = req.query.category as string;
 
       const features = await FeatureService.getPublicFeatures(locale, category);
-      ResponseUtil.success(res, 'Features retrieved successfully', features);
+      ResponseUtil.success(res, "Features retrieved successfully", features);
     } catch (error) {
       next(error);
     }
@@ -30,7 +30,7 @@ export class FeatureController {
       const locale = req.locale || Locale.id;
 
       const feature = await FeatureService.getPublicFeatureById(featureId, locale);
-      ResponseUtil.success(res, 'Feature retrieved successfully', feature);
+      ResponseUtil.success(res, "Feature retrieved successfully", feature);
     } catch (error) {
       next(error);
     }
@@ -43,7 +43,7 @@ export class FeatureController {
   static async getCategories(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const categories = await FeatureService.getCategories();
-      ResponseUtil.success(res, 'Categories retrieved successfully', categories);
+      ResponseUtil.success(res, "Categories retrieved successfully", categories);
     } catch (error) {
       next(error);
     }
@@ -63,13 +63,7 @@ export class FeatureController {
 
       const result = await FeatureService.getAllFeatures(page, limit, search, category, isActive);
 
-      ResponseUtil.success(
-        res,
-        'Features retrieved successfully',
-        result.data,
-        200,
-        result.pagination
-      );
+      ResponseUtil.success(res, "Features retrieved successfully", result.data, 200, result.pagination);
     } catch (error) {
       next(error);
     }
@@ -82,7 +76,7 @@ export class FeatureController {
   static async createFeature(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const result = await FeatureService.createFeature(req.body, req.user!.userId);
-      ResponseUtil.created(res, 'Feature created successfully', result);
+      ResponseUtil.created(res, "Feature created successfully", result);
     } catch (error) {
       next(error);
     }
@@ -96,7 +90,7 @@ export class FeatureController {
     try {
       const featureId = parseInt(req.params.id);
       const result = await FeatureService.updateFeature(featureId, req.body, req.user!.userId);
-      ResponseUtil.success(res, 'Feature updated successfully', result);
+      ResponseUtil.success(res, "Feature updated successfully", result);
     } catch (error) {
       next(error);
     }
@@ -110,7 +104,7 @@ export class FeatureController {
     try {
       const featureId = parseInt(req.params.id);
       await FeatureService.deleteFeature(featureId, req.user!.userId);
-      ResponseUtil.success(res, 'Feature deleted successfully');
+      ResponseUtil.success(res, "Feature deleted successfully");
     } catch (error) {
       next(error);
     }

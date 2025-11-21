@@ -35,21 +35,24 @@ PostgreSQL Database
 ### Layer Responsibilities
 
 #### 1. **Routes** (`src/routes/`)
+
 - Define API endpoints
 - Apply middlewares (authentication, locale detection)
 - Map HTTP methods to controller actions
 - Separate public and admin routes
 
 **Example:**
+
 ```typescript
 // Public routes
-router.get('/', detectLocale, PricingController.listPublicPlans);
+router.get("/", detectLocale, PricingController.listPublicPlans);
 
 // Admin routes
-router.post('/', authenticate, authorize(['Admin']), PricingController.createPlan);
+router.post("/", authenticate, authorize(["Admin"]), PricingController.createPlan);
 ```
 
 #### 2. **Controllers** (`src/controllers/`)
+
 - Handle HTTP requests and responses
 - Validate request parameters
 - Call appropriate service methods
@@ -57,6 +60,7 @@ router.post('/', authenticate, authorize(['Admin']), PricingController.createPla
 - Catch and forward errors to error handler
 
 **Responsibilities:**
+
 - ✅ Request parsing (params, query, body)
 - ✅ Response formatting
 - ✅ Error handling delegation
@@ -64,12 +68,13 @@ router.post('/', authenticate, authorize(['Admin']), PricingController.createPla
 - ❌ NO database queries
 
 **Example:**
+
 ```typescript
 export class PricingController {
   static async createPlan(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const result = await PricingService.createPlan(req.body, req.user!.userId);
-      ResponseUtil.created(res, 'Pricing plan created successfully', result);
+      ResponseUtil.created(res, "Pricing plan created successfully", result);
     } catch (error) {
       next(error);
     }
@@ -78,6 +83,7 @@ export class PricingController {
 ```
 
 #### 3. **Services** (`src/services/`)
+
 - Implement business logic
 - Interact with database via Prisma
 - Handle data validation and transformation
@@ -85,6 +91,7 @@ export class PricingController {
 - Reusable across different controllers
 
 **Responsibilities:**
+
 - ✅ Business logic implementation
 - ✅ Data validation
 - ✅ Database operations (CRUD)
@@ -93,12 +100,13 @@ export class PricingController {
 - ❌ NO HTTP concerns (req, res objects)
 
 **Example:**
+
 ```typescript
 export class PricingService {
   static async createPlan(data: any, userId: number) {
     // Validation
     if (!data.planCode) {
-      throw new ValidationError('Plan code is required');
+      throw new ValidationError("Plan code is required");
     }
 
     // Business logic
@@ -107,7 +115,7 @@ export class PricingService {
     });
 
     if (existingPlan) {
-      throw new ValidationError('Plan code already exists');
+      throw new ValidationError("Plan code already exists");
     }
 
     // Database operation
@@ -119,6 +127,7 @@ export class PricingService {
 ```
 
 #### 4. **Middlewares** (`src/middlewares/`)
+
 - Process requests before reaching controllers
 - Authentication & authorization
 - Locale detection
@@ -126,6 +135,7 @@ export class PricingService {
 - Error handling
 
 #### 5. **Utils** (`src/utils/`)
+
 - Reusable helper functions
 - Response formatting
 - JWT utilities
@@ -181,6 +191,7 @@ JSON response with status 201
 ## Multi-Language Pattern
 
 ### Translation Tables
+
 Semua entity yang memiliki konten multi-bahasa memiliki tabel translation terpisah:
 
 ```prisma
@@ -195,7 +206,7 @@ model PricingTranslation {
   locale      Locale  // enum: id, en
   planName    String
   description String
-  
+
   @@unique([planId, locale])
 }
 ```
@@ -203,6 +214,7 @@ model PricingTranslation {
 ### Service Layer Handling
 
 **Public API (Single Locale):**
+
 ```typescript
 // Returns: { planId, planCode, planName, description, ... }
 const plans = await prisma.pricingPlan.findMany({
@@ -222,11 +234,12 @@ return plans.map(plan => ({
 ```
 
 **Admin API (All Locales):**
+
 ```typescript
 // Returns: { planId, planCode, translations: { id: {...}, en: {...} } }
 const plans = await prisma.pricingPlan.findMany({
   include: {
-    translations: true  // Get all locales
+    translations: true // Get all locales
   }
 });
 
@@ -239,6 +252,7 @@ return plans.map(plan => ({
 ## Error Handling
 
 ### Custom Error Classes
+
 ```typescript
 export class ValidationError extends Error {
   statusCode = 400;
@@ -254,39 +268,45 @@ export class UnauthorizedError extends Error {
 ```
 
 ### Service Layer
+
 Services throw custom errors:
+
 ```typescript
 if (!plan) {
-  throw new NotFoundError('Pricing plan not found');
+  throw new NotFoundError("Pricing plan not found");
 }
 
 if (existingCode) {
-  throw new ValidationError('Plan code already exists');
+  throw new ValidationError("Plan code already exists");
 }
 ```
 
 ### Controller Layer
+
 Controllers catch and forward to error handler:
+
 ```typescript
 try {
   const result = await Service.method();
-  ResponseUtil.success(res, 'Success', result);
+  ResponseUtil.success(res, "Success", result);
 } catch (error) {
-  next(error);  // Forward to global error handler
+  next(error); // Forward to global error handler
 }
 ```
 
 ### Global Error Handler
+
 Centralized error handling in `src/middlewares/errorHandler.ts`:
+
 ```typescript
 export const errorHandler = (err, req, res, next) => {
   const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal Server Error';
-  
+  const message = err.message || "Internal Server Error";
+
   res.status(statusCode).json({
     success: false,
     message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack })
   });
 };
 ```
@@ -294,26 +314,31 @@ export const errorHandler = (err, req, res, next) => {
 ## Benefits of This Architecture
 
 ### 1. **Separation of Concerns**
+
 - Each layer has single responsibility
 - Easy to understand and maintain
 - Changes in one layer don't affect others
 
 ### 2. **Reusability**
+
 - Services can be called from multiple controllers
 - Same business logic for different endpoints
 - Utility functions shared across codebase
 
 ### 3. **Testability**
+
 - Services can be unit tested independently
 - Mock database calls easily
 - Test business logic without HTTP layer
 
 ### 4. **Scalability**
+
 - Easy to add new features
 - Can extract services to microservices later
 - Clear boundaries for team collaboration
 
 ### 5. **Type Safety**
+
 - TypeScript throughout the stack
 - Prisma generates types from schema
 - Compile-time error detection
@@ -323,14 +348,17 @@ export const errorHandler = (err, req, res, next) => {
 ### Implemented with Services Layer:
 
 1. **Pricing Plans** (`pricing.service.ts`)
+
    - Public: List plans, Get single plan
    - Admin: CRUD operations with all translations
 
 2. **Features** (`feature.service.ts`)
+
    - Public: List features, Filter by category, Get categories
    - Admin: CRUD operations with all translations
 
 3. **Plan Features** (`plan-feature.service.ts`)
+
    - Public: List features for specific plan
    - Admin: Add/Update/Remove features, Bulk operations
 
@@ -350,6 +378,7 @@ When creating new modules, follow this structure:
 ## Best Practices
 
 ### DO ✅
+
 - Keep controllers thin (HTTP only)
 - Put all business logic in services
 - Use TypeScript types for better IDE support
@@ -359,6 +388,7 @@ When creating new modules, follow this structure:
 - Use Prisma's type safety features
 
 ### DON'T ❌
+
 - Don't put business logic in controllers
 - Don't access database directly from controllers
 - Don't use `any` type unless necessary for Prisma complex types
@@ -369,18 +399,22 @@ When creating new modules, follow this structure:
 ## Future Improvements
 
 1. **Add Repository Layer** (Optional)
+
    - Separate data access from business logic
    - Easier to switch databases
 
 2. **Add DTOs (Data Transfer Objects)**
+
    - Strong typing for request/response
    - Validation decorators
 
 3. **Add Unit Tests**
+
    - Test services independently
    - Mock Prisma client
 
 4. **Add API Documentation**
+
    - Swagger/OpenAPI
    - Auto-generated from code
 

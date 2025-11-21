@@ -1,7 +1,7 @@
-import { prisma } from '../utils/prisma';
-import { ValidationError, NotFoundError } from '../utils/errors';
-import { Locale } from '@prisma/client';
-import { mergeAllTranslations } from '../utils/translation';
+import { prisma } from "../utils/prisma";
+import { ValidationError, NotFoundError } from "../utils/errors";
+import { Locale } from "@prisma/client";
+import { mergeAllTranslations } from "../utils/translation";
 
 export class ProcessStepService {
   /**
@@ -11,21 +11,21 @@ export class ProcessStepService {
     const steps: any = await prisma.processStep.findMany({
       where: {
         isActive: true,
-        deletedAt: null,
+        deletedAt: null
       },
       include: {
         translations: {
-          where: { locale },
+          where: { locale }
         },
         imageFile: {
           select: {
             fileId: true,
             filePath: true,
-            altText: true,
-          },
-        },
+            altText: true
+          }
+        }
       },
-      orderBy: { displayOrder: 'asc' },
+      orderBy: { displayOrder: "asc" }
     });
 
     return steps.map((step: any) => {
@@ -33,15 +33,15 @@ export class ProcessStepService {
       return {
         stepId: step.stepId,
         displayOrder: step.displayOrder,
-        title: translation.title || '',
-        description: translation.description || '',
+        title: translation.title || "",
+        description: translation.description || "",
         image: step.imageFile
           ? {
               fileId: step.imageFile.fileId,
               filePath: step.imageFile.filePath,
-              altText: step.imageFile.altText,
+              altText: step.imageFile.altText
             }
-          : null,
+          : null
       };
     });
   }
@@ -56,16 +56,13 @@ export class ProcessStepService {
     if (search) {
       where.translations = {
         some: {
-          OR: [
-            { title: { contains: search, mode: 'insensitive' } },
-            { description: { contains: search, mode: 'insensitive' } },
-          ],
-        },
+          OR: [{ title: { contains: search, mode: "insensitive" } }, { description: { contains: search, mode: "insensitive" } }]
+        }
       };
     }
 
     if (isActive !== undefined) {
-      where.isActive = isActive === 'true';
+      where.isActive = isActive === "true";
     }
 
     const [total, steps]: any = await Promise.all([
@@ -74,34 +71,34 @@ export class ProcessStepService {
         where,
         include: {
           translations: {
-            orderBy: { locale: 'asc' },
+            orderBy: { locale: "asc" }
           },
           imageFile: {
             select: {
               fileId: true,
               filePath: true,
-              altText: true,
-            },
+              altText: true
+            }
           },
           creator: {
             select: {
               userId: true,
               username: true,
-              email: true,
-            },
+              email: true
+            }
           },
           updater: {
             select: {
               userId: true,
               username: true,
-              email: true,
-            },
-          },
+              email: true
+            }
+          }
         },
-        orderBy: { displayOrder: 'asc' },
+        orderBy: { displayOrder: "asc" },
         skip,
-        take: limit,
-      }),
+        take: limit
+      })
     ]);
 
     const result = steps.map((step: any) => ({
@@ -114,7 +111,7 @@ export class ProcessStepService {
       image: step.imageFile,
       creator: step.creator,
       updater: step.updater,
-      translations: mergeAllTranslations(step.translations),
+      translations: mergeAllTranslations(step.translations)
     }));
 
     return {
@@ -123,8 +120,8 @@ export class ProcessStepService {
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / limit),
-      },
+        totalPages: Math.ceil(total / limit)
+      }
     };
   }
 
@@ -135,11 +132,11 @@ export class ProcessStepService {
     const { displayOrder, imageFileId, translations } = data;
 
     if (displayOrder === undefined) {
-      throw new ValidationError('displayOrder is required');
+      throw new ValidationError("displayOrder is required");
     }
 
     if (!translations || !translations.id) {
-      throw new ValidationError('Indonesian translation (id) is required');
+      throw new ValidationError("Indonesian translation (id) is required");
     }
 
     // Generate stepCode
@@ -148,11 +145,11 @@ export class ProcessStepService {
     // Verify image file if provided
     if (imageFileId) {
       const imageFile = await prisma.mediaFile.findUnique({
-        where: { fileId: imageFileId },
+        where: { fileId: imageFileId }
       });
 
       if (!imageFile) {
-        throw new NotFoundError('Image file not found');
+        throw new NotFoundError("Image file not found");
       }
     }
 
@@ -169,19 +166,19 @@ export class ProcessStepService {
             {
               locale: Locale.id,
               title: translations.id.title,
-              description: translations.id.description || null,
+              description: translations.id.description || null
             },
             ...(translations.en
               ? [
                   {
                     locale: Locale.en,
                     title: translations.en.title,
-                    description: translations.en.description || null,
-                  },
+                    description: translations.en.description || null
+                  }
                 ]
-              : []),
-          ],
-        },
+              : [])
+          ]
+        }
       },
       include: {
         translations: true,
@@ -189,22 +186,22 @@ export class ProcessStepService {
           select: {
             fileId: true,
             filePath: true,
-            altText: true,
-          },
+            altText: true
+          }
         },
         creator: {
           select: {
             userId: true,
             username: true,
-            email: true,
-          },
-        },
-      },
+            email: true
+          }
+        }
+      }
     });
 
     return {
       ...step,
-      translations: mergeAllTranslations(step.translations),
+      translations: mergeAllTranslations(step.translations)
     };
   }
 
@@ -215,20 +212,20 @@ export class ProcessStepService {
     const { displayOrder, imageFileId, isActive, translations } = data;
 
     const existing = await prisma.processStep.findUnique({
-      where: { stepId },
+      where: { stepId }
     });
 
     if (!existing || existing.deletedAt) {
-      throw new NotFoundError('Process step not found');
+      throw new NotFoundError("Process step not found");
     }
 
     if (imageFileId) {
       const imageFile = await prisma.mediaFile.findUnique({
-        where: { fileId: imageFileId },
+        where: { fileId: imageFileId }
       });
 
       if (!imageFile) {
-        throw new NotFoundError('Image file not found');
+        throw new NotFoundError("Image file not found");
       }
     }
 
@@ -240,7 +237,7 @@ export class ProcessStepService {
 
     await prisma.processStep.update({
       where: { stepId },
-      data: updateData,
+      data: updateData
     });
 
     if (translations) {
@@ -250,19 +247,19 @@ export class ProcessStepService {
             where: {
               stepId_locale: {
                 stepId,
-                locale,
-              },
+                locale
+              }
             },
             create: {
               stepId,
               locale,
               title: translations[locale].title,
-              description: translations[locale].description || null,
+              description: translations[locale].description || null
             },
             update: {
               title: translations[locale].title,
-              description: translations[locale].description || null,
-            },
+              description: translations[locale].description || null
+            }
           });
         }
       }
@@ -276,22 +273,22 @@ export class ProcessStepService {
           select: {
             fileId: true,
             filePath: true,
-            altText: true,
-          },
+            altText: true
+          }
         },
         updater: {
           select: {
             userId: true,
             username: true,
-            email: true,
-          },
-        },
-      },
+            email: true
+          }
+        }
+      }
     });
 
     return {
       ...updated,
-      translations: mergeAllTranslations(updated.translations),
+      translations: mergeAllTranslations(updated.translations)
     };
   }
 
@@ -300,11 +297,11 @@ export class ProcessStepService {
    */
   static async deleteStep(stepId: number, userId: number) {
     const step = await prisma.processStep.findUnique({
-      where: { stepId },
+      where: { stepId }
     });
 
     if (!step || step.deletedAt) {
-      throw new NotFoundError('Process step not found');
+      throw new NotFoundError("Process step not found");
     }
 
     await prisma.processStep.update({
@@ -312,8 +309,8 @@ export class ProcessStepService {
       data: {
         deletedAt: new Date(),
         isActive: false,
-        updatedBy: userId,
-      },
+        updatedBy: userId
+      }
     });
   }
 }
