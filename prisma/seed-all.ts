@@ -26,6 +26,8 @@ const seeders = [
   { name: "Site Config", file: "seed-site-configs.ts", required: true },
   { name: "Pricing Plans", file: "seed-pricing.ts", required: true },
   { name: "Features", file: "seed-features.ts", required: true },
+  { name: "Industries", file: "seed-industries.ts", required: false },
+  { name: "Feature Pages", file: "seed-feature-pages.ts", required: false },
   { name: "FAQ", file: "seed-faqs.ts", required: false },
   { name: "Testimonials", file: "seed-testimonials.ts", required: false },
   { name: "Partners", file: "seed-partners.ts", required: false },

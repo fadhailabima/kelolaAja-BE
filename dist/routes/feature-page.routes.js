@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const locale_middleware_1 = require("../middlewares/locale.middleware");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const feature_page_controller_1 = require("../controllers/feature-page.controller");
+const router = (0, express_1.Router)();
+router.get("/", locale_middleware_1.detectLocale, feature_page_controller_1.FeaturePageController.listPublicPages);
+router.get("/admin/all", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), feature_page_controller_1.FeaturePageController.listPages);
+router.get("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), feature_page_controller_1.FeaturePageController.getPageDetail);
+router.post("/admin", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), feature_page_controller_1.FeaturePageController.createPage);
+router.put("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), feature_page_controller_1.FeaturePageController.updatePage);
+router.delete("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), feature_page_controller_1.FeaturePageController.deletePage);
+router.get("/admin/:pageId/items", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), feature_page_controller_1.FeaturePageController.listItems);
+router.post("/admin/:pageId/items", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), feature_page_controller_1.FeaturePageController.createItem);
+router.put("/admin/items/:itemId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), feature_page_controller_1.FeaturePageController.updateItem);
+router.delete("/admin/items/:itemId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), feature_page_controller_1.FeaturePageController.deleteItem);
+router.get("/:slug", locale_middleware_1.detectLocale, feature_page_controller_1.FeaturePageController.getPublicPage);
+exports.default = router;
+//# sourceMappingURL=feature-page.routes.js.map

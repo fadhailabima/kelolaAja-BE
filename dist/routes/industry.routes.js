@@ -1,0 +1,28 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const industry_controller_1 = require("../controllers/industry.controller");
+const locale_middleware_1 = require("../middlewares/locale.middleware");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const router = (0, express_1.Router)();
+router.get("/", locale_middleware_1.detectLocale, industry_controller_1.IndustryController.listPublicIndustries);
+router.get("/admin/all", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), industry_controller_1.IndustryController.listIndustries);
+router.get("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), industry_controller_1.IndustryController.getIndustryDetail);
+router.post("/admin", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.createIndustry);
+router.put("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.updateIndustry);
+router.delete("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.deleteIndustry);
+router.get("/admin/:industryId/problems", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), industry_controller_1.IndustryController.listProblems);
+router.post("/admin/:industryId/problems", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.createProblem);
+router.put("/admin/problems/:problemId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.updateProblem);
+router.delete("/admin/problems/:problemId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.deleteProblem);
+router.get("/admin/:industryId/solutions", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), industry_controller_1.IndustryController.listSolutions);
+router.post("/admin/:industryId/solutions", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.createSolution);
+router.put("/admin/solutions/:solutionId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.updateSolution);
+router.delete("/admin/solutions/:solutionId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.deleteSolution);
+router.get("/admin/:industryId/media", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), industry_controller_1.IndustryController.listMedia);
+router.post("/admin/:industryId/media", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.addMedia);
+router.put("/admin/media/:mediaId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.updateMedia);
+router.delete("/admin/media/:mediaId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), industry_controller_1.IndustryController.deleteMedia);
+router.get("/:slug", locale_middleware_1.detectLocale, industry_controller_1.IndustryController.getPublicIndustry);
+exports.default = router;
+//# sourceMappingURL=industry.routes.js.map

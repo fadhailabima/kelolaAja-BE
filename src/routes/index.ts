@@ -18,6 +18,9 @@ import siteConfigRoutes from "./site-config.routes";
 import mediaFileRoutes from "./media-file.routes";
 import contactSubmissionRoutes from "./contact-submission.routes";
 import auditLogRoutes from "./audit-log.routes";
+import industryRoutes from "./industry.routes";
+import featurePageRoutes from "./feature-page.routes";
+import analyticsRoutes from "./analytics.routes";
 
 const router = Router();
 
@@ -41,6 +44,9 @@ router.use("/site-config", siteConfigRoutes);
 router.use("/media-files", mediaFileRoutes);
 router.use("/contact-submissions", contactSubmissionRoutes);
 router.use("/audit-logs", auditLogRoutes);
+router.use("/industries", industryRoutes);
+router.use("/feature-pages", featurePageRoutes);
+router.use("/analytics", analyticsRoutes);
 
 // Admin routes
 router.use("/admin/testimonials", testimonialAdminRoutes);
