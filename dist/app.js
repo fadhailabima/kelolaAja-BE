@@ -9,6 +9,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const express_session_1 = __importDefault(require("express-session"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const connect_livereload_1 = __importDefault(require("connect-livereload"));
+const path_1 = __importDefault(require("path"));
 const routes_1 = __importDefault(require("./routes"));
 const error_middleware_1 = require("./middlewares/error.middleware");
 dotenv_1.default.config();
@@ -41,6 +42,7 @@ app.use((req, _res, next) => {
 if (process.env.NODE_ENV === "development") {
     app.use((0, connect_livereload_1.default)());
 }
+app.use("/uploads", express_1.default.static(path_1.default.join(__dirname, "..", "uploads")));
 app.get("/", (_req, res) => {
     res.json({
         message: "KelolaAja API Server",
@@ -48,7 +50,7 @@ app.get("/", (_req, res) => {
         status: "running"
     });
 });
-app.use("/api", routes_1.default);
+app.use("/api/v1", routes_1.default);
 app.use((req, res) => {
     res.status(404).json({
         error: "Not Found",

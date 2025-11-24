@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MediaFileService = void 0;
 const client_1 = require("@prisma/client");
+const file_util_1 = require("../utils/file.util");
 const prisma = new client_1.PrismaClient();
 class MediaFileService {
     static async getAllFiles(page = 1, limit = 20, filters) {
@@ -129,6 +130,20 @@ class MediaFileService {
             data: { deletedAt: new Date() },
         });
         return { message: 'Media file deleted successfully' };
+    }
+    static async permanentlyDeleteFile(fileId) {
+        const file = await prisma.mediaFile.findUnique({
+            where: { fileId },
+        });
+        if (!file) {
+            throw new Error('Media file not found');
+        }
+        const absolutePath = file_util_1.FileUtil.getAbsolutePath(file.filePath);
+        file_util_1.FileUtil.deleteFile(absolutePath);
+        await prisma.mediaFile.delete({
+            where: { fileId },
+        });
+        return { message: 'Media file permanently deleted' };
     }
     static async getFileStats() {
         const [totalFiles, totalSize, filesByType] = await Promise.all([

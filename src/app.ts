@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import livereload from "connect-livereload";
+import path from "path";
 import routes from "./routes";
 import { errorHandler } from "./middlewares/error.middleware";
 
@@ -49,6 +50,9 @@ if (process.env.NODE_ENV === "development") {
   app.use(livereload());
 }
 
+// Static files - serve uploaded files
+app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
+
 // Routes
 app.get("/", (_req: Request, res: Response) => {
   res.json({
@@ -59,7 +63,7 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 // API Routes
-app.use("/api", routes);
+app.use("/api/v1", routes);
 
 // 404 Handler
 app.use((req: Request, res: Response) => {

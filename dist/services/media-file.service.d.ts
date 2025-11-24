@@ -124,6 +124,9 @@ export declare class MediaFileService {
     static deleteFile(fileId: number): Promise<{
         message: string;
     }>;
+    static permanentlyDeleteFile(fileId: number): Promise<{
+        message: string;
+    }>;
     static getFileStats(): Promise<{
         totalFiles: number;
         totalSize: bigint;

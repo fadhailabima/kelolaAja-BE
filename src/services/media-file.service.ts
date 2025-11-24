@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { FileUtil } from '../utils/file.util';
 
 const prisma = new PrismaClient();
 
@@ -179,12 +180,41 @@ export class MediaFileService {
       throw new Error('Media file not found');
     }
 
+    // Soft delete in database
     await prisma.mediaFile.update({
       where: { fileId },
       data: { deletedAt: new Date() },
     });
 
+    // Optionally delete physical file (uncomment if you want hard delete)
+    // const absolutePath = FileUtil.getAbsolutePath(file.filePath);
+    // FileUtil.deleteFile(absolutePath);
+
     return { message: 'Media file deleted successfully' };
+  }
+
+  /**
+   * Permanently delete a media file (hard delete)
+   */
+  static async permanentlyDeleteFile(fileId: number) {
+    const file = await prisma.mediaFile.findUnique({
+      where: { fileId },
+    });
+
+    if (!file) {
+      throw new Error('Media file not found');
+    }
+
+    // Delete physical file
+    const absolutePath = FileUtil.getAbsolutePath(file.filePath);
+    FileUtil.deleteFile(absolutePath);
+
+    // Delete from database
+    await prisma.mediaFile.delete({
+      where: { fileId },
+    });
+
+    return { message: 'Media file permanently deleted' };
   }
 
   /**

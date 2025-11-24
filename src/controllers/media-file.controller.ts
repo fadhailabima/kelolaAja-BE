@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { MediaFileService } from '../services/media-file.service';
 import { ResponseUtil } from '../utils/response';
+import { FileUtil } from '../utils/file.util';
 
 export class MediaFileController {
   /**
@@ -51,8 +52,49 @@ export class MediaFileController {
         return ResponseUtil.unauthorized(res, 'User not authenticated');
       }
 
+      // Check if file was uploaded
+      if (!req.file) {
+        return ResponseUtil.error(res, 'No file uploaded', 400);
+      }
+
+      const uploadedFile = req.file;
+      const fileType = FileUtil.getFileType(uploadedFile.mimetype);
+      const relativePath = FileUtil.getRelativePath(uploadedFile.path);
+
+      // Get image dimensions if it's an image
+      let width: number | undefined;
+      let height: number | undefined;
+      if (fileType === 'image') {
+        const dimensions = await FileUtil.getImageDimensions(uploadedFile.path);
+        if (dimensions) {
+          width = dimensions.width;
+          height = dimensions.height;
+        }
+
+        // Optimize image
+        await FileUtil.optimizeImage(uploadedFile.path, {
+          maxWidth: 2000,
+          maxHeight: 2000,
+          quality: 85,
+        });
+      }
+
+      // Get alt text from request body or use filename
+      const altText = req.body.altText || uploadedFile.originalname;
+      const isPublic = req.body.isPublic !== undefined ? req.body.isPublic === 'true' : true;
+
+      // Create database record
       const file = await MediaFileService.createFile({
-        ...req.body,
+        fileName: uploadedFile.originalname,
+        filePath: relativePath,
+        fileType,
+        mimeType: uploadedFile.mimetype,
+        fileSize: BigInt(uploadedFile.size),
+        width,
+        height,
+        altText,
+        storageType: 'local',
+        isPublic,
         uploadedBy: userId,
       });
 
@@ -101,9 +143,76 @@ export class MediaFileController {
       const serializedStats = {
         ...stats,
         totalSize: stats.totalSize.toString(),
+        totalSizeFormatted: FileUtil.formatFileSize(stats.totalSize),
       };
 
       return ResponseUtil.success(res, 'File statistics retrieved successfully', serializedStats);
+    } catch (error: any) {
+      return ResponseUtil.error(res, error.message);
+    }
+  }
+
+  /**
+   * Serve/Download a file
+   */
+  static async serveFile(req: Request, res: Response) {
+    try {
+      const fileId = parseInt(req.params.id);
+      const file = await MediaFileService.getFileById(fileId);
+
+      // Check if file is public or user has access
+      if (!file.isPublic && !req.user) {
+        return ResponseUtil.unauthorized(res, 'This file is not public');
+      }
+
+      // Get absolute path
+      const absolutePath = FileUtil.getAbsolutePath(file.filePath);
+
+      // Check if file exists
+      const fs = await import('fs');
+      if (!fs.existsSync(absolutePath)) {
+        return ResponseUtil.error(res, 'File not found on server', 404);
+      }
+
+      // Set headers
+      res.setHeader('Content-Type', file.mimeType || 'application/octet-stream');
+      res.setHeader('Content-Disposition', `inline; filename="${file.fileName}"`);
+
+      // Send file
+      return res.sendFile(absolutePath);
+    } catch (error: any) {
+      return ResponseUtil.error(res, error.message);
+    }
+  }
+
+  /**
+   * Download a file (force download)
+   */
+  static async downloadFile(req: Request, res: Response) {
+    try {
+      const fileId = parseInt(req.params.id);
+      const file = await MediaFileService.getFileById(fileId);
+
+      // Check if file is public or user has access
+      if (!file.isPublic && !req.user) {
+        return ResponseUtil.unauthorized(res, 'This file is not public');
+      }
+
+      // Get absolute path
+      const absolutePath = FileUtil.getAbsolutePath(file.filePath);
+
+      // Check if file exists
+      const fs = await import('fs');
+      if (!fs.existsSync(absolutePath)) {
+        return ResponseUtil.error(res, 'File not found on server', 404);
+      }
+
+      // Set headers for download
+      res.setHeader('Content-Type', file.mimeType || 'application/octet-stream');
+      res.setHeader('Content-Disposition', `attachment; filename="${file.fileName}"`);
+
+      // Send file
+      return res.sendFile(absolutePath);
     } catch (error: any) {
       return ResponseUtil.error(res, error.message);
     }
