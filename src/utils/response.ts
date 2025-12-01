@@ -57,4 +57,8 @@ export class ResponseUtil {
   static serverError(res: Response, message: string = "Internal server error", errors?: any): void {
     this.error(res, message, errors, 500);
   }
+
+  static badRequest(res: Response, message: string = "Bad request", errors?: any): void {
+    this.error(res, message, errors, 400);
+  }
 }

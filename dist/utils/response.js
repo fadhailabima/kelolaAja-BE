@@ -36,6 +36,9 @@ class ResponseUtil {
     static serverError(res, message = "Internal server error", errors) {
         this.error(res, message, errors, 500);
     }
+    static badRequest(res, message = "Bad request", errors) {
+        this.error(res, message, errors, 400);
+    }
 }
 exports.ResponseUtil = ResponseUtil;
 //# sourceMappingURL=response.js.map

@@ -13,7 +13,7 @@ router.get("/download/:id", MediaFileController.downloadFile);
 router.get("/admin", authenticate, MediaFileController.listAll);
 router.get("/admin/stats", authenticate, MediaFileController.getStats);
 router.get("/admin/:id", authenticate, MediaFileController.getById);
-router.post("/admin/upload", authenticate, upload.single('file'), handleMulterError, MediaFileController.upload);
+router.post("/admin/upload", authenticate, upload.single("file"), handleMulterError, MediaFileController.upload);
 router.put("/admin/:id", authenticate, MediaFileController.update);
 router.delete("/admin/:id", authenticate, MediaFileController.delete);
 

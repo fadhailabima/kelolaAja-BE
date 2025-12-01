@@ -19,6 +19,7 @@
 - [Industries](#14-industries)
 - [Feature Pages](#15-feature-pages)
 - [Analytics](#16-analytics)
+- [Career Management](#17-career-management)
 
 ---
 
@@ -3883,7 +3884,6 @@ Authorization: Bearer <access_token>
 | `page` | number | ❌ | Halaman (default: 1) |
 | `limit` | number | ❌ | Jumlah per halaman (default: 20) |
 | `status` | string | ❌ | pending/assigned/contacted/resolved |
-| `assignedTo` | number | ❌ | Filter by assigned user ID |
 | `source` | string | ❌ | Filter by source |
 
 **Example Request:**
@@ -3908,7 +3908,6 @@ GET /api/contact-submissions/admin?page=1&limit=20&status=pending
       "message": "Saya tertarik dengan produk KelolaAja",
       "status": "pending",
       "source": "website",
-      "assignedTo": null,
       "notes": null,
       "submittedAt": "2025-11-23T10:30:00.000Z",
       "contactedAt": null,
@@ -3954,10 +3953,6 @@ Mendapatkan detail submission berdasarkan ID.
     "message": "Saya tertarik dengan produk KelolaAja",
     "status": "contacted",
     "source": "website",
-    "assignedTo": {
-      "userId": 2,
-      "fullName": "Sales Manager"
-    },
     "notes": "Follow up via email",
     "visitor": {
       "visitorId": 50,
@@ -4088,7 +4083,7 @@ Menghapus submission (soft delete).
 
 ---
 
-### 12.7 Get Submission Statistics (Admin)
+### 12.6 Get Submission Statistics (Admin)
 
 Mendapatkan statistik submission.
 
@@ -5321,9 +5316,812 @@ GET /api/analytics/admin/page-views?pagePath=/pricing&page=1&limit=50
 
 ---
 
+## 17. Career Management
+
+### Overview
+
+Fitur Career Management memungkinkan perusahaan untuk mengelola lowongan pekerjaan (job postings) dan menerima lamaran (job applications) dari kandidat. Sistem ini mencakup manajemen job posting lengkap dengan deskripsi, requirements, responsibilities, dan benefits, serta sistem aplikasi yang mendukung upload CV.
+
+### Database Schema
+
+#### Job Posting Tables
+
+- **JOB_POSTING**: Tabel utama untuk lowongan pekerjaan
+- **JOB_POSTING_TRANSLATION**: Terjemahan konten job posting (multi-language)
+- **JOB_REQUIREMENT**: Persyaratan pekerjaan
+- **JOB_REQUIREMENT_TRANSLATION**: Terjemahan persyaratan
+- **JOB_RESPONSIBILITY**: Tanggung jawab pekerjaan
+- **JOB_RESPONSIBILITY_TRANSLATION**: Terjemahan tanggung jawab
+- **JOB_BENEFIT**: Benefit yang ditawarkan
+- **JOB_BENEFIT_TRANSLATION**: Terjemahan benefit
+
+#### Job Application Tables
+
+- **JOB_APPLICATION**: Data lamaran kandidat termasuk CV
+
+### Enums
+
+#### JobType
+
+- `FullTime`: Pekerjaan full-time
+- `PartTime`: Pekerjaan part-time
+- `Contract`: Kontrak
+- `Internship`: Magang
+- `Freelance`: Freelance
+
+#### JobLevel
+
+- `EntryLevel`: Entry level
+- `Junior`: Junior
+- `MidLevel`: Mid level
+- `Senior`: Senior
+- `Lead`: Lead
+- `Manager`: Manager
+- `Director`: Director
+- `Executive`: Executive
+
+#### WorkLocation
+
+- `OnSite`: Kerja di kantor
+- `Remote`: Remote/WFH
+- `Hybrid`: Hybrid (kombinasi)
+
+#### ApplicationStatus
+
+- `Pending`: Menunggu review dari HR
+- `Reviewed`: Sudah direview oleh HR
+- `Shortlisted`: Masuk shortlist kandidat terpilih
+- `Interview`: Proses interview
+- `Offered`: Ditawari posisi oleh perusahaan
+- `Rejected`: Ditolak oleh perusahaan
+- `Accepted`: Kandidat menerima offer
+
+### API Endpoints
+
+#### Job Posting Endpoints
+
+##### 1. Create Job Posting
+
+**POST** `/api/v1/jobs/admin`
+
+- **Auth**: Required (Admin, Editor)
+- **Body**:
+
+```json
+{
+  "jobCode": "DEV-001",
+  "slug": "senior-backend-developer",
+  "department": "Engineering",
+  "jobType": "FullTime",
+  "jobLevel": "Senior",
+  "workLocation": "Hybrid",
+  "city": "Jakarta",
+  "country": "Indonesia",
+  "salaryMin": 15000000,
+  "salaryMax": 25000000,
+  "salaryCurrency": "IDR",
+  "salaryPeriod": "monthly",
+  "showSalary": true,
+  "positions": 2,
+  "experienceYears": 5,
+  "applicationDeadline": "2024-12-31T23:59:59Z",
+  "isActive": true,
+  "isFeatured": true,
+  "publishedAt": "2024-11-27T00:00:00Z",
+  "translations": [
+    {
+      "locale": "id",
+      "title": "Senior Backend Developer",
+      "shortDescription": "Kami mencari Senior Backend Developer untuk tim Engineering",
+      "description": "Deskripsi lengkap pekerjaan...",
+      "qualifications": "Kualifikasi yang dibutuhkan...",
+      "additionalInfo": "Informasi tambahan..."
+    },
+    {
+      "locale": "en",
+      "title": "Senior Backend Developer",
+      "shortDescription": "We are looking for Senior Backend Developer",
+      "description": "Full job description...",
+      "qualifications": "Required qualifications...",
+      "additionalInfo": "Additional information..."
+    }
+  ],
+  "requirements": [
+    {
+      "locale": "id",
+      "requirement": "Minimal 5 tahun pengalaman backend development",
+      "isRequired": true,
+      "displayOrder": 1
+    },
+    {
+      "locale": "id",
+      "requirement": "Mahir dalam Node.js, TypeScript, dan PostgreSQL",
+      "isRequired": true,
+      "displayOrder": 2
+    }
+  ],
+  "responsibilities": [
+    {
+      "locale": "id",
+      "responsibility": "Mengembangkan dan memelihara backend services",
+      "displayOrder": 1
+    },
+    {
+      "locale": "id",
+      "responsibility": "Berkolaborasi dengan tim frontend",
+      "displayOrder": 2
+    }
+  ],
+  "benefits": [
+    {
+      "locale": "id",
+      "benefit": "Asuransi kesehatan",
+      "description": "BPJS Kesehatan & Swasta",
+      "iconName": "health",
+      "displayOrder": 1
+    },
+    {
+      "locale": "id",
+      "benefit": "Flexible working hours",
+      "description": "Jam kerja fleksibel",
+      "iconName": "clock",
+      "displayOrder": 2
+    }
+  ]
+}
+```
+
+**Response**:
+
+```json
+{
+  "success": true,
+  "message": "Job posting created successfully",
+  "data": {
+    "jobId": 1,
+    "jobCode": "DEV-001",
+    "slug": "senior-backend-developer",
+    // ... other fields
+  }
+}
+```
+
+##### 2. Update Job Posting
+
+**PUT** `/api/v1/jobs/admin/:id`
+
+- **Auth**: Required (Admin, Editor)
+- **Body**: Same as create (all fields optional)
+
+##### 3. Get All Job Postings (Public)
+
+**GET** `/api/v1/jobs/public`
+
+- **Auth**: Not required
+- **Query Parameters**:
+  - `page`: Page number (default: 1)
+  - `limit`: Items per page (default: 10)
+  - `locale`: Language (id/en)
+  - `jobType`: Filter by job type
+  - `jobLevel`: Filter by job level
+  - `workLocation`: Filter by work location
+  - `city`: Filter by city
+  - `department`: Filter by department
+  - `isActive`: Filter active jobs (true/false)
+  - `isFeatured`: Filter featured jobs (true/false)
+  - `search`: Search in title, description, department
+
+**Example**:
+
+```
+GET /api/v1/jobs/public?page=1&limit=10&locale=id&jobType=FullTime&city=Jakarta&search=developer
+```
+
+**Response**:
+
+```json
+{
+  "success": true,
+  "message": "Jobs retrieved successfully",
+  "data": [
+    {
+      "jobId": 1,
+      "jobCode": "DEV-001",
+      "slug": "senior-backend-developer",
+      "department": "Engineering",
+      "jobType": "FullTime",
+      "jobLevel": "Senior",
+      "workLocation": "Hybrid",
+      "city": "Jakarta",
+      "country": "Indonesia",
+      "salaryMin": 15000000,
+      "salaryMax": 25000000,
+      "showSalary": true,
+      "positions": 2,
+      "viewCount": 150,
+      "applicationCount": 23,
+      "publishedAt": "2024-11-27T00:00:00Z",
+      "translations": [
+        {
+          "locale": "id",
+          "title": "Senior Backend Developer",
+          "shortDescription": "Kami mencari Senior Backend Developer"
+        }
+      ],
+      "requirements": [...],
+      "responsibilities": [...],
+      "benefits": [...]
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "total": 45,
+    "totalPages": 5
+  }
+}
+```
+
+##### 4. Get All Job Postings (Admin)
+
+**GET** `/api/v1/jobs/admin`
+
+- **Auth**: Required (Admin, Editor, Viewer)
+- **Query Parameters**: Same as public endpoint
+- **Note**: Returns all jobs including inactive and unpublished
+
+##### 5. Get Job by ID
+
+**GET** `/api/v1/jobs/public/:id`
+
+- **Auth**: Not required for public route
+- **Query Parameters**: `locale` (optional)
+
+##### 6. Get Job by Slug
+
+**GET** `/api/v1/jobs/public/slug/:slug`
+
+- **Auth**: Not required
+- **Query Parameters**: `locale` (optional)
+- **Note**: Automatically increments view count
+
+##### 7. Delete Job Posting (Soft Delete)
+
+**DELETE** `/api/v1/jobs/admin/:id`
+
+- **Auth**: Required (Admin only)
+
+**Response**:
+
+```json
+{
+  "success": true,
+  "message": "Job posting deleted successfully"
+}
+```
+
+##### 8. Get Job Statistics
+
+**GET** `/api/v1/jobs/admin/stats`
+
+- **Auth**: Required (Admin, Editor, Viewer)
+
+**Response**:
+
+```json
+{
+  "success": true,
+  "message": "Job statistics retrieved successfully",
+  "data": {
+    "totalJobs": 45,
+    "activeJobs": 32,
+    "totalApplications": 234,
+    "pendingApplications": 56,
+    "jobsByType": [
+      { "jobType": "FullTime", "_count": 30 },
+      { "jobType": "Contract", "_count": 10 }
+    ],
+    "jobsByLevel": [
+      { "jobLevel": "Senior", "_count": 15 },
+      { "jobLevel": "MidLevel", "_count": 20 }
+    ]
+  }
+}
+```
+
+#### Job Application Endpoints
+
+##### 1. Submit Application (Public)
+
+**POST** `/api/v1/job-applications/apply`
+
+- **Auth**: Not required (public endpoint)
+- **Content-Type**: `multipart/form-data`
+- **Form Fields**:
+  - `cv`: File upload (PDF, DOC, DOCX) - Max 10MB
+  - `jobId`: Number (required)
+  - `applicantName`: String (required)
+  - `applicantEmail`: String (required, email format)
+  - `applicantPhone`: String (optional)
+  - `currentCompany`: String (optional)
+  - `currentPosition`: String (optional)
+  - `yearsOfExperience`: Number (optional)
+  - `expectedSalary`: Number (optional)
+  - `salaryCurrency`: String (default: "IDR")
+  - `availableFrom`: Date (optional)
+  - `coverLetter`: Text (optional)
+  - `portfolioUrl`: String URL (optional)
+  - `linkedinUrl`: String URL (optional)
+  - `githubUrl`: String URL (optional)
+  - `referralSource`: String (optional, e.g., "website", "linkedin")
+
+**Example using cURL**:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/job-applications/apply \
+  -F "cv=@/path/to/cv.pdf" \
+  -F "jobId=1" \
+  -F "applicantName=John Doe" \
+  -F "applicantEmail=john.doe@email.com" \
+  -F "applicantPhone=+6281234567890" \
+  -F "currentCompany=Tech Corp" \
+  -F "currentPosition=Backend Developer" \
+  -F "yearsOfExperience=5" \
+  -F "expectedSalary=20000000" \
+  -F "coverLetter=I am interested in this position..." \
+  -F "linkedinUrl=https://linkedin.com/in/johndoe" \
+  -F "githubUrl=https://github.com/johndoe" \
+  -F "referralSource=website"
+```
+
+**Response**:
+
+```json
+{
+  "success": true,
+  "message": "Application submitted successfully",
+  "data": {
+    "applicationId": 123,
+    "jobId": 1,
+    "applicantName": "John Doe",
+    "applicantEmail": "john.doe@email.com",
+    "status": "Pending",
+    "createdAt": "2024-11-27T10:30:00Z"
+  }
+}
+```
+
+##### 2. Get All Applications (Admin)
+
+**GET** `/api/v1/job-applications/admin`
+
+- **Auth**: Required (Admin, Editor, Viewer)
+- **Query Parameters**:
+  - `page`: Page number
+  - `limit`: Items per page
+  - `jobId`: Filter by job ID
+  - `status`: Filter by application status
+  - `ratingMin`: Filter by minimum rating (1-5)
+  - `search`: Search in name, email, company, position
+
+##### 3. Get Applications by Job (Admin)
+
+**GET** `/api/v1/job-applications/admin/job/:jobId`
+
+- **Auth**: Required (Admin, Editor, Viewer)
+- **Query Parameters**: `page`, `limit`
+
+##### 4. Get Application by ID (Admin)
+
+**GET** `/api/v1/job-applications/admin/:id`
+
+- **Auth**: Required (Admin, Editor, Viewer)
+
+**Response**:
+
+```json
+{
+  "success": true,
+  "message": "Application retrieved successfully",
+  "data": {
+    "applicationId": 123,
+    "jobId": 1,
+    "applicantName": "John Doe",
+    "applicantEmail": "john.doe@email.com",
+    "applicantPhone": "+6281234567890",
+    "currentCompany": "Tech Corp",
+    "currentPosition": "Backend Developer",
+    "yearsOfExperience": 5,
+    "expectedSalary": 20000000,
+    "coverLetter": "...",
+    "status": "Reviewed",
+    "rating": 4,
+    "adminNotes": "Kandidat bagus, cocok untuk interview",
+    "cvFile": {
+      "fileId": 456,
+      "fileName": "john_doe_cv.pdf",
+      "filePath": "/uploads/2024/11/...",
+      "fileSize": 245678
+    },
+    "job": {
+      "jobId": 1,
+      "jobCode": "DEV-001",
+      "translations": [...]
+    }
+  }
+}
+```
+
+##### 5. Update Application Status (Admin)
+
+**PUT** `/api/v1/job-applications/admin/:id`
+
+- **Auth**: Required (Admin, Editor)
+- **Body**:
+
+```json
+{
+  "status": "Reviewed",
+  "rating": 4,
+  "adminNotes": "Kandidat bagus, cocok untuk interview"
+}
+```
+
+**Available status transitions**:
+
+- `Pending` → `Reviewed`
+- `Reviewed` → `Shortlisted` / `Rejected`
+- `Shortlisted` → `Interview` / `Rejected`
+- `Interview` → `Offered` / `Rejected`
+- `Offered` → `Accepted` / `Rejected`
+
+**Auto-timestamps**:
+
+- Setting status to `Reviewed` → auto sets `reviewedAt`
+- Setting status to `Interview` → auto sets `interviewedAt`
+
+##### 6. Delete Application (Admin)
+
+**DELETE** `/api/v1/job-applications/admin/:id`
+
+- **Auth**: Required (Admin only)
+- **Note**: Decrements job application count
+
+##### 7. Get Application Statistics (Admin)
+
+**GET** `/api/v1/job-applications/admin/stats`
+
+- **Auth**: Required (Admin, Editor, Viewer)
+- **Query Parameters**: `jobId` (optional, for specific job stats)
+
+**Response**:
+
+```json
+{
+  "success": true,
+  "message": "Application statistics retrieved successfully",
+  "data": {
+    "total": 234,
+    "byStatus": [
+      { "status": "Pending", "_count": 56 },
+      { "status": "Reviewed", "_count": 78 },
+      { "status": "Interview", "_count": 34 }
+    ],
+    "averageRating": 3.8,
+    "applicationsThisMonth": 45,
+    "topReferralSources": [
+      { "referralSource": "website", "_count": 120 },
+      { "referralSource": "linkedin", "_count": 67 }
+    ]
+  }
+}
+```
+
+### Frontend Integration Examples
+
+#### React - Job List Component
+
+```jsx
+import React, { useEffect, useState } from "react";
+
+const JobList = () => {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  const fetchJobs = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/jobs/public?locale=id&isActive=true");
+      const data = await response.json();
+      setJobs(data.data);
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <div className="job-list">
+      {jobs.map(job => (
+        <div key={job.jobId} className="job-card">
+          <h3>{job.translations[0]?.title}</h3>
+          <p>{job.translations[0]?.shortDescription}</p>
+          <div>
+            <span>{job.jobType}</span>
+            <span>{job.workLocation}</span>
+            <span>{job.city}</span>
+          </div>
+          {job.showSalary && (
+            <p>
+              {job.salaryCurrency} {job.salaryMin.toLocaleString()} - {job.salaryMax.toLocaleString()} / {job.salaryPeriod}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default JobList;
+```
+
+#### React - Job Application Form
+
+```jsx
+import React, { useState } from "react";
+
+const JobApplicationForm = ({ jobId }) => {
+  const [formData, setFormData] = useState({
+    applicantName: "",
+    applicantEmail: "",
+    applicantPhone: "",
+    coverLetter: ""
+  });
+  const [cvFile, setCvFile] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    const formDataObj = new FormData();
+    formDataObj.append("jobId", jobId);
+
+    // Append all form fields
+    Object.keys(formData).forEach((key) => {
+      if (formData[key]) {
+        formDataObj.append(key, formData[key]);
+      }
+    });
+
+    // Append CV file
+    if (cvFile) {
+      formDataObj.append("cv", cvFile);
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/job-applications/apply", {
+        method: "POST",
+        body: formDataObj
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("Application submitted successfully!");
+        // Reset form
+      } else {
+        alert("Error: " + result.message);
+      }
+    } catch (error) {
+      console.error("Error submitting application:", error);
+      alert("Failed to submit application");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Full Name"
+        value={formData.applicantName}
+        onChange={(e) => setFormData({ ...formData, applicantName: e.target.value })}
+        required
+      />
+
+      <input
+        type="email"
+        placeholder="Email"
+        value={formData.applicantEmail}
+        onChange={(e) => setFormData({ ...formData, applicantEmail: e.target.value })}
+        required
+      />
+
+      <input
+        type="tel"
+        placeholder="Phone"
+        value={formData.applicantPhone}
+        onChange={(e) => setFormData({ ...formData, applicantPhone: e.target.value })}
+      />
+
+      <textarea
+        placeholder="Cover Letter"
+        value={formData.coverLetter}
+        onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
+      />
+
+      <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => setCvFile(e.target.files[0])} required />
+
+      <button type="submit" disabled={submitting}>
+        {submitting ? "Submitting..." : "Submit Application"}
+      </button>
+    </form>
+  );
+};
+
+export default JobApplicationForm;
+```
+
+### File Upload Configuration
+
+#### Allowed File Types for CV
+
+- PDF (`.pdf`)
+- Word Documents (`.doc`, `.docx`)
+- Maximum file size: **10MB**
+
+#### Storage
+
+- CVs are stored in `/uploads/YYYY/MM/` directory
+- File names are automatically generated with timestamp and random string
+- Files are marked as `isPublic: false` by default for privacy
+
+#### Security Features
+
+1. **File Type Validation**: Only allowed MIME types accepted
+2. **File Size Limit**: Maximum 10MB per file
+3. **Unique Filenames**: Prevents file name conflicts
+4. **Private Files**: CVs are not publicly accessible
+5. **Virus Scanning**: Recommended to add antivirus scanning in production
+
+### Business Logic
+
+#### Job Posting Lifecycle
+
+1. **Created**: Job posting dibuat oleh Admin/Editor
+2. **Published**: Set `publishedAt` date untuk publish job
+3. **Active/Inactive**: Toggle `isActive` untuk mengaktifkan/menonaktifkan
+4. **Featured**: Set `isFeatured` untuk menampilkan di top list
+5. **Closed**: Set `closedAt` date ketika lowongan ditutup
+6. **Deleted**: Soft delete dengan `deletedAt`
+
+#### Application Workflow
+
+1. **User applies**: Submit application dengan CV melalui form public
+2. **Pending**: Status awal setelah submit (HR menerima notifikasi manual)
+3. **HR reviews**: Admin membuka aplikasi di admin panel
+4. **Reviewed**: Admin mengubah status setelah review aplikasi
+5. **Communication**: HR menghubungi kandidat via **email/telepon** (bukan melalui sistem)
+   - Email address tersedia di field `applicantEmail`
+   - Phone number tersedia di field `applicantPhone`
+   - HR mengirim feedback/schedule interview secara manual
+6. **Shortlisted**: Kandidat masuk shortlist (update via admin panel)
+7. **Interview**: Kandidat di-invite interview (koordinasi via email/telepon manual)
+8. **Offered**: Kandidat ditawari posisi (offer letter via email manual)
+9. **Accepted/Rejected**: Final status
+
+**PENTING**:
+
+- Sistem ini TIDAK mengirim email otomatis
+- Semua komunikasi dengan kandidat dilakukan MANUAL via email/phone
+- Sistem hanya menyimpan data dan tracking status
+- HR menggunakan email & phone dari database untuk menghubungi kandidat
+
+#### Auto-Counters
+
+- `viewCount`: Auto increment saat job detail diakses
+- `applicationCount`: Auto increment/decrement saat aplikasi dibuat/dihapus
+
+### Communication Flow
+
+#### Current System Behavior
+
+**Sistem ini adalah BACKEND ADMIN PANEL untuk manajemen data recruitment.**
+
+**Yang TERSEDIA:**
+
+- ✅ Menyimpan data pelamar & CV
+- ✅ Tracking status aplikasi
+- ✅ Admin notes untuk catatan internal
+- ✅ Display email & phone pelamar
+- ✅ Rating & assignment system
+
+**Yang TIDAK TERSEDIA:**
+
+- ❌ Pengiriman email otomatis ke kandidat
+- ❌ Notifikasi push/SMS
+- ❌ Portal untuk kandidat login & lihat status
+- ❌ Kandidat tidak bisa withdraw sendiri (butuh login system)
+
+#### How HR Communicates with Candidates
+
+1. **HR opens application detail** di admin panel
+2. **Copy email/phone** dari field `applicantEmail` dan `applicantPhone`
+3. **Compose email manual** menggunakan Gmail/Outlook/email client lainnya
+4. **Send feedback/schedule** interview via email atau telepon
+5. **Update status** di admin panel sesuai progress
+
+**Contoh Workflow HR:**
+
+```
+1. Kandidat apply → Status: Pending
+2. HR buka admin panel → Lihat aplikasi baru
+3. HR review CV & data → Tulis admin notes
+4. HR buka Gmail → Copy email kandidat dari sistem
+5. HR kirim email: "Terima kasih telah apply, kami akan review..."
+6. HR update status di sistem → Status: Reviewed
+7. (HR melanjutkan komunikasi via email manual)
+```
+
+### Database Indexes
+
+Untuk performance optimal, indexes sudah ditambahkan pada:
+
+- `JOB_POSTING`: `[isActive, publishedAt]`, `[jobType, jobLevel]`, `[workLocation]`
+- `JOB_APPLICATION`: `[jobId, status]`, `[applicantEmail]`, `[status, createdAt]`
+
+### Performance Considerations
+
+1. **Pagination**: Always use pagination for list endpoints
+2. **Locale Filtering**: Specify locale to reduce response size
+3. **Eager Loading**: Relations are eagerly loaded to reduce N+1 queries
+4. **Soft Deletes**: Records are soft deleted, not permanently removed
+5. **View Counting**: Implemented efficiently with single update query
+
+### Future Enhancements
+
+#### Phase 1 - Email Automation
+
+1. **Email Notifications**: Send email otomatis saat aplikasi diterima/ditolak
+   - Integration dengan SendGrid/AWS SES/Nodemailer
+   - Email templates untuk berbagai status
+   - Email tracking dan delivery reports
+
+#### Phase 2 - Candidate Portal
+
+2. **Application Tracking Portal**: Portal untuk kandidat
+   - Kandidat bisa login & track status aplikasi
+   - View application history
+   - Upload dokumen tambahan
+   - Withdraw application sendiri
+
+#### Phase 3 - AI & Automation
+
+3. **Resume Parsing**: Auto-extract info from CV dengan AI
+4. **Interview Scheduling**: Built-in calendar integration
+5. **Chatbot**: Auto-reply untuk FAQ kandidat
+
+#### Phase 4 - Advanced Features
+
+6. **Bulk Operations**: Bulk update application status
+7. **Advanced Search**: Full-text search dengan Elasticsearch
+8. **Analytics Dashboard**: Detailed recruitment funnel analytics
+9. **API Rate Limiting**: Prevent spam applications
+10. **Video Interview**: Integrated video call untuk remote interview
+
+---
+
 ## 📊 Kesimpulan
 
-Dokumentasi API lengkap ini mencakup **22 modul** dengan total **lebih dari 150 endpoints** yang terdiri dari:
+Dokumentasi API lengkap ini mencakup **17 modul** dengan total **lebih dari 160 endpoints** yang terdiri dari:
 
 ### Modul Publik (Tanpa Autentikasi)
 
@@ -5340,6 +6138,7 @@ Dokumentasi API lengkap ini mencakup **22 modul** dengan total **lebih dari 150 
 11. **Feature Pages** - Halaman detail fitur
 12. **Contact Submissions** - Form kontak (submit only)
 13. **Analytics** - Tracking visitor dan page views
+14. **Career Management** - Job postings dan applications (submit only)
 
 ### Modul Admin (Memerlukan Autentikasi)
 
@@ -5349,6 +6148,7 @@ Dokumentasi API lengkap ini mencakup **22 modul** dengan total **lebih dari 150 
 4. **Contact Management** - Manajemen submission kontak
 5. **Audit Logs** - Log aktivitas sistem
 6. **Analytics Dashboard** - Statistik dan laporan
+7. **Career Management** - Manajemen job postings dan applications
 
 ### Catatan Penting untuk Frontend Developer
 

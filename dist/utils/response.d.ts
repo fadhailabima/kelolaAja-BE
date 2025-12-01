@@ -19,5 +19,6 @@ export declare class ResponseUtil {
     static forbidden(res: Response, message?: string): void;
     static notFound(res: Response, message?: string): void;
     static serverError(res: Response, message?: string, errors?: any): void;
+    static badRequest(res: Response, message?: string, errors?: any): void;
 }
 //# sourceMappingURL=response.d.ts.map

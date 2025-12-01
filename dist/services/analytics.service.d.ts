@@ -28,9 +28,9 @@ export declare class AnalyticsService {
         ipAddress: string | null;
         userAgent: string | null;
         visitorId: number;
+        city: string | null;
         referrer: string | null;
         countryCode: string | null;
-        city: string | null;
         deviceType: string | null;
         browser: string | null;
         os: string | null;
@@ -79,9 +79,9 @@ export declare class AnalyticsService {
             ipAddress: string | null;
             userAgent: string | null;
             visitorId: number;
+            city: string | null;
             referrer: string | null;
             countryCode: string | null;
-            city: string | null;
             deviceType: string | null;
             browser: string | null;
             os: string | null;
@@ -128,9 +128,9 @@ export declare class AnalyticsService {
         ipAddress: string | null;
         userAgent: string | null;
         visitorId: number;
+        city: string | null;
         referrer: string | null;
         countryCode: string | null;
-        city: string | null;
         deviceType: string | null;
         browser: string | null;
         os: string | null;

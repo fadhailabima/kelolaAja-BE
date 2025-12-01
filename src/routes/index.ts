@@ -21,6 +21,8 @@ import auditLogRoutes from "./audit-log.routes";
 import industryRoutes from "./industry.routes";
 import featurePageRoutes from "./feature-page.routes";
 import analyticsRoutes from "./analytics.routes";
+import jobPostingRoutes from "./job-posting.routes";
+import jobApplicationRoutes from "./job-application.routes";
 
 const router = Router();
 
@@ -47,6 +49,8 @@ router.use("/audit-logs", auditLogRoutes);
 router.use("/industries", industryRoutes);
 router.use("/feature-pages", featurePageRoutes);
 router.use("/analytics", analyticsRoutes);
+router.use("/jobs", jobPostingRoutes);
+router.use("/job-applications", jobApplicationRoutes);
 
 // Admin routes
 router.use("/admin/testimonials", testimonialAdminRoutes);

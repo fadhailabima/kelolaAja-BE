@@ -10,7 +10,7 @@ router.get("/download/:id", media_file_controller_1.MediaFileController.download
 router.get("/admin", auth_middleware_1.authenticate, media_file_controller_1.MediaFileController.listAll);
 router.get("/admin/stats", auth_middleware_1.authenticate, media_file_controller_1.MediaFileController.getStats);
 router.get("/admin/:id", auth_middleware_1.authenticate, media_file_controller_1.MediaFileController.getById);
-router.post("/admin/upload", auth_middleware_1.authenticate, upload_middleware_1.upload.single('file'), upload_middleware_1.handleMulterError, media_file_controller_1.MediaFileController.upload);
+router.post("/admin/upload", auth_middleware_1.authenticate, upload_middleware_1.upload.single("file"), upload_middleware_1.handleMulterError, media_file_controller_1.MediaFileController.upload);
 router.put("/admin/:id", auth_middleware_1.authenticate, media_file_controller_1.MediaFileController.update);
 router.delete("/admin/:id", auth_middleware_1.authenticate, media_file_controller_1.MediaFileController.delete);
 exports.default = router;

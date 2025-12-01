@@ -1603,27 +1603,6 @@
           }
         },
         {
-          "name": "Assign Submission (Admin)",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"assignedTo\": 2\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/contact-submissions/admin/1/assign",
-              "host": ["{{baseUrl}}"],
-              "path": ["contact-submissions", "admin", "1", "assign"]
-            }
-          }
-        },
-        {
           "name": "Get Statistics (Admin)",
           "request": {
             "method": "GET",
@@ -1934,6 +1913,530 @@
               "path": ["media-files", "download", "1"]
             }
           }
+        }
+      ]
+    },
+    {
+      "name": "13. Career Management",
+      "item": [
+        {
+          "name": "Job Postings",
+          "item": [
+            {
+              "name": "Public - Get All Jobs",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "id",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/public?page=1&limit=10&locale=id&isActive=true",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", "public"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "locale",
+                      "value": "id"
+                    },
+                    {
+                      "key": "isActive",
+                      "value": "true"
+                    },
+                    {
+                      "key": "jobType",
+                      "value": "FullTime",
+                      "disabled": true
+                    },
+                    {
+                      "key": "jobLevel",
+                      "value": "Senior",
+                      "disabled": true
+                    },
+                    {
+                      "key": "workLocation",
+                      "value": "Hybrid",
+                      "disabled": true
+                    },
+                    {
+                      "key": "city",
+                      "value": "Jakarta",
+                      "disabled": true
+                    },
+                    {
+                      "key": "search",
+                      "value": "developer",
+                      "disabled": true
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Public - Get Job by ID",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "id",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/public/1?locale=id",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", "public", "1"],
+                  "query": [
+                    {
+                      "key": "locale",
+                      "value": "id"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Public - Get Job by Slug",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "id",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/public/slug/senior-backend-developer?locale=id",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", "public", "slug", "senior-backend-developer"],
+                  "query": [
+                    {
+                      "key": "locale",
+                      "value": "id"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Admin - Create Job Posting",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"jobCode\": \"DEV-001\",\n  \"slug\": \"senior-backend-developer\",\n  \"department\": \"Engineering\",\n  \"jobType\": \"FullTime\",\n  \"jobLevel\": \"Senior\",\n  \"workLocation\": \"Hybrid\",\n  \"city\": \"Jakarta\",\n  \"country\": \"Indonesia\",\n  \"salaryMin\": 15000000,\n  \"salaryMax\": 25000000,\n  \"salaryCurrency\": \"IDR\",\n  \"salaryPeriod\": \"monthly\",\n  \"showSalary\": true,\n  \"positions\": 2,\n  \"experienceYears\": 5,\n  \"applicationDeadline\": \"2024-12-31T23:59:59Z\",\n  \"isActive\": true,\n  \"isFeatured\": true,\n  \"publishedAt\": \"2024-11-27T00:00:00Z\",\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Senior Backend Developer\",\n      \"shortDescription\": \"Kami mencari Senior Backend Developer berpengalaman untuk bergabung dengan tim Engineering kami\",\n      \"description\": \"Kami mencari seorang Senior Backend Developer yang berpengalaman untuk bergabung dengan tim Engineering kami. Posisi ini akan bertanggung jawab untuk mengembangkan dan memelihara backend services yang scalable dan reliable.\",\n      \"qualifications\": \"- Minimal S1 di bidang Computer Science atau setara\\n- Pengalaman minimum 5 tahun sebagai Backend Developer\\n- Strong problem-solving skills\",\n      \"additionalInfo\": \"Benefit tambahan: BPJS Kesehatan, Asuransi Swasta, Laptop, WFH Allowance\"\n    },\n    {\n      \"locale\": \"en\",\n      \"title\": \"Senior Backend Developer\",\n      \"shortDescription\": \"We are looking for experienced Senior Backend Developer to join our Engineering team\",\n      \"description\": \"We are seeking an experienced Senior Backend Developer to join our Engineering team. This role will be responsible for developing and maintaining scalable and reliable backend services.\",\n      \"qualifications\": \"- Bachelor's degree in Computer Science or equivalent\\n- Minimum 5 years of experience as Backend Developer\\n- Strong problem-solving skills\",\n      \"additionalInfo\": \"Additional benefits: Health Insurance, Company Laptop, WFH Allowance\"\n    }\n  ],\n  \"requirements\": [\n    {\n      \"locale\": \"id\",\n      \"requirement\": \"Minimal 5 tahun pengalaman backend development\",\n      \"isRequired\": true,\n      \"displayOrder\": 1\n    },\n    {\n      \"locale\": \"id\",\n      \"requirement\": \"Mahir dalam Node.js, TypeScript, dan PostgreSQL\",\n      \"isRequired\": true,\n      \"displayOrder\": 2\n    },\n    {\n      \"locale\": \"id\",\n      \"requirement\": \"Pengalaman dengan RESTful API dan microservices architecture\",\n      \"isRequired\": true,\n      \"displayOrder\": 3\n    },\n    {\n      \"locale\": \"id\",\n      \"requirement\": \"Familiar dengan Docker dan Kubernetes\",\n      \"isRequired\": false,\n      \"displayOrder\": 4\n    }\n  ],\n  \"responsibilities\": [\n    {\n      \"locale\": \"id\",\n      \"responsibility\": \"Mengembangkan dan memelihara backend services yang scalable\",\n      \"displayOrder\": 1\n    },\n    {\n      \"locale\": \"id\",\n      \"responsibility\": \"Berkolaborasi dengan tim frontend dan product\",\n      \"displayOrder\": 2\n    },\n    {\n      \"locale\": \"id\",\n      \"responsibility\": \"Code review dan mentoring junior developers\",\n      \"displayOrder\": 3\n    },\n    {\n      \"locale\": \"id\",\n      \"responsibility\": \"Optimasi performance dan monitoring aplikasi\",\n      \"displayOrder\": 4\n    }\n  ],\n  \"benefits\": [\n    {\n      \"locale\": \"id\",\n      \"benefit\": \"Asuransi Kesehatan\",\n      \"description\": \"BPJS Kesehatan dan Asuransi Swasta untuk karyawan dan keluarga\",\n      \"iconName\": \"health\",\n      \"displayOrder\": 1\n    },\n    {\n      \"locale\": \"id\",\n      \"benefit\": \"Flexible Working Hours\",\n      \"description\": \"Jam kerja fleksibel dengan hybrid working arrangement\",\n      \"iconName\": \"clock\",\n      \"displayOrder\": 2\n    },\n    {\n      \"locale\": \"id\",\n      \"benefit\": \"Learning Budget\",\n      \"description\": \"Budget untuk training, conference, dan professional development\",\n      \"iconName\": \"book\",\n      \"displayOrder\": 3\n    },\n    {\n      \"locale\": \"id\",\n      \"benefit\": \"Performance Bonus\",\n      \"description\": \"Bonus tahunan berdasarkan performance\",\n      \"iconName\": \"star\",\n      \"displayOrder\": 4\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/admin",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", "admin"]
+                }
+              }
+            },
+            {
+              "name": "Admin - Update Job Posting",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isActive\": false,\n  \"closedAt\": \"2024-11-28T00:00:00Z\",\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Senior Backend Developer - CLOSED\"\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/admin/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", "admin", "1"]
+                }
+              }
+            },
+            {
+              "name": "Admin - Get All Jobs",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/admin?page=1&limit=20",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", "admin"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Admin - Get Job Statistics",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/admin/stats",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", "admin", "stats"]
+                }
+              }
+            },
+            {
+              "name": "Admin - Delete Job Posting",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/admin/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", "admin", "1"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Job Applications",
+          "item": [
+            {
+              "name": "Public - Submit Application (with CV)",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "cv",
+                      "type": "file",
+                      "src": "/path/to/cv.pdf",
+                      "description": "CV File (PDF, DOC, DOCX - Max 10MB)"
+                    },
+                    {
+                      "key": "jobId",
+                      "value": "1",
+                      "type": "text"
+                    },
+                    {
+                      "key": "applicantName",
+                      "value": "John Doe",
+                      "type": "text"
+                    },
+                    {
+                      "key": "applicantEmail",
+                      "value": "john.doe@email.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "applicantPhone",
+                      "value": "+6281234567890",
+                      "type": "text"
+                    },
+                    {
+                      "key": "currentCompany",
+                      "value": "Tech Corp Indonesia",
+                      "type": "text"
+                    },
+                    {
+                      "key": "currentPosition",
+                      "value": "Backend Developer",
+                      "type": "text"
+                    },
+                    {
+                      "key": "yearsOfExperience",
+                      "value": "5",
+                      "type": "text"
+                    },
+                    {
+                      "key": "expectedSalary",
+                      "value": "20000000",
+                      "type": "text"
+                    },
+                    {
+                      "key": "salaryCurrency",
+                      "value": "IDR",
+                      "type": "text"
+                    },
+                    {
+                      "key": "availableFrom",
+                      "value": "2024-12-01",
+                      "type": "text"
+                    },
+                    {
+                      "key": "coverLetter",
+                      "value": "I am very interested in the Senior Backend Developer position at your company. With 5 years of experience in backend development using Node.js and TypeScript, I believe I can contribute significantly to your team.",
+                      "type": "text"
+                    },
+                    {
+                      "key": "portfolioUrl",
+                      "value": "https://portfolio.johndoe.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "linkedinUrl",
+                      "value": "https://linkedin.com/in/johndoe",
+                      "type": "text"
+                    },
+                    {
+                      "key": "githubUrl",
+                      "value": "https://github.com/johndoe",
+                      "type": "text"
+                    },
+                    {
+                      "key": "referralSource",
+                      "value": "website",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/job-applications/apply",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["job-applications", "apply"]
+                },
+                "description": "Submit job application with CV upload. All communication with candidate (feedback, interview schedule, etc.) will be done MANUALLY via email/phone by HR."
+              }
+            },
+            {
+              "name": "Admin - Get All Applications",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/job-applications/admin?page=1&limit=20&status=Pending",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["job-applications", "admin"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "status",
+                      "value": "Pending"
+                    },
+                    {
+                      "key": "jobId",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "ratingMin",
+                      "value": "4",
+                      "disabled": true
+                    },
+                    {
+                      "key": "search",
+                      "value": "john",
+                      "disabled": true
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Admin - Get Application by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/job-applications/admin/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["job-applications", "admin", "1"]
+                },
+                "description": "Get application detail. HR will use applicantEmail and applicantPhone from this response to contact candidate manually."
+              }
+            },
+            {
+              "name": "Admin - Get Applications by Job",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/job-applications/admin/job/1?page=1&limit=10",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["job-applications", "admin", "job", "1"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Admin - Update Application Status",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"Reviewed\",\n  \"rating\": 4,\n  \"adminNotes\": \"Kandidat bagus, cocok untuk interview. Background di Node.js sangat kuat. Sudah email kandidat untuk schedule interview.\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/job-applications/admin/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["job-applications", "admin", "1"]
+                },
+                "description": "Update application after HR manually contacts candidate. HR will:\n1. Review application in admin panel\n2. Copy applicantEmail from response\n3. Send email manually to candidate\n4. Update status here after sending email"
+              }
+            },
+            {
+              "name": "Admin - Update to Shortlisted",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"Shortlisted\",\n  \"rating\": 5,\n  \"adminNotes\": \"Top candidate! Masuk shortlist. Sudah kirim email untuk schedule interview minggu depan.\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/job-applications/admin/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["job-applications", "admin", "1"]
+                }
+              }
+            },
+            {
+              "name": "Admin - Update to Interview",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"Interview\",\n  \"adminNotes\": \"Interview scheduled for Dec 5, 2024 at 2PM via Google Meet. Link sudah dikirim ke email kandidat.\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/job-applications/admin/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["job-applications", "admin", "1"]
+                },
+                "description": "Update to Interview status. interviewedAt timestamp will be auto-set."
+              }
+            },
+            {
+              "name": "Admin - Reject Application",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"Rejected\",\n  \"rejectionReason\": \"Terima kasih atas minat Anda. Setelah review CV, kami memutuskan untuk melanjutkan dengan kandidat yang lebih sesuai dengan kebutuhan kami saat ini.\",\n  \"adminNotes\": \"Pengalaman kurang sesuai dengan requirement. Email rejection sudah dikirim.\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/job-applications/admin/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["job-applications", "admin", "1"]
+                },
+                "description": "Reject application. rejectionReason can be used as template for manual email to candidate."
+              }
+            },
+            {
+              "name": "Admin - Get Application Statistics",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/job-applications/admin/stats",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["job-applications", "admin", "stats"],
+                  "query": [
+                    {
+                      "key": "jobId",
+                      "value": "1",
+                      "disabled": true,
+                      "description": "Optional: filter by job ID"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Admin - Delete Application",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/job-applications/admin/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["job-applications", "admin", "1"]
+                }
+              }
+            }
+          ]
         }
       ]
     }

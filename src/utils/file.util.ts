@@ -1,25 +1,27 @@
-import sharp from 'sharp';
-import path from 'path';
-import fs from 'fs';
+import sharp from "sharp";
+import path from "path";
+import fs from "fs";
 
 export class FileUtil {
   /**
    * Get file type from mime type
    */
   static getFileType(mimeType: string): string {
-    if (mimeType.startsWith('image/')) return 'image';
-    if (mimeType.startsWith('video/')) return 'video';
-    if (mimeType.startsWith('audio/')) return 'audio';
-    if (mimeType.includes('pdf') || 
-        mimeType.includes('document') || 
-        mimeType.includes('word') || 
-        mimeType.includes('excel') || 
-        mimeType.includes('powerpoint') || 
-        mimeType.includes('spreadsheet') || 
-        mimeType.includes('presentation')) {
-      return 'document';
+    if (mimeType.startsWith("image/")) return "image";
+    if (mimeType.startsWith("video/")) return "video";
+    if (mimeType.startsWith("audio/")) return "audio";
+    if (
+      mimeType.includes("pdf") ||
+      mimeType.includes("document") ||
+      mimeType.includes("word") ||
+      mimeType.includes("excel") ||
+      mimeType.includes("powerpoint") ||
+      mimeType.includes("spreadsheet") ||
+      mimeType.includes("presentation")
+    ) {
+      return "document";
     }
-    return 'other';
+    return "other";
   }
 
   /**
@@ -30,7 +32,7 @@ export class FileUtil {
       const metadata = await sharp(filePath).metadata();
       return {
         width: metadata.width || 0,
-        height: metadata.height || 0,
+        height: metadata.height || 0
       };
     } catch (error) {
       return null;
@@ -69,20 +71,20 @@ export class FileUtil {
       }
 
       // Apply format-specific optimization
-      if (metadata.format === 'jpeg' || metadata.format === 'jpg') {
+      if (metadata.format === "jpeg" || metadata.format === "jpg") {
         processedImage = processedImage.jpeg({ quality });
-      } else if (metadata.format === 'png') {
+      } else if (metadata.format === "png") {
         processedImage = processedImage.png({ quality });
-      } else if (metadata.format === 'webp') {
+      } else if (metadata.format === "webp") {
         processedImage = processedImage.webp({ quality });
       }
 
       // Save optimized image (overwrite original)
-      await processedImage.toFile(filePath + '.tmp');
-      fs.renameSync(filePath + '.tmp', filePath);
+      await processedImage.toFile(filePath + ".tmp");
+      fs.renameSync(filePath + ".tmp", filePath);
     } catch (error) {
       // If optimization fails, keep original file
-      console.error('Image optimization failed:', error);
+      console.error("Image optimization failed:", error);
     }
   }
 
@@ -97,7 +99,7 @@ export class FileUtil {
       }
       return false;
     } catch (error) {
-      console.error('Error deleting file:', error);
+      console.error("Error deleting file:", error);
       return false;
     }
   }
@@ -106,15 +108,15 @@ export class FileUtil {
    * Get relative path from absolute path
    */
   static getRelativePath(absolutePath: string): string {
-    const uploadDir = path.join(process.cwd(), 'uploads');
-    return absolutePath.replace(uploadDir, '').replace(/\\/g, '/');
+    const uploadDir = path.join(process.cwd(), "uploads");
+    return absolutePath.replace(uploadDir, "").replace(/\\/g, "/");
   }
 
   /**
    * Get absolute path from relative path
    */
   static getAbsolutePath(relativePath: string): string {
-    const uploadDir = path.join(process.cwd(), 'uploads');
+    const uploadDir = path.join(process.cwd(), "uploads");
     return path.join(uploadDir, relativePath);
   }
 
@@ -122,8 +124,8 @@ export class FileUtil {
    * Format file size to human readable
    */
   static formatFileSize(bytes: bigint | number): string {
-    const size = typeof bytes === 'bigint' ? Number(bytes) : bytes;
-    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const size = typeof bytes === "bigint" ? Number(bytes) : bytes;
+    const units = ["B", "KB", "MB", "GB", "TB"];
     let unitIndex = 0;
     let fileSize = size;
 

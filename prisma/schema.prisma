@@ -5,7 +5,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // Mengasumsikan PostgreSQL
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -81,6 +81,8 @@ model AdminUser {
   auditLogs            AuditLog[]          @relation("AdminUserAuditLog")
   assignedSubmissions  ContactSubmission[] @relation("AssignedToAdmin")
   updatedSiteConfigs   SiteConfig[]        @relation("UpdatedSiteConfigByAdmin")
+  createdJobPostings   JobPosting[]        @relation("CreatedJobPostingByAdmin")
+  updatedJobPostings   JobPosting[]        @relation("UpdatedJobPostingByAdmin")
   
   @@map("ADMIN_USER")
 }
@@ -918,6 +920,7 @@ model MediaFile {
   partnerLogos    Partner[] @relation("PartnerLogo")
   aboutCardImages AboutCard[] @relation("AboutCardImage")
   advancedFeatureImages AdvancedFeature[] @relation("AdvancedFeatureImage")
+  jobApplicationCVs JobApplication[] @relation("JobApplicationCV")
 
   @@map("MEDIA_FILE")
 }
@@ -1034,4 +1037,223 @@ model SiteConfig {
   updater      AdminUser? @relation("UpdatedSiteConfigByAdmin", fields: [updatedBy], references: [userId])
 
   @@map("SITE_CONFIG")
+}
+
+// ============================================
+// CAREER & JOB POSTINGS
+// ============================================
+
+enum JobType {
+  FullTime     @map("full_time")
+  PartTime     @map("part_time")
+  Contract     @map("contract")
+  Internship   @map("internship")
+  Freelance    @map("freelance")
+}
+
+enum JobLevel {
+  EntryLevel   @map("entry_level")
+  Junior       @map("junior")
+  MidLevel     @map("mid_level")
+  Senior       @map("senior")
+  Lead         @map("lead")
+  Manager      @map("manager")
+  Director     @map("director")
+  Executive    @map("executive")
+}
+
+enum WorkLocation {
+  OnSite       @map("on_site")
+  Remote       @map("remote")
+  Hybrid       @map("hybrid")
+}
+
+enum ApplicationStatus {
+  Pending      @map("pending")
+  Reviewed     @map("reviewed")
+  Shortlisted  @map("shortlisted")
+  Interview    @map("interview")
+  Offered      @map("offered")
+  Rejected     @map("rejected")
+  Accepted     @map("accepted")
+}
+
+model JobPosting {
+  jobId              Int                  @id @default(autoincrement()) @map("job_id")
+  jobCode            String               @unique @map("job_code") @db.VarChar(100)
+  slug               String               @unique @db.VarChar(150)
+  department         String?              @db.VarChar(100)
+  jobType            JobType              @map("job_type")
+  jobLevel           JobLevel             @map("job_level")
+  workLocation       WorkLocation         @map("work_location")
+  city               String?              @db.VarChar(100)
+  country            String?              @db.VarChar(100)
+  salaryMin          Int?                 @map("salary_min")
+  salaryMax          Int?                 @map("salary_max")
+  salaryCurrency     String?              @default("IDR") @map("salary_currency") @db.VarChar(10)
+  salaryPeriod       String?              @default("monthly") @map("salary_period") @db.VarChar(20) // monthly, yearly
+  showSalary         Boolean              @default(false) @map("show_salary")
+  positions          Int                  @default(1) // jumlah posisi tersedia
+  experienceYears    Int?                 @map("experience_years") // minimum tahun pengalaman
+  applicationDeadline DateTime?           @map("application_deadline") @db.Timestamp(3)
+  isActive           Boolean              @default(true) @map("is_active")
+  isFeatured         Boolean              @default(false) @map("is_featured")
+  viewCount          Int                  @default(0) @map("view_count")
+  applicationCount   Int                  @default(0) @map("application_count")
+  createdAt          DateTime             @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt          DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  publishedAt        DateTime?            @map("published_at") @db.Timestamp(3)
+  closedAt           DateTime?            @map("closed_at") @db.Timestamp(3)
+  deletedAt          DateTime?            @map("deleted_at") @db.Timestamp(3)
+
+  createdBy          Int                  @map("created_by")
+  creator            AdminUser            @relation("CreatedJobPostingByAdmin", fields: [createdBy], references: [userId])
+  updatedBy          Int                  @map("updated_by")
+  updater            AdminUser            @relation("UpdatedJobPostingByAdmin", fields: [updatedBy], references: [userId])
+
+  translations       JobPostingTranslation[]
+  requirements       JobRequirement[]
+  responsibilities   JobResponsibility[]
+  benefits           JobBenefit[]
+  applications       JobApplication[]
+
+  @@index([isActive, publishedAt])
+  @@index([jobType, jobLevel])
+  @@index([workLocation])
+  @@map("JOB_POSTING")
+}
+
+model JobPostingTranslation {
+  translationId      Int         @id @default(autoincrement()) @map("translation_id")
+  jobId              Int         @map("job_id")
+  locale             Locale      @default(id)
+  title              String      @db.VarChar(255)
+  shortDescription   String?     @map("short_description") @db.Text
+  description        String?     @db.Text
+  qualifications     String?     @db.Text
+  additionalInfo     String?     @map("additional_info") @db.Text
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt          DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  job                JobPosting  @relation(fields: [jobId], references: [jobId], onDelete: Cascade)
+
+  @@unique([jobId, locale], map: "unique_job_posting_translation")
+  @@map("JOB_POSTING_TRANSLATION")
+}
+
+model JobRequirement {
+  requirementId      Int         @id @default(autoincrement()) @map("requirement_id")
+  jobId              Int         @map("job_id")
+  displayOrder       Int         @map("display_order")
+  isRequired         Boolean     @default(true) @map("is_required")
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  job                JobPosting  @relation(fields: [jobId], references: [jobId], onDelete: Cascade)
+  translations       JobRequirementTranslation[]
+
+  @@map("JOB_REQUIREMENT")
+}
+
+model JobRequirementTranslation {
+  translationId      Int         @id @default(autoincrement()) @map("translation_id")
+  requirementId      Int         @map("requirement_id")
+  locale             Locale      @default(id)
+  requirement        String      @db.Text
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  jobRequirement     JobRequirement @relation(fields: [requirementId], references: [requirementId], onDelete: Cascade)
+
+  @@unique([requirementId, locale], map: "unique_job_requirement_translation")
+  @@map("JOB_REQUIREMENT_TRANSLATION")
+}
+
+model JobResponsibility {
+  responsibilityId   Int         @id @default(autoincrement()) @map("responsibility_id")
+  jobId              Int         @map("job_id")
+  displayOrder       Int         @map("display_order")
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  job                JobPosting  @relation(fields: [jobId], references: [jobId], onDelete: Cascade)
+  translations       JobResponsibilityTranslation[]
+
+  @@map("JOB_RESPONSIBILITY")
+}
+
+model JobResponsibilityTranslation {
+  translationId      Int         @id @default(autoincrement()) @map("translation_id")
+  responsibilityId   Int         @map("responsibility_id")
+  locale             Locale      @default(id)
+  responsibility     String      @db.Text
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  jobResponsibility  JobResponsibility @relation(fields: [responsibilityId], references: [responsibilityId], onDelete: Cascade)
+
+  @@unique([responsibilityId, locale], map: "unique_job_responsibility_translation")
+  @@map("JOB_RESPONSIBILITY_TRANSLATION")
+}
+
+model JobBenefit {
+  benefitId          Int         @id @default(autoincrement()) @map("benefit_id")
+  jobId              Int         @map("job_id")
+  displayOrder       Int         @map("display_order")
+  iconName           String?     @map("icon_name") @db.VarChar(100)
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  job                JobPosting  @relation(fields: [jobId], references: [jobId], onDelete: Cascade)
+  translations       JobBenefitTranslation[]
+
+  @@map("JOB_BENEFIT")
+}
+
+model JobBenefitTranslation {
+  translationId      Int         @id @default(autoincrement()) @map("translation_id")
+  benefitId          Int         @map("benefit_id")
+  locale             Locale      @default(id)
+  benefit            String      @db.VarChar(255)
+  description        String?     @db.Text
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  jobBenefit         JobBenefit  @relation(fields: [benefitId], references: [benefitId], onDelete: Cascade)
+
+  @@unique([benefitId, locale], map: "unique_job_benefit_translation")
+  @@map("JOB_BENEFIT_TRANSLATION")
+}
+
+model JobApplication {
+  applicationId      Int                 @id @default(autoincrement()) @map("application_id")
+  jobId              Int                 @map("job_id")
+  applicantName      String              @map("applicant_name") @db.VarChar(255)
+  applicantEmail     String              @map("applicant_email") @db.VarChar(255)
+  applicantPhone     String?             @map("applicant_phone") @db.VarChar(50)
+  currentCompany     String?             @map("current_company") @db.VarChar(255)
+  currentPosition    String?             @map("current_position") @db.VarChar(255)
+  yearsOfExperience  Int?                @map("years_of_experience")
+  expectedSalary     Int?                @map("expected_salary")
+  salaryCurrency     String?             @default("IDR") @map("salary_currency") @db.VarChar(10)
+  availableFrom      DateTime?           @map("available_from") @db.Date
+  coverLetter        String?             @map("cover_letter") @db.Text
+  cvFileId           Int?                @map("cv_file_id")
+  portfolioUrl       String?             @map("portfolio_url") @db.VarChar(255)
+  linkedinUrl        String?             @map("linkedin_url") @db.VarChar(255)
+  githubUrl          String?             @map("github_url") @db.VarChar(255)
+  referralSource     String?             @map("referral_source") @db.VarChar(100) // website, linkedin, referral, etc
+  status             ApplicationStatus   @default(Pending)
+  rating             Int?                // 1-5 rating dari recruiter
+  adminNotes         String?             @map("admin_notes") @db.Text
+  rejectionReason    String?             @map("rejection_reason") @db.Text
+  ipAddress          String?             @map("ip_address") @db.VarChar(45)
+  userAgent          String?             @map("user_agent") @db.Text
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt          DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  reviewedAt         DateTime?           @map("reviewed_at") @db.Timestamp(3)
+  interviewedAt      DateTime?           @map("interviewed_at") @db.Timestamp(3)
+  deletedAt          DateTime?           @map("deleted_at") @db.Timestamp(3)
+
+  job                JobPosting          @relation(fields: [jobId], references: [jobId])
+  cvFile             MediaFile?          @relation("JobApplicationCV", fields: [cvFileId], references: [fileId])
+
+  @@index([jobId, status])
+  @@index([applicantEmail])
+  @@index([status, createdAt])
+  @@map("JOB_APPLICATION")
 }

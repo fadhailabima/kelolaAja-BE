@@ -8,8 +8,8 @@ export declare class ContactSubmissionService {
             visitor: {
                 ipAddress: string | null;
                 visitorId: number;
-                countryCode: string | null;
                 city: string | null;
+                countryCode: string | null;
                 deviceType: string | null;
                 browser: string | null;
             } | null;
@@ -46,9 +46,9 @@ export declare class ContactSubmissionService {
             ipAddress: string | null;
             userAgent: string | null;
             visitorId: number;
+            city: string | null;
             referrer: string | null;
             countryCode: string | null;
-            city: string | null;
             deviceType: string | null;
             browser: string | null;
             os: string | null;
@@ -110,9 +110,9 @@ export declare class ContactSubmissionService {
             ipAddress: string | null;
             userAgent: string | null;
             visitorId: number;
+            city: string | null;
             referrer: string | null;
             countryCode: string | null;
-            city: string | null;
             deviceType: string | null;
             browser: string | null;
             os: string | null;

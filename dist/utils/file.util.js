@@ -9,29 +9,29 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 class FileUtil {
     static getFileType(mimeType) {
-        if (mimeType.startsWith('image/'))
-            return 'image';
-        if (mimeType.startsWith('video/'))
-            return 'video';
-        if (mimeType.startsWith('audio/'))
-            return 'audio';
-        if (mimeType.includes('pdf') ||
-            mimeType.includes('document') ||
-            mimeType.includes('word') ||
-            mimeType.includes('excel') ||
-            mimeType.includes('powerpoint') ||
-            mimeType.includes('spreadsheet') ||
-            mimeType.includes('presentation')) {
-            return 'document';
+        if (mimeType.startsWith("image/"))
+            return "image";
+        if (mimeType.startsWith("video/"))
+            return "video";
+        if (mimeType.startsWith("audio/"))
+            return "audio";
+        if (mimeType.includes("pdf") ||
+            mimeType.includes("document") ||
+            mimeType.includes("word") ||
+            mimeType.includes("excel") ||
+            mimeType.includes("powerpoint") ||
+            mimeType.includes("spreadsheet") ||
+            mimeType.includes("presentation")) {
+            return "document";
         }
-        return 'other';
+        return "other";
     }
     static async getImageDimensions(filePath) {
         try {
             const metadata = await (0, sharp_1.default)(filePath).metadata();
             return {
                 width: metadata.width || 0,
-                height: metadata.height || 0,
+                height: metadata.height || 0
             };
         }
         catch (error) {
@@ -54,20 +54,20 @@ class FileUtil {
             if (resizeOptions) {
                 processedImage = processedImage.resize(resizeOptions);
             }
-            if (metadata.format === 'jpeg' || metadata.format === 'jpg') {
+            if (metadata.format === "jpeg" || metadata.format === "jpg") {
                 processedImage = processedImage.jpeg({ quality });
             }
-            else if (metadata.format === 'png') {
+            else if (metadata.format === "png") {
                 processedImage = processedImage.png({ quality });
             }
-            else if (metadata.format === 'webp') {
+            else if (metadata.format === "webp") {
                 processedImage = processedImage.webp({ quality });
             }
-            await processedImage.toFile(filePath + '.tmp');
-            fs_1.default.renameSync(filePath + '.tmp', filePath);
+            await processedImage.toFile(filePath + ".tmp");
+            fs_1.default.renameSync(filePath + ".tmp", filePath);
         }
         catch (error) {
-            console.error('Image optimization failed:', error);
+            console.error("Image optimization failed:", error);
         }
     }
     static deleteFile(filePath) {
@@ -79,21 +79,21 @@ class FileUtil {
             return false;
         }
         catch (error) {
-            console.error('Error deleting file:', error);
+            console.error("Error deleting file:", error);
             return false;
         }
     }
     static getRelativePath(absolutePath) {
-        const uploadDir = path_1.default.join(process.cwd(), 'uploads');
-        return absolutePath.replace(uploadDir, '').replace(/\\/g, '/');
+        const uploadDir = path_1.default.join(process.cwd(), "uploads");
+        return absolutePath.replace(uploadDir, "").replace(/\\/g, "/");
     }
     static getAbsolutePath(relativePath) {
-        const uploadDir = path_1.default.join(process.cwd(), 'uploads');
+        const uploadDir = path_1.default.join(process.cwd(), "uploads");
         return path_1.default.join(uploadDir, relativePath);
     }
     static formatFileSize(bytes) {
-        const size = typeof bytes === 'bigint' ? Number(bytes) : bytes;
-        const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        const size = typeof bytes === "bigint" ? Number(bytes) : bytes;
+        const units = ["B", "KB", "MB", "GB", "TB"];
         let unitIndex = 0;
         let fileSize = size;
         while (fileSize >= 1024 && unitIndex < units.length - 1) {
