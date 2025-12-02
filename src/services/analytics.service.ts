@@ -315,4 +315,40 @@ export class AnalyticsService {
       }
     };
   }
+
+  /**
+   * Get top pages by view count
+   */
+  static async getTopPages(startDate?: string, endDate?: string, limit: number = 10) {
+    const where: any = {};
+
+    if (startDate || endDate) {
+      where.viewedAt = {};
+      if (startDate) {
+        where.viewedAt.gte = new Date(startDate);
+      }
+      if (endDate) {
+        where.viewedAt.lte = new Date(endDate);
+      }
+    }
+
+    const topPages = await prisma.pageView.groupBy({
+      by: ["pagePath"],
+      where,
+      _count: {
+        viewId: true
+      },
+      orderBy: {
+        _count: {
+          viewId: "desc"
+        }
+      },
+      take: limit
+    });
+
+    return topPages.map(item => ({
+      pagePath: item.pagePath,
+      views: item._count?.viewId || 0
+    }));
+  }
 }

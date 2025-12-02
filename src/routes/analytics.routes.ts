@@ -13,5 +13,6 @@ router.get("/admin/overview", authenticate, authorize("Admin", "Editor"), Analyt
 router.get("/admin/visitors", authenticate, authorize("Admin", "Editor"), AnalyticsController.getVisitors);
 router.get("/admin/visitors/:id", authenticate, authorize("Admin", "Editor"), AnalyticsController.getVisitorDetail);
 router.get("/admin/page-views", authenticate, authorize("Admin", "Editor"), AnalyticsController.getPageViews);
+router.get("/top-pages", authenticate, authorize("Admin", "Editor"), AnalyticsController.getTopPages);
 
 export default router;

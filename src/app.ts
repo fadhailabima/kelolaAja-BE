@@ -15,8 +15,12 @@ const app: Application = express();
 const port = process.env.PORT || 8080;
 
 const corsOptions = {
-  origin: process.env.WEB_URL || "http://localhost:3001",
-  credentials: true
+  origin: process.env.WEB_URL 
+    ? process.env.WEB_URL.split(",").map(url => url.trim())
+    : ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "http://localhost:5174"],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept-Language"]
 };
 app.use(cors(corsOptions));
 
@@ -62,8 +66,43 @@ app.get("/", (_req: Request, res: Response) => {
   });
 });
 
-// API Routes
+// API info endpoints - Define /api/v1 first (more specific) before /api (more general)
+app.get("/api/v1", (_req: Request, res: Response) => {
+  res.json({
+    message: "KelolaAja API v1",
+    version: "1.0.0",
+    status: "running",
+    baseUrl: "/api/v1",
+    endpoints: {
+      auth: "/api/v1/auth",
+      users: "/api/v1/users",
+      pricing: "/api/v1/pricing-plans",
+      features: "/api/v1/features",
+      jobs: "/api/v1/jobs"
+    }
+  });
+});
+
+app.get("/api", (_req: Request, res: Response) => {
+  res.json({
+    message: "KelolaAja API",
+    version: "1.0.0",
+    status: "running",
+    baseUrl: "/api",
+    endpoints: {
+      auth: "/api/auth",
+      users: "/api/users",
+      pricing: "/api/pricing-plans",
+      features: "/api/features",
+      jobs: "/api/jobs"
+    }
+  });
+});
+
+// API Routes - Support both /api and /api/v1 for compatibility
+// Define /api/v1 first (more specific) before /api (more general)
 app.use("/api/v1", routes);
+app.use("/api", routes);
 
 // 404 Handler
 app.use((req: Request, res: Response) => {

@@ -16,8 +16,8 @@ import detailFeatureSectionRoutes from "./detail-feature-section.routes";
 import contentSectionRoutes from "./content-section.routes";
 import siteConfigRoutes from "./site-config.routes";
 import mediaFileRoutes from "./media-file.routes";
-import contactSubmissionRoutes from "./contact-submission.routes";
-import auditLogRoutes from "./audit-log.routes";
+import contactSubmissionRoutes, { contactSubmissionAdminRoutes } from "./contact-submission.routes";
+import auditLogRoutes, { auditLogAdminRoutes } from "./audit-log.routes";
 import industryRoutes from "./industry.routes";
 import featurePageRoutes from "./feature-page.routes";
 import analyticsRoutes from "./analytics.routes";
@@ -56,5 +56,7 @@ router.use("/job-applications", jobApplicationRoutes);
 router.use("/admin/testimonials", testimonialAdminRoutes);
 router.use("/admin/faq-categories", faqCategoryAdminRoutes);
 router.use("/admin/faqs", faqAdminRoutes);
+router.use("/admin/contact-submissions", contactSubmissionAdminRoutes);
+router.use("/admin/audit-logs", auditLogAdminRoutes);
 
 export default router;

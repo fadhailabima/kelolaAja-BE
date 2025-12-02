@@ -89,4 +89,20 @@ export class AnalyticsController {
       next(error);
     }
   }
+
+  /**
+   * GET /api/analytics/top-pages
+   */
+  static async getTopPages(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const startDate = req.query.startDate as string;
+      const endDate = req.query.endDate as string;
+      const limit = parseInt(req.query.limit as string) || 10;
+
+      const topPages = await AnalyticsService.getTopPages(startDate, endDate, limit);
+      ResponseUtil.success(res, "Top pages retrieved successfully", topPages);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
