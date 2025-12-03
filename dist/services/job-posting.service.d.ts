@@ -1,5 +1,5 @@
 import { Locale } from "@prisma/client";
-import { CreateJobPostingDTO, UpdateJobPostingDTO, JobPostingFilters } from "../../src/types/job-posting.types";
+import { CreateJobPostingDTO, UpdateJobPostingDTO, JobPostingFilters } from "../types/job-posting.types";
 export declare class JobPostingService {
     createJobPosting(data: CreateJobPostingDTO, createdBy: number): Promise<{
         translations: {
@@ -8,7 +8,7 @@ export declare class JobPostingService {
             title: string;
             description: string | null;
             jobId: number;
-            locale: import(".prisma/client/client").$Enums.Locale;
+            locale: import(".prisma/client").$Enums.Locale;
             translationId: number;
             shortDescription: string | null;
             qualifications: string | null;
@@ -19,7 +19,7 @@ export declare class JobPostingService {
                 createdAt: Date;
                 benefitId: number;
                 description: string | null;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 benefit: string;
             }[];
@@ -33,7 +33,7 @@ export declare class JobPostingService {
         requirements: ({
             translations: {
                 createdAt: Date;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 requirementId: number;
                 requirement: string;
@@ -48,7 +48,7 @@ export declare class JobPostingService {
         responsibilities: ({
             translations: {
                 createdAt: Date;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 responsibilityId: number;
                 responsibility: string;
@@ -71,9 +71,9 @@ export declare class JobPostingService {
         jobId: number;
         jobCode: string;
         department: string | null;
-        jobType: import(".prisma/client/client").$Enums.JobType;
-        jobLevel: import(".prisma/client/client").$Enums.JobLevel;
-        workLocation: import(".prisma/client/client").$Enums.WorkLocation;
+        jobType: import(".prisma/client").$Enums.JobType;
+        jobLevel: import(".prisma/client").$Enums.JobLevel;
+        workLocation: import(".prisma/client").$Enums.WorkLocation;
         city: string | null;
         country: string | null;
         salaryMin: number | null;
@@ -96,7 +96,7 @@ export declare class JobPostingService {
             title: string;
             description: string | null;
             jobId: number;
-            locale: import(".prisma/client/client").$Enums.Locale;
+            locale: import(".prisma/client").$Enums.Locale;
             translationId: number;
             shortDescription: string | null;
             qualifications: string | null;
@@ -107,7 +107,7 @@ export declare class JobPostingService {
                 createdAt: Date;
                 benefitId: number;
                 description: string | null;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 benefit: string;
             }[];
@@ -121,7 +121,7 @@ export declare class JobPostingService {
         requirements: ({
             translations: {
                 createdAt: Date;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 requirementId: number;
                 requirement: string;
@@ -136,7 +136,7 @@ export declare class JobPostingService {
         responsibilities: ({
             translations: {
                 createdAt: Date;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 responsibilityId: number;
                 responsibility: string;
@@ -159,9 +159,9 @@ export declare class JobPostingService {
         jobId: number;
         jobCode: string;
         department: string | null;
-        jobType: import(".prisma/client/client").$Enums.JobType;
-        jobLevel: import(".prisma/client/client").$Enums.JobLevel;
-        workLocation: import(".prisma/client/client").$Enums.WorkLocation;
+        jobType: import(".prisma/client").$Enums.JobType;
+        jobLevel: import(".prisma/client").$Enums.JobLevel;
+        workLocation: import(".prisma/client").$Enums.WorkLocation;
         city: string | null;
         country: string | null;
         salaryMin: number | null;
@@ -185,7 +185,7 @@ export declare class JobPostingService {
                 title: string;
                 description: string | null;
                 jobId: number;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 shortDescription: string | null;
                 qualifications: string | null;
@@ -196,7 +196,7 @@ export declare class JobPostingService {
                     createdAt: Date;
                     benefitId: number;
                     description: string | null;
-                    locale: import(".prisma/client/client").$Enums.Locale;
+                    locale: import(".prisma/client").$Enums.Locale;
                     translationId: number;
                     benefit: string;
                 }[];
@@ -210,7 +210,7 @@ export declare class JobPostingService {
             requirements: ({
                 translations: {
                     createdAt: Date;
-                    locale: import(".prisma/client/client").$Enums.Locale;
+                    locale: import(".prisma/client").$Enums.Locale;
                     translationId: number;
                     requirementId: number;
                     requirement: string;
@@ -225,7 +225,7 @@ export declare class JobPostingService {
             responsibilities: ({
                 translations: {
                     createdAt: Date;
-                    locale: import(".prisma/client/client").$Enums.Locale;
+                    locale: import(".prisma/client").$Enums.Locale;
                     translationId: number;
                     responsibilityId: number;
                     responsibility: string;
@@ -248,9 +248,9 @@ export declare class JobPostingService {
             jobId: number;
             jobCode: string;
             department: string | null;
-            jobType: import(".prisma/client/client").$Enums.JobType;
-            jobLevel: import(".prisma/client/client").$Enums.JobLevel;
-            workLocation: import(".prisma/client/client").$Enums.WorkLocation;
+            jobType: import(".prisma/client").$Enums.JobType;
+            jobLevel: import(".prisma/client").$Enums.JobLevel;
+            workLocation: import(".prisma/client").$Enums.WorkLocation;
             city: string | null;
             country: string | null;
             salaryMin: number | null;
@@ -280,7 +280,7 @@ export declare class JobPostingService {
             title: string;
             description: string | null;
             jobId: number;
-            locale: import(".prisma/client/client").$Enums.Locale;
+            locale: import(".prisma/client").$Enums.Locale;
             translationId: number;
             shortDescription: string | null;
             qualifications: string | null;
@@ -291,7 +291,7 @@ export declare class JobPostingService {
                 createdAt: Date;
                 benefitId: number;
                 description: string | null;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 benefit: string;
             }[];
@@ -305,7 +305,7 @@ export declare class JobPostingService {
         requirements: ({
             translations: {
                 createdAt: Date;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 requirementId: number;
                 requirement: string;
@@ -320,7 +320,7 @@ export declare class JobPostingService {
         responsibilities: ({
             translations: {
                 createdAt: Date;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 responsibilityId: number;
                 responsibility: string;
@@ -343,9 +343,9 @@ export declare class JobPostingService {
         jobId: number;
         jobCode: string;
         department: string | null;
-        jobType: import(".prisma/client/client").$Enums.JobType;
-        jobLevel: import(".prisma/client/client").$Enums.JobLevel;
-        workLocation: import(".prisma/client/client").$Enums.WorkLocation;
+        jobType: import(".prisma/client").$Enums.JobType;
+        jobLevel: import(".prisma/client").$Enums.JobLevel;
+        workLocation: import(".prisma/client").$Enums.WorkLocation;
         city: string | null;
         country: string | null;
         salaryMin: number | null;
@@ -368,7 +368,7 @@ export declare class JobPostingService {
             title: string;
             description: string | null;
             jobId: number;
-            locale: import(".prisma/client/client").$Enums.Locale;
+            locale: import(".prisma/client").$Enums.Locale;
             translationId: number;
             shortDescription: string | null;
             qualifications: string | null;
@@ -379,7 +379,7 @@ export declare class JobPostingService {
                 createdAt: Date;
                 benefitId: number;
                 description: string | null;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 benefit: string;
             }[];
@@ -393,7 +393,7 @@ export declare class JobPostingService {
         requirements: ({
             translations: {
                 createdAt: Date;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 requirementId: number;
                 requirement: string;
@@ -408,7 +408,7 @@ export declare class JobPostingService {
         responsibilities: ({
             translations: {
                 createdAt: Date;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 responsibilityId: number;
                 responsibility: string;
@@ -431,9 +431,9 @@ export declare class JobPostingService {
         jobId: number;
         jobCode: string;
         department: string | null;
-        jobType: import(".prisma/client/client").$Enums.JobType;
-        jobLevel: import(".prisma/client/client").$Enums.JobLevel;
-        workLocation: import(".prisma/client/client").$Enums.WorkLocation;
+        jobType: import(".prisma/client").$Enums.JobType;
+        jobLevel: import(".prisma/client").$Enums.JobLevel;
+        workLocation: import(".prisma/client").$Enums.WorkLocation;
         city: string | null;
         country: string | null;
         salaryMin: number | null;
@@ -461,9 +461,9 @@ export declare class JobPostingService {
         jobId: number;
         jobCode: string;
         department: string | null;
-        jobType: import(".prisma/client/client").$Enums.JobType;
-        jobLevel: import(".prisma/client/client").$Enums.JobLevel;
-        workLocation: import(".prisma/client/client").$Enums.WorkLocation;
+        jobType: import(".prisma/client").$Enums.JobType;
+        jobLevel: import(".prisma/client").$Enums.JobLevel;
+        workLocation: import(".prisma/client").$Enums.WorkLocation;
         city: string | null;
         country: string | null;
         salaryMin: number | null;
@@ -484,10 +484,10 @@ export declare class JobPostingService {
         activeJobs: number;
         totalApplications: number;
         pendingApplications: number;
-        jobsByType: (import(".prisma/client/client").Prisma.PickEnumerable<import(".prisma/client/client").Prisma.JobPostingGroupByOutputType, "jobType"[]> & {
+        jobsByType: (import(".prisma/client").Prisma.PickEnumerable<import(".prisma/client").Prisma.JobPostingGroupByOutputType, "jobType"[]> & {
             _count: number;
         })[];
-        jobsByLevel: (import(".prisma/client/client").Prisma.PickEnumerable<import(".prisma/client/client").Prisma.JobPostingGroupByOutputType, "jobLevel"[]> & {
+        jobsByLevel: (import(".prisma/client").Prisma.PickEnumerable<import(".prisma/client").Prisma.JobPostingGroupByOutputType, "jobLevel"[]> & {
             _count: number;
         })[];
     }>;

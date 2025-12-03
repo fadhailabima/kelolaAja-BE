@@ -8,7 +8,7 @@ export declare class PlanFeatureService {
                 updatedAt: Date;
                 featureId: number;
                 description: string | null;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 featureName: string | null;
             }[];
@@ -39,7 +39,7 @@ export declare class PlanFeatureService {
                 updatedAt: Date;
                 featureId: number;
                 description: string | null;
-                locale: import(".prisma/client/client").$Enums.Locale;
+                locale: import(".prisma/client").$Enums.Locale;
                 translationId: number;
                 featureName: string | null;
             }[];

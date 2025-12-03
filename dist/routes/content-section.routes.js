@@ -7,9 +7,9 @@ const auth_middleware_1 = require("../middlewares/auth.middleware");
 const router = (0, express_1.Router)();
 router.get("/", locale_middleware_1.detectLocale, content_section_controller_1.ContentSectionController.listPublic);
 router.get("/key/:key", locale_middleware_1.detectLocale, content_section_controller_1.ContentSectionController.getByKey);
-router.get("/admin", auth_middleware_1.authenticate, content_section_controller_1.ContentSectionController.listAll);
-router.post("/admin", auth_middleware_1.authenticate, content_section_controller_1.ContentSectionController.create);
-router.put("/admin/:id", auth_middleware_1.authenticate, content_section_controller_1.ContentSectionController.update);
-router.delete("/admin/:id", auth_middleware_1.authenticate, content_section_controller_1.ContentSectionController.delete);
+router.get("/admin", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), content_section_controller_1.ContentSectionController.listAll);
+router.post("/admin", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), content_section_controller_1.ContentSectionController.create);
+router.put("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), content_section_controller_1.ContentSectionController.update);
+router.delete("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), content_section_controller_1.ContentSectionController.delete);
 exports.default = router;
 //# sourceMappingURL=content-section.routes.js.map

@@ -35,7 +35,11 @@ class DetailFeatureSectionController {
                 return response_1.ResponseUtil.unauthorized(res, 'User not authenticated');
             }
             const section = await detail_feature_section_service_1.DetailFeatureSectionService.createSection({
-                ...req.body,
+                category: req.body.category,
+                displayOrder: parseInt(req.body.displayOrder),
+                iconFileId: req.body.iconFileId ? parseInt(req.body.iconFileId) : undefined,
+                isActive: req.body.isActive === 'true' || req.body.isActive === true,
+                translations: req.body.translations,
                 createdBy: userId,
             });
             return response_1.ResponseUtil.success(res, 'Detail feature section created successfully', section, 201);
@@ -52,7 +56,11 @@ class DetailFeatureSectionController {
             }
             const sectionId = parseInt(req.params.id);
             const section = await detail_feature_section_service_1.DetailFeatureSectionService.updateSection(sectionId, {
-                ...req.body,
+                category: req.body.category,
+                displayOrder: req.body.displayOrder ? parseInt(req.body.displayOrder) : undefined,
+                iconFileId: req.body.iconFileId ? parseInt(req.body.iconFileId) : undefined,
+                isActive: req.body.isActive !== undefined ? (req.body.isActive === 'true' || req.body.isActive === true) : undefined,
+                translations: req.body.translations,
                 updatedBy: userId,
             });
             return response_1.ResponseUtil.success(res, 'Detail feature section updated successfully', section);

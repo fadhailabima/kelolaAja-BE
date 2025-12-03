@@ -242,6 +242,35 @@ class AnalyticsService {
             }
         };
     }
+    static async getTopPages(startDate, endDate, limit = 10) {
+        const where = {};
+        if (startDate || endDate) {
+            where.viewedAt = {};
+            if (startDate) {
+                where.viewedAt.gte = new Date(startDate);
+            }
+            if (endDate) {
+                where.viewedAt.lte = new Date(endDate);
+            }
+        }
+        const topPages = await prisma_1.prisma.pageView.groupBy({
+            by: ["pagePath"],
+            where,
+            _count: {
+                viewId: true
+            },
+            orderBy: {
+                _count: {
+                    viewId: "desc"
+                }
+            },
+            take: limit
+        });
+        return topPages.map(item => ({
+            pagePath: item.pagePath,
+            views: item._count?.viewId || 0
+        }));
+    }
 }
 exports.AnalyticsService = AnalyticsService;
 //# sourceMappingURL=analytics.service.js.map

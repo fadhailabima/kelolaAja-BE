@@ -123,7 +123,7 @@ export declare class FeaturePageService {
                 username: string;
                 email: string;
             };
-            translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
+            translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
                 locale: Locale;
             }, "locale">>;
         }[];
@@ -148,7 +148,7 @@ export declare class FeaturePageService {
             altText: string | null;
         } | null;
         isActive: boolean;
-        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
         items: {
@@ -161,7 +161,7 @@ export declare class FeaturePageService {
                 filePath: string;
                 altText: string | null;
             } | null;
-            translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
+            translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
                 locale: Locale;
             }, "locale">>;
         }[];
@@ -180,7 +180,7 @@ export declare class FeaturePageService {
             altText: string | null;
         } | null;
         isActive: boolean;
-        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
     }>;
@@ -199,7 +199,7 @@ export declare class FeaturePageService {
             altText: string | null;
         } | null;
         isActive: boolean;
-        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
         items: {
@@ -212,7 +212,7 @@ export declare class FeaturePageService {
                 filePath: string;
                 altText: string | null;
             } | null;
-            translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
+            translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
                 locale: Locale;
             }, "locale">>;
         }[];
@@ -228,7 +228,7 @@ export declare class FeaturePageService {
             filePath: string;
             altText: string | null;
         } | null;
-        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
     }[]>;
@@ -242,7 +242,7 @@ export declare class FeaturePageService {
             filePath: string;
             altText: string | null;
         } | null;
-        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
     }>;
@@ -257,7 +257,7 @@ export declare class FeaturePageService {
             filePath: string;
             altText: string | null;
         } | null;
-        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
     }>;

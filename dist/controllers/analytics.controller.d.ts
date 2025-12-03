@@ -6,5 +6,6 @@ export declare class AnalyticsController {
     static getVisitors(req: Request, res: Response, next: NextFunction): Promise<void>;
     static getVisitorDetail(req: Request, res: Response, next: NextFunction): Promise<void>;
     static getPageViews(req: Request, res: Response, next: NextFunction): Promise<void>;
+    static getTopPages(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 //# sourceMappingURL=analytics.controller.d.ts.map

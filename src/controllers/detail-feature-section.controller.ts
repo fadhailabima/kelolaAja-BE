@@ -46,7 +46,11 @@ export class DetailFeatureSectionController {
       }
 
       const section = await DetailFeatureSectionService.createSection({
-        ...req.body,
+        category: req.body.category,
+        displayOrder: parseInt(req.body.displayOrder),
+        iconFileId: req.body.iconFileId ? parseInt(req.body.iconFileId) : undefined,
+        isActive: req.body.isActive === 'true' || req.body.isActive === true,
+        translations: req.body.translations,
         createdBy: userId,
       });
 
@@ -68,7 +72,11 @@ export class DetailFeatureSectionController {
 
       const sectionId = parseInt(req.params.id);
       const section = await DetailFeatureSectionService.updateSection(sectionId, {
-        ...req.body,
+        category: req.body.category,
+        displayOrder: req.body.displayOrder ? parseInt(req.body.displayOrder) : undefined,
+        iconFileId: req.body.iconFileId ? parseInt(req.body.iconFileId) : undefined,
+        isActive: req.body.isActive !== undefined ? (req.body.isActive === 'true' || req.body.isActive === true) : undefined,
+        translations: req.body.translations,
         updatedBy: userId,
       });
 

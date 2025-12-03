@@ -70,6 +70,18 @@ class AnalyticsController {
             next(error);
         }
     }
+    static async getTopPages(req, res, next) {
+        try {
+            const startDate = req.query.startDate;
+            const endDate = req.query.endDate;
+            const limit = parseInt(req.query.limit) || 10;
+            const topPages = await analytics_service_1.AnalyticsService.getTopPages(startDate, endDate, limit);
+            response_1.ResponseUtil.success(res, "Top pages retrieved successfully", topPages);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
 }
 exports.AnalyticsController = AnalyticsController;
 //# sourceMappingURL=analytics.controller.js.map

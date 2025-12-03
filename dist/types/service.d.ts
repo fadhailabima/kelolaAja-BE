@@ -1,4 +1,4 @@
-import { TranslationInput } from "../../src/types/translation";
+import { TranslationInput } from "./translation";
 export interface BaseCreateInput {
     createdBy: number;
 }

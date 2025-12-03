@@ -2668,7 +2668,7 @@ GET /api/benefit-stats?locale=id
 
 **Endpoint:** `GET /api/benefit-stats/admin`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin, Editor)
 
 **Response:** Termasuk semua stat dengan translations lengkap
 
@@ -2676,7 +2676,7 @@ GET /api/benefit-stats?locale=id
 
 **Endpoint:** `POST /api/benefit-stats/admin`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin only)
 
 **Request Body:**
 
@@ -2706,13 +2706,13 @@ GET /api/benefit-stats?locale=id
 
 **Endpoint:** `PUT /api/benefit-stats/admin/:id`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin only)
 
 #### 8.1.5 Delete Benefit Stat (Admin)
 
 **Endpoint:** `DELETE /api/benefit-stats/admin/:id`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin only)
 
 ---
 
@@ -2758,13 +2758,13 @@ GET /api/process-steps?locale=id
 
 **Endpoint:** `GET /api/process-steps/admin`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin, Editor)
 
 #### 8.2.3 Create Process Step (Admin)
 
 **Endpoint:** `POST /api/process-steps/admin`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin only)
 
 **Request Body:**
 
@@ -2788,13 +2788,13 @@ GET /api/process-steps?locale=id
 
 **Endpoint:** `PUT /api/process-steps/admin/:id`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin only)
 
 #### 8.2.5 Delete Process Step (Admin)
 
 **Endpoint:** `DELETE /api/process-steps/admin/:id`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin only)
 
 ---
 
@@ -2839,13 +2839,13 @@ GET /api/erp-benefits?locale=id
 
 **Endpoint:** `GET /api/erp-benefits/admin`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin, Editor)
 
 #### 8.3.3 Create ERP Benefit (Admin)
 
 **Endpoint:** `POST /api/erp-benefits/admin`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin only)
 
 **Request Body:**
 
@@ -2868,13 +2868,13 @@ GET /api/erp-benefits?locale=id
 
 **Endpoint:** `PUT /api/erp-benefits/admin/:id`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin only)
 
 #### 8.3.5 Delete ERP Benefit (Admin)
 
 **Endpoint:** `DELETE /api/erp-benefits/admin/:id`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin only)
 
 ---
 
@@ -3309,7 +3309,7 @@ Mendapatkan semua konfigurasi termasuk yang private (Admin).
 
 **Endpoint:** `GET /api/site-config/admin`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin, Editor)
 
 **Headers:**
 
@@ -3571,7 +3571,7 @@ Mendapatkan daftar semua file media dengan filter.
 
 **Endpoint:** `GET /api/media-files/admin`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin, Editor)
 
 **Headers:**
 
@@ -3634,7 +3634,7 @@ Mendapatkan detail file media berdasarkan ID.
 
 **Endpoint:** `GET /api/media-files/admin/:id`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin, Editor)
 
 **Path Parameters:**
 | Parameter | Type | Description |
@@ -3726,7 +3726,7 @@ Update metadata file media.
 
 **Endpoint:** `PUT /api/media-files/admin/:id`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin only)
 
 **Path Parameters:**
 | Parameter | Type | Description |
@@ -3870,7 +3870,7 @@ Mendapatkan daftar semua submission dengan filter.
 
 **Endpoint:** `GET /api/contact-submissions/admin`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin, Editor)
 
 **Headers:**
 
@@ -3931,7 +3931,7 @@ Mendapatkan detail submission berdasarkan ID.
 
 **Endpoint:** `GET /api/contact-submissions/admin/:id`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin, Editor) (Admin, Editor)
 
 **Path Parameters:**
 | Parameter | Type | Description |
@@ -4024,7 +4024,7 @@ Assign submission ke admin tertentu.
 
 **Endpoint:** `PUT /api/contact-submissions/admin/:id/assign`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin only)
 
 **Path Parameters:**
 | Parameter | Type | Description |
@@ -4194,7 +4194,7 @@ Mendapatkan log untuk entity tertentu.
 
 **Endpoint:** `GET /api/audit-logs/admin/entity/:entityType/:entityId`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin, Editor)
 
 **Path Parameters:**
 | Parameter | Type | Description |
@@ -4246,7 +4246,7 @@ Mendapatkan semua log aktivitas user tertentu.
 
 **Endpoint:** `GET /api/audit-logs/admin/user/:userId`
 
-**Authentication:** ✅ Required
+**Authentication:** ✅ Required (Admin, Editor)
 
 **Path Parameters:**
 | Parameter | Type | Description |
@@ -5480,7 +5480,7 @@ Fitur Career Management memungkinkan perusahaan untuk mengelola lowongan pekerja
   "data": {
     "jobId": 1,
     "jobCode": "DEV-001",
-    "slug": "senior-backend-developer",
+    "slug": "senior-backend-developer"
     // ... other fields
   }
 }
@@ -5617,14 +5617,8 @@ GET /api/v1/jobs/public?page=1&limit=10&locale=id&jobType=FullTime&city=Jakarta&
     "activeJobs": 32,
     "totalApplications": 234,
     "pendingApplications": 56,
-    "jobsByType": [
-      { "jobType": "FullTime", "_count": 30 },
-      { "jobType": "Contract", "_count": 10 }
-    ],
-    "jobsByLevel": [
-      { "jobLevel": "Senior", "_count": 15 },
-      { "jobLevel": "MidLevel", "_count": 20 }
-    ]
+    "jobsByType": [{ "jobType": "FullTime", "_count": 30 }, { "jobType": "Contract", "_count": 10 }],
+    "jobsByLevel": [{ "jobLevel": "Senior", "_count": 15 }, { "jobLevel": "MidLevel", "_count": 20 }]
   }
 }
 ```
@@ -5639,21 +5633,27 @@ GET /api/v1/jobs/public?page=1&limit=10&locale=id&jobType=FullTime&city=Jakarta&
 - **Content-Type**: `multipart/form-data`
 - **Form Fields**:
   - `cv`: File upload (PDF, DOC, DOCX) - Max 10MB
-  - `jobId`: Number (required)
+  - `jobId`: Number (required) - **akan dikonversi otomatis dari string**
   - `applicantName`: String (required)
   - `applicantEmail`: String (required, email format)
   - `applicantPhone`: String (optional)
   - `currentCompany`: String (optional)
   - `currentPosition`: String (optional)
-  - `yearsOfExperience`: Number (optional)
-  - `expectedSalary`: Number (optional)
+  - `yearsOfExperience`: Number (optional) - **akan dikonversi otomatis dari string**
+  - `expectedSalary`: Number (optional) - **akan dikonversi otomatis dari string**
   - `salaryCurrency`: String (default: "IDR")
-  - `availableFrom`: Date (optional)
+  - `availableFrom`: Date (optional) - **format: YYYY-MM-DD**
   - `coverLetter`: Text (optional)
   - `portfolioUrl`: String URL (optional)
   - `linkedinUrl`: String URL (optional)
   - `githubUrl`: String URL (optional)
   - `referralSource`: String (optional, e.g., "website", "linkedin")
+
+**Important Notes:**
+
+- ✅ Field number seperti `jobId`, `yearsOfExperience`, `expectedSalary` **otomatis dikonversi** dari string ke integer di backend
+- ✅ Anda bisa mengirim sebagai string dari form HTML, backend akan handle konversi
+- ✅ Field `availableFrom` harus dalam format ISO date string atau YYYY-MM-DD
 
 **Example using cURL**:
 
@@ -5689,6 +5689,102 @@ curl -X POST http://localhost:8080/api/v1/job-applications/apply \
     "createdAt": "2024-11-27T10:30:00Z"
   }
 }
+```
+
+**Example React/JavaScript Implementation**:
+
+```javascript
+// React Component Example
+const handleSubmit = async e => {
+  e.preventDefault();
+
+  const formData = new FormData();
+
+  // File upload
+  if (cvFile) {
+    formData.append("cv", cvFile);
+  }
+
+  // Text fields - kirim sebagai string, backend akan convert
+  formData.append("jobId", jobId.toString()); // atau langsung jobId (akan auto-convert)
+  formData.append("applicantName", applicantName);
+  formData.append("applicantEmail", applicantEmail);
+  formData.append("applicantPhone", applicantPhone);
+  formData.append("currentCompany", currentCompany);
+  formData.append("currentPosition", currentPosition);
+
+  // Number fields - kirim sebagai string, backend akan parse ke integer
+  if (yearsOfExperience) {
+    formData.append("yearsOfExperience", yearsOfExperience.toString());
+  }
+  if (expectedSalary) {
+    formData.append("expectedSalary", expectedSalary.toString());
+  }
+
+  // Date field - convert ke ISO string atau YYYY-MM-DD
+  if (availableFrom) {
+    formData.append("availableFrom", availableFrom); // new Date().toISOString()
+  }
+
+  formData.append("coverLetter", coverLetter);
+  formData.append("linkedinUrl", linkedinUrl);
+  formData.append("githubUrl", githubUrl);
+  formData.append("referralSource", "website");
+
+  try {
+    const response = await fetch("http://localhost:8080/api/v1/job-applications/apply", {
+      method: "POST",
+      body: formData
+      // Jangan set Content-Type header, browser akan auto-set dengan boundary
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      alert("Application submitted successfully!");
+    }
+  } catch (error) {
+    console.error("Error submitting application:", error);
+  }
+};
+```
+
+**Example HTML Form (Plain JavaScript)**:
+
+```html
+<form id="applicationForm" enctype="multipart/form-data">
+  <input type="file" name="cv" accept=".pdf,.doc,.docx" required /> <input type="hidden" name="jobId" value="1" />
+  <input type="text" name="applicantName" required /> <input type="email" name="applicantEmail" required />
+  <input type="tel" name="applicantPhone" /> <input type="text" name="currentCompany" />
+  <input type="text" name="currentPosition" />
+
+  <!-- Number inputs akan terkirim sebagai string, tapi backend auto-convert -->
+  <input type="number" name="yearsOfExperience" min="0" max="50" /> <input type="number" name="expectedSalary" min="0" />
+
+  <input type="date" name="availableFrom" /> <textarea name="coverLetter"></textarea> <input type="url" name="linkedinUrl" />
+  <input type="url" name="githubUrl" />
+  <select name="referralSource">
+    <option value="website">Website</option>
+    <option value="linkedin">LinkedIn</option>
+    <option value="referral">Referral</option>
+  </select>
+
+  <button type="submit">Submit Application</button>
+</form>
+
+<script>
+  document.getElementById("applicationForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const response = await fetch("/api/v1/job-applications/apply", {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await response.json();
+    console.log(result);
+  });
+</script>
 ```
 
 ##### 2. Get All Applications (Admin)
@@ -5809,10 +5905,7 @@ curl -X POST http://localhost:8080/api/v1/job-applications/apply \
     ],
     "averageRating": 3.8,
     "applicationsThisMonth": 45,
-    "topReferralSources": [
-      { "referralSource": "website", "_count": 120 },
-      { "referralSource": "linkedin", "_count": 67 }
-    ]
+    "topReferralSources": [{ "referralSource": "website", "_count": 120 }, { "referralSource": "linkedin", "_count": 67 }]
   }
 }
 ```
@@ -5886,7 +5979,7 @@ const JobApplicationForm = ({ jobId }) => {
   const [cvFile, setCvFile] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setSubmitting(true);
 
@@ -5894,7 +5987,7 @@ const JobApplicationForm = ({ jobId }) => {
     formDataObj.append("jobId", jobId);
 
     // Append all form fields
-    Object.keys(formData).forEach((key) => {
+    Object.keys(formData).forEach(key => {
       if (formData[key]) {
         formDataObj.append(key, formData[key]);
       }
@@ -5933,7 +6026,7 @@ const JobApplicationForm = ({ jobId }) => {
         type="text"
         placeholder="Full Name"
         value={formData.applicantName}
-        onChange={(e) => setFormData({ ...formData, applicantName: e.target.value })}
+        onChange={e => setFormData({ ...formData, applicantName: e.target.value })}
         required
       />
 
@@ -5941,7 +6034,7 @@ const JobApplicationForm = ({ jobId }) => {
         type="email"
         placeholder="Email"
         value={formData.applicantEmail}
-        onChange={(e) => setFormData({ ...formData, applicantEmail: e.target.value })}
+        onChange={e => setFormData({ ...formData, applicantEmail: e.target.value })}
         required
       />
 
@@ -5949,16 +6042,16 @@ const JobApplicationForm = ({ jobId }) => {
         type="tel"
         placeholder="Phone"
         value={formData.applicantPhone}
-        onChange={(e) => setFormData({ ...formData, applicantPhone: e.target.value })}
+        onChange={e => setFormData({ ...formData, applicantPhone: e.target.value })}
       />
 
       <textarea
         placeholder="Cover Letter"
         value={formData.coverLetter}
-        onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
+        onChange={e => setFormData({ ...formData, coverLetter: e.target.value })}
       />
 
-      <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => setCvFile(e.target.files[0])} required />
+      <input type="file" accept=".pdf,.doc,.docx" onChange={e => setCvFile(e.target.files[0])} required />
 
       <button type="submit" disabled={submitting}>
         {submitting ? "Submitting..." : "Submit Application"}

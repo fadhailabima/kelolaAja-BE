@@ -46,7 +46,13 @@ class ContentSectionController {
                 return response_1.ResponseUtil.unauthorized(res, 'User not authenticated');
             }
             const section = await content_section_service_1.ContentSectionService.createSection({
-                ...req.body,
+                sectionType: req.body.sectionType,
+                sectionKey: req.body.sectionKey,
+                pageLocation: req.body.pageLocation,
+                displayOrder: parseInt(req.body.displayOrder),
+                isActive: req.body.isActive === 'true' || req.body.isActive === true,
+                metadata: req.body.metadata,
+                translations: req.body.translations,
                 createdBy: userId,
             });
             return response_1.ResponseUtil.success(res, 'Content section created successfully', section, 201);
@@ -63,7 +69,11 @@ class ContentSectionController {
             }
             const sectionId = parseInt(req.params.id);
             const section = await content_section_service_1.ContentSectionService.updateSection(sectionId, {
-                ...req.body,
+                pageLocation: req.body.pageLocation,
+                displayOrder: req.body.displayOrder ? parseInt(req.body.displayOrder) : undefined,
+                isActive: req.body.isActive !== undefined ? (req.body.isActive === 'true' || req.body.isActive === true) : undefined,
+                metadata: req.body.metadata,
+                translations: req.body.translations,
                 updatedBy: userId,
             });
             return response_1.ResponseUtil.success(res, 'Content section updated successfully', section);

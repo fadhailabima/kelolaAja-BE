@@ -36,8 +36,22 @@ export class JobApplicationController {
       }
 
       const data: CreateJobApplicationDTO = {
-        ...req.body,
-        cvFileId: cvFileId || req.body.cvFileId,
+        jobId: parseInt(req.body.jobId),
+        applicantName: req.body.applicantName,
+        applicantEmail: req.body.applicantEmail,
+        applicantPhone: req.body.applicantPhone,
+        currentCompany: req.body.currentCompany,
+        currentPosition: req.body.currentPosition,
+        yearsOfExperience: req.body.yearsOfExperience ? parseInt(req.body.yearsOfExperience) : undefined,
+        expectedSalary: req.body.expectedSalary ? parseInt(req.body.expectedSalary) : undefined,
+        salaryCurrency: req.body.salaryCurrency,
+        availableFrom: req.body.availableFrom ? new Date(req.body.availableFrom) : undefined,
+        coverLetter: req.body.coverLetter,
+        cvFileId: cvFileId || (req.body.cvFileId ? parseInt(req.body.cvFileId) : undefined),
+        portfolioUrl: req.body.portfolioUrl,
+        linkedinUrl: req.body.linkedinUrl,
+        githubUrl: req.body.githubUrl,
+        referralSource: req.body.referralSource,
       };
       
       const ipAddress = req.ip;
@@ -58,7 +72,12 @@ export class JobApplicationController {
   async update(req: Request, res: Response, next: NextFunction) {
     try {
       const applicationId = parseInt(req.params.id);
-      const data: UpdateJobApplicationDTO = req.body;
+      const data: UpdateJobApplicationDTO = {
+        status: req.body.status,
+        rating: req.body.rating ? parseInt(req.body.rating) : undefined,
+        adminNotes: req.body.adminNotes,
+        rejectionReason: req.body.rejectionReason,
+      };
 
       const application = await jobApplicationService.updateJobApplication(applicationId, data);
 

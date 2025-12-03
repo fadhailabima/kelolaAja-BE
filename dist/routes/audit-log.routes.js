@@ -1,13 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.auditLogAdminRoutes = void 0;
 const express_1 = require("express");
 const audit_log_controller_1 = require("../controllers/audit-log.controller");
 const auth_middleware_1 = require("../middlewares/auth.middleware");
 const router = (0, express_1.Router)();
-router.get("/admin", auth_middleware_1.authenticate, audit_log_controller_1.AuditLogController.listAll);
-router.get("/admin/stats", auth_middleware_1.authenticate, audit_log_controller_1.AuditLogController.getStats);
-router.get("/admin/entity/:entityType/:entityId", auth_middleware_1.authenticate, audit_log_controller_1.AuditLogController.getEntityLogs);
-router.get("/admin/user/:userId", auth_middleware_1.authenticate, audit_log_controller_1.AuditLogController.getUserLogs);
-router.post("/admin", auth_middleware_1.authenticate, audit_log_controller_1.AuditLogController.create);
+router.get("/admin", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), audit_log_controller_1.AuditLogController.listAll);
+router.get("/admin/stats", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), audit_log_controller_1.AuditLogController.getStats);
+router.get("/admin/entity/:entityType/:entityId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), audit_log_controller_1.AuditLogController.getEntityLogs);
+router.get("/admin/user/:userId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), audit_log_controller_1.AuditLogController.getUserLogs);
+router.post("/admin", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), audit_log_controller_1.AuditLogController.create);
 exports.default = router;
+const adminRouter = (0, express_1.Router)();
+adminRouter.get("/", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), audit_log_controller_1.AuditLogController.listAll);
+adminRouter.get("/stats", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), audit_log_controller_1.AuditLogController.getStats);
+adminRouter.get("/entity/:entityType/:entityId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), audit_log_controller_1.AuditLogController.getEntityLogs);
+adminRouter.get("/user/:userId", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), audit_log_controller_1.AuditLogController.getUserLogs);
+adminRouter.post("/", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), audit_log_controller_1.AuditLogController.create);
+exports.auditLogAdminRoutes = adminRouter;
 //# sourceMappingURL=audit-log.routes.js.map

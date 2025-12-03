@@ -176,6 +176,10 @@ export declare class AnalyticsService {
             totalPages: number;
         };
     }>;
+    static getTopPages(startDate?: string, endDate?: string, limit?: number): Promise<{
+        pagePath: string;
+        views: number;
+    }[]>;
 }
 export {};
 //# sourceMappingURL=analytics.service.d.ts.map

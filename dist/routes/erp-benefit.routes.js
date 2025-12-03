@@ -6,9 +6,9 @@ const auth_middleware_1 = require("../middlewares/auth.middleware");
 const locale_middleware_1 = require("../middlewares/locale.middleware");
 const router = (0, express_1.Router)();
 router.get("/", locale_middleware_1.detectLocale, erp_benefit_controller_1.ERPBenefitController.listPublicBenefits);
-router.get("/admin", auth_middleware_1.authenticate, erp_benefit_controller_1.ERPBenefitController.listAllBenefits);
-router.post("/admin", auth_middleware_1.authenticate, erp_benefit_controller_1.ERPBenefitController.createBenefit);
-router.put("/admin/:id", auth_middleware_1.authenticate, erp_benefit_controller_1.ERPBenefitController.updateBenefit);
-router.delete("/admin/:id", auth_middleware_1.authenticate, erp_benefit_controller_1.ERPBenefitController.deleteBenefit);
+router.get("/admin", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin", "Editor"), erp_benefit_controller_1.ERPBenefitController.listAllBenefits);
+router.post("/admin", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), erp_benefit_controller_1.ERPBenefitController.createBenefit);
+router.put("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), erp_benefit_controller_1.ERPBenefitController.updateBenefit);
+router.delete("/admin/:id", auth_middleware_1.authenticate, (0, auth_middleware_1.authorize)("Admin"), erp_benefit_controller_1.ERPBenefitController.deleteBenefit);
 exports.default = router;
 //# sourceMappingURL=erp-benefit.routes.js.map

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { JwtPayload } from "../../src/utils/jwt";
+import { JwtPayload } from "../utils/jwt";
 declare global {
     namespace Express {
         interface Request {

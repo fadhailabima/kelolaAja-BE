@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { ContactSubmissionController } from "../controllers/contact-submission.controller";
-import { authenticate } from "../middlewares/auth.middleware";
+import { authenticate, authorize } from "../middlewares/auth.middleware";
 
 const router = Router();
 
@@ -8,23 +8,23 @@ const router = Router();
 router.post("/", ContactSubmissionController.create);
 
 // Admin routes (protected) - keep for backward compatibility
-router.get("/admin", authenticate, ContactSubmissionController.listAll);
-router.get("/admin/stats", authenticate, ContactSubmissionController.getStats);
-router.get("/admin/:id", authenticate, ContactSubmissionController.getById);
-router.put("/admin/:id", authenticate, ContactSubmissionController.update);
-router.put("/admin/:id/assign", authenticate, ContactSubmissionController.assign);
-router.delete("/admin/:id", authenticate, ContactSubmissionController.delete);
+router.get("/admin", authenticate, authorize("Admin", "Editor"), ContactSubmissionController.listAll);
+router.get("/admin/stats", authenticate, authorize("Admin", "Editor"), ContactSubmissionController.getStats);
+router.get("/admin/:id", authenticate, authorize("Admin", "Editor"), ContactSubmissionController.getById);
+router.put("/admin/:id", authenticate, authorize("Admin", "Editor"), ContactSubmissionController.update);
+router.put("/admin/:id/assign", authenticate, authorize("Admin"), ContactSubmissionController.assign);
+router.delete("/admin/:id", authenticate, authorize("Admin"), ContactSubmissionController.delete);
 
 export default router;
 
 // Admin routes for /admin/contact-submissions pattern
 const adminRouter = Router();
 
-adminRouter.get("/", authenticate, ContactSubmissionController.listAll);
-adminRouter.get("/stats", authenticate, ContactSubmissionController.getStats);
-adminRouter.get("/:id", authenticate, ContactSubmissionController.getById);
-adminRouter.put("/:id", authenticate, ContactSubmissionController.update);
-adminRouter.put("/:id/assign", authenticate, ContactSubmissionController.assign);
-adminRouter.delete("/:id", authenticate, ContactSubmissionController.delete);
+adminRouter.get("/", authenticate, authorize("Admin", "Editor"), ContactSubmissionController.listAll);
+adminRouter.get("/stats", authenticate, authorize("Admin", "Editor"), ContactSubmissionController.getStats);
+adminRouter.get("/:id", authenticate, authorize("Admin", "Editor"), ContactSubmissionController.getById);
+adminRouter.put("/:id", authenticate, authorize("Admin", "Editor"), ContactSubmissionController.update);
+adminRouter.put("/:id/assign", authenticate, authorize("Admin"), ContactSubmissionController.assign);
+adminRouter.delete("/:id", authenticate, authorize("Admin"), ContactSubmissionController.delete);
 
 export const contactSubmissionAdminRoutes = adminRouter;
