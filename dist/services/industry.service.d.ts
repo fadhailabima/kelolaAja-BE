@@ -79,14 +79,14 @@ export declare class IndustryService {
                 username: string;
                 email: string;
             };
-            translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+            translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
                 locale: Locale;
             }, "locale">>;
             problems: {
                 problemId: number;
                 displayOrder: number;
                 isActive: boolean;
-                translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+                translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
                     locale: Locale;
                 }, "locale">>;
             }[];
@@ -94,7 +94,7 @@ export declare class IndustryService {
                 solutionId: number;
                 displayOrder: number;
                 isActive: boolean;
-                translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+                translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
                     locale: Locale;
                 }, "locale">>;
             }[];
@@ -126,14 +126,14 @@ export declare class IndustryService {
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
         problems: {
             problemId: number;
             displayOrder: number;
             isActive: boolean;
-            translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+            translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
                 locale: Locale;
             }, "locale">>;
         }[];
@@ -141,7 +141,7 @@ export declare class IndustryService {
             solutionId: number;
             displayOrder: number;
             isActive: boolean;
-            translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+            translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
                 locale: Locale;
             }, "locale">>;
         }[];
@@ -164,7 +164,7 @@ export declare class IndustryService {
         slug: string;
         displayOrder: number;
         isActive: boolean;
-        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
     }>;
@@ -176,14 +176,14 @@ export declare class IndustryService {
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
         problems: {
             problemId: number;
             displayOrder: number;
             isActive: boolean;
-            translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+            translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
                 locale: Locale;
             }, "locale">>;
         }[];
@@ -191,7 +191,7 @@ export declare class IndustryService {
             solutionId: number;
             displayOrder: number;
             isActive: boolean;
-            translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+            translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
                 locale: Locale;
             }, "locale">>;
         }[];
@@ -213,7 +213,7 @@ export declare class IndustryService {
         problemId: number;
         displayOrder: number;
         isActive: boolean;
-        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
     }[]>;
@@ -221,7 +221,7 @@ export declare class IndustryService {
         problemId: number;
         displayOrder: number;
         isActive: boolean;
-        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
     }>;
@@ -229,7 +229,7 @@ export declare class IndustryService {
         problemId: number;
         displayOrder: number;
         isActive: boolean;
-        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
     }>;
@@ -238,7 +238,7 @@ export declare class IndustryService {
         solutionId: number;
         displayOrder: number;
         isActive: boolean;
-        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
     }[]>;
@@ -246,7 +246,7 @@ export declare class IndustryService {
         solutionId: number;
         displayOrder: number;
         isActive: boolean;
-        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
     }>;
@@ -254,7 +254,7 @@ export declare class IndustryService {
         solutionId: number;
         displayOrder: number;
         isActive: boolean;
-        translations: Record<import(".prisma/client").$Enums.Locale, Omit<Record<string, any> & {
+        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<Record<string, any> & {
             locale: Locale;
         }, "locale">>;
     }>;

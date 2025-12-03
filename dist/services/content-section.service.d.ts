@@ -24,7 +24,7 @@ export declare class ContentSectionService {
             displayOrder: any;
             isActive: any;
             metadata: any;
-            translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
+            translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<import("../../src/utils/translation").Translation, "locale">>;
             media: any;
             createdBy: any;
             createdAt: any;
@@ -62,13 +62,13 @@ export declare class ContentSectionService {
         };
         createdBy: number;
     }): Promise<{
-        translations: Record<import(".prisma/client").$Enums.Locale, Omit<{
+        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<{
             createdAt: Date;
             updatedAt: Date;
             sectionId: number;
             title: string | null;
             description: string | null;
-            locale: import(".prisma/client").$Enums.Locale;
+            locale: import(".prisma/client/client").$Enums.Locale;
             translationId: number;
             subtitle: string | null;
             content: string | null;
@@ -138,13 +138,13 @@ export declare class ContentSectionService {
         };
         updatedBy: number;
     }): Promise<{
-        translations: Record<import(".prisma/client").$Enums.Locale, Omit<{
+        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<{
             createdAt: Date;
             updatedAt: Date;
             sectionId: number;
             title: string | null;
             description: string | null;
-            locale: import(".prisma/client").$Enums.Locale;
+            locale: import(".prisma/client/client").$Enums.Locale;
             translationId: number;
             subtitle: string | null;
             content: string | null;

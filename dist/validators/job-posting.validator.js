@@ -215,10 +215,17 @@ exports.updateJobPostingSchema = zod_1.z.object({
 });
 exports.createJobApplicationSchema = zod_1.z.object({
     body: zod_1.z.object({
-        jobId: zod_1.z
-            .number()
-            .int()
-            .positive(),
+        jobId: zod_1.z.preprocess((val) => {
+            if (val === undefined || val === null) return val;
+            if (typeof val === 'number') return val;
+            if (typeof val === 'string') {
+                const trimmed = val.trim();
+                if (trimmed === '') return val;
+                const num = parseInt(trimmed, 10);
+                return isNaN(num) ? val : num;
+            }
+            return val;
+        }, zod_1.z.number().int().positive()),
         applicantName: zod_1.z
             .string()
             .min(1)
@@ -239,16 +246,28 @@ exports.createJobApplicationSchema = zod_1.z.object({
             .string()
             .max(255)
             .optional(),
-        yearsOfExperience: zod_1.z
-            .number()
-            .int()
-            .min(0)
-            .optional(),
-        expectedSalary: zod_1.z
-            .number()
-            .int()
-            .min(0)
-            .optional(),
+        yearsOfExperience: zod_1.z.preprocess((val) => {
+            if (val === undefined || val === null || val === '') return undefined;
+            if (typeof val === 'number') return val;
+            if (typeof val === 'string') {
+                const trimmed = val.trim();
+                if (trimmed === '') return undefined;
+                const num = Number(trimmed);
+                if (!isNaN(num) && isFinite(num)) return num;
+            }
+            return undefined;
+        }, zod_1.z.number().int().min(0).optional()),
+        expectedSalary: zod_1.z.preprocess((val) => {
+            if (val === undefined || val === null || val === '') return undefined;
+            if (typeof val === 'number') return val;
+            if (typeof val === 'string') {
+                const trimmed = val.trim();
+                if (trimmed === '') return undefined;
+                const num = Number(trimmed);
+                if (!isNaN(num) && isFinite(num)) return num;
+            }
+            return undefined;
+        }, zod_1.z.number().int().min(0).optional()),
         salaryCurrency: zod_1.z
             .string()
             .max(10)
