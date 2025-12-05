@@ -20,6 +20,7 @@
 - [Feature Pages](#15-feature-pages)
 - [Analytics](#16-analytics)
 - [Career Management](#17-career-management)
+- [About Us Content](#18-about-us-content)
 
 ---
 
@@ -6294,6 +6295,191 @@ HTTP Status Codes:
 4. **Retry logic** untuk request yang gagal karena network
 5. **Loading states** untuk semua API calls
 6. **Optimistic updates** untuk better UX
+
+---
+
+## 18. About Us Content
+
+### 18.1 Core Values
+
+#### 18.1.1 Get All Core Values (Public)
+
+Mendapatkan daftar nilai-nilai inti perusahaan yang aktif.
+
+**Endpoint:** `GET /api/core-values`
+
+**Authentication:** ❌ Tidak diperlukan (Public)
+
+**Locale:** ✅ Supported
+
+**Query Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `locale` | string | ❌ | Bahasa (id/en), default: id |
+
+**Example Request:**
+
+```http
+GET /api/core-values?locale=id
+```
+
+**Response Success (200):**
+
+```json
+{
+  "success": true,
+  "message": "Core values retrieved successfully",
+  "data": [
+    {
+      "valueId": 1,
+      "displayOrder": 1,
+      "iconName": "integrity",
+      "title": "Integritas",
+      "description": "Kami selalu bertindak jujur dan berintegritas dalam setiap keputusan",
+      "image": {
+        "fileId": 10,
+        "filePath": "/images/core-values/integrity.png",
+        "altText": "Integritas"
+      }
+    }
+  ]
+}
+```
+
+#### 18.1.2 Get All Core Values (Admin)
+
+**Endpoint:** `GET /api/core-values/admin`
+
+**Authentication:** ✅ Required (Admin, Editor)
+
+**Response:** Termasuk semua nilai dengan translations lengkap
+
+#### 18.1.3 Create Core Value (Admin)
+
+**Endpoint:** `POST /api/core-values/admin`
+
+**Authentication:** ✅ Required (Admin only)
+
+**Request Body:**
+
+```json
+{
+  "displayOrder": 1,
+  "iconName": "innovation",
+  "imageFileId": 15,
+  "translations": {
+    "id": {
+      "title": "Inovasi",
+      "description": "Kami terus berinovasi untuk memberikan solusi terbaik"
+    },
+    "en": {
+      "title": "Innovation",
+      "description": "We continuously innovate to provide the best solutions"
+    }
+  }
+}
+```
+
+#### 18.1.4 Update Core Value (Admin)
+
+**Endpoint:** `PUT /api/core-values/admin/:id`
+
+**Authentication:** ✅ Required (Admin only)
+
+#### 18.1.5 Delete Core Value (Admin)
+
+**Endpoint:** `DELETE /api/core-values/admin/:id`
+
+**Authentication:** ✅ Required (Admin only)
+
+---
+
+### 18.2 Our Philosophy
+
+#### 18.2.1 Get All Our Philosophies (Public)
+
+Mendapatkan filosofi perusahaan yang aktif.
+
+**Endpoint:** `GET /api/our-philosophies`
+
+**Authentication:** ❌ Tidak diperlukan (Public)
+
+**Locale:** ✅ Supported
+
+**Example Request:**
+
+```http
+GET /api/our-philosophies?locale=id
+```
+
+**Response Success (200):**
+
+```json
+{
+  "success": true,
+  "message": "Our philosophies retrieved successfully",
+  "data": [
+    {
+      "philosophyId": 1,
+      "displayOrder": 1,
+      "iconName": "customer-first",
+      "title": "Customer First",
+      "description": "Pelanggan adalah prioritas utama dalam setiap keputusan yang kami buat",
+      "image": {
+        "fileId": 20,
+        "filePath": "/images/philosophy/customer-first.png",
+        "altText": "Customer First"
+      }
+    }
+  ]
+}
+```
+
+#### 18.2.2 Get All Our Philosophies (Admin)
+
+**Endpoint:** `GET /api/our-philosophies/admin`
+
+**Authentication:** ✅ Required (Admin, Editor)
+
+**Response:** Termasuk semua filosofi dengan translations lengkap
+
+#### 18.2.3 Create Our Philosophy (Admin)
+
+**Endpoint:** `POST /api/our-philosophies/admin`
+
+**Authentication:** ✅ Required (Admin only)
+
+**Request Body:**
+
+```json
+{
+  "displayOrder": 2,
+  "iconName": "excellence",
+  "imageFileId": 21,
+  "translations": {
+    "id": {
+      "title": "Keunggulan",
+      "description": "Kami berkomitmen untuk memberikan keunggulan dalam setiap aspek layanan"
+    },
+    "en": {
+      "title": "Excellence",
+      "description": "We are committed to delivering excellence in every aspect of our service"
+    }
+  }
+}
+```
+
+#### 18.2.4 Update Our Philosophy (Admin)
+
+**Endpoint:** `PUT /api/our-philosophies/admin/:id`
+
+**Authentication:** ✅ Required (Admin only)
+
+#### 18.2.5 Delete Our Philosophy (Admin)
+
+**Endpoint:** `DELETE /api/our-philosophies/admin/:id`
+
+**Authentication:** ✅ Required (Admin only)
 
 ---
 

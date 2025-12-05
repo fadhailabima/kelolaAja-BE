@@ -74,6 +74,10 @@ model AdminUser {
   updatedAboutCards    AboutCard[]         @relation("UpdatedAboutCardByAdmin")
   createdKelolaAjaFeatures KelolaAjaFeature[] @relation("CreatedKelolaAjaFeatureByAdmin")
   updatedKelolaAjaFeatures KelolaAjaFeature[] @relation("UpdatedKelolaAjaFeatureByAdmin")
+  createdCoreValues    CoreValue[]         @relation("CreatedCoreValueByAdmin")
+  updatedCoreValues    CoreValue[]         @relation("UpdatedCoreValueByAdmin")
+  createdOurPhilosophies OurPhilosophy[]   @relation("CreatedOurPhilosophyByAdmin")
+  updatedOurPhilosophies OurPhilosophy[]   @relation("UpdatedOurPhilosophyByAdmin")
   createdFaqCategories FAQCategory[]       @relation("CreatedFaqCategoryByAdmin")
   updatedFaqCategories FAQCategory[]       @relation("UpdatedFaqCategoryByAdmin")
 
@@ -884,6 +888,84 @@ model KelolaAjaFeatureTranslation {
 }
 
 // ============================================
+// CORE VALUES & OUR PHILOSOPHY (New)
+// ============================================
+
+model CoreValue {
+  valueId      Int                      @id @default(autoincrement()) @map("value_id")
+  valueCode    String                   @unique @map("value_code") @db.VarChar(100)
+  iconName     String?                  @map("icon_name") @db.VarChar(100)
+  imageFileId  Int?                     @map("image_file_id")
+  displayOrder Int                      @map("display_order")
+  isActive     Boolean                  @default(true) @map("is_active")
+  createdAt    DateTime                 @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime                 @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?                @map("deleted_at") @db.Timestamp(3)
+
+  imageFile    MediaFile?               @relation("CoreValueImage", fields: [imageFileId], references: [fileId])
+  createdBy    Int                      @map("created_by")
+  creator      AdminUser                @relation("CreatedCoreValueByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                      @map("updated_by")
+  updater      AdminUser                @relation("UpdatedCoreValueByAdmin", fields: [updatedBy], references: [userId])
+
+  translations CoreValueTranslation[]
+
+  @@map("CORE_VALUE")
+}
+
+model CoreValueTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  valueId       Int      @map("value_id")
+  locale        Locale   @default(id)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  coreValue     CoreValue @relation(fields: [valueId], references: [valueId])
+
+  @@unique([valueId, locale], map: "unique_core_value_translation")
+  @@map("CORE_VALUE_TRANSLATION")
+}
+
+model OurPhilosophy {
+  philosophyId Int                         @id @default(autoincrement()) @map("philosophy_id")
+  philosophyCode String                    @unique @map("philosophy_code") @db.VarChar(100)
+  iconName     String?                     @map("icon_name") @db.VarChar(100)
+  imageFileId  Int?                        @map("image_file_id")
+  displayOrder Int                         @map("display_order")
+  isActive     Boolean                     @default(true) @map("is_active")
+  createdAt    DateTime                    @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime                    @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?                   @map("deleted_at") @db.Timestamp(3)
+
+  imageFile    MediaFile?                  @relation("OurPhilosophyImage", fields: [imageFileId], references: [fileId])
+  createdBy    Int                         @map("created_by")
+  creator      AdminUser                   @relation("CreatedOurPhilosophyByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                         @map("updated_by")
+  updater      AdminUser                   @relation("UpdatedOurPhilosophyByAdmin", fields: [updatedBy], references: [userId])
+
+  translations OurPhilosophyTranslation[]
+
+  @@map("OUR_PHILOSOPHY")
+}
+
+model OurPhilosophyTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  philosophyId  Int      @map("philosophy_id")
+  locale        Locale   @default(id)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  philosophy    OurPhilosophy @relation(fields: [philosophyId], references: [philosophyId])
+
+  @@unique([philosophyId, locale], map: "unique_our_philosophy_translation")
+  @@map("OUR_PHILOSOPHY_TRANSLATION")
+}
+
+// ============================================
 // MEDIA FILE (Reused from previous)
 // ============================================
 
@@ -920,6 +1002,8 @@ model MediaFile {
   partnerLogos    Partner[] @relation("PartnerLogo")
   aboutCardImages AboutCard[] @relation("AboutCardImage")
   advancedFeatureImages AdvancedFeature[] @relation("AdvancedFeatureImage")
+  coreValueImages CoreValue[] @relation("CoreValueImage")
+  ourPhilosophyImages OurPhilosophy[] @relation("OurPhilosophyImage")
   jobApplicationCVs JobApplication[] @relation("JobApplicationCV")
 
   @@map("MEDIA_FILE")
