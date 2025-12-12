@@ -6,12 +6,12 @@ Pilih metode deployment yang sesuai dengan kebutuhan Anda.
 
 ## 📊 Comparison Table
 
-| Metode | Kompleksitas | Portability | Recommended For | Time to Deploy |
-|--------|--------------|-------------|-----------------|----------------|
-| **Docker + Railway** | ⭐⭐ | ⭐⭐⭐⭐⭐ | **Production (Recommended)** | 5 min |
-| **Docker Compose** | ⭐⭐ | ⭐⭐⭐⭐⭐ | **Local Development** | 2 min |
-| **Manual Railway** | ⭐⭐⭐ | ⭐⭐ | Quick testing | 10 min |
-| **VPS + Docker** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Self-hosted | 30 min |
+| Metode               | Kompleksitas | Portability | Recommended For              | Time to Deploy |
+| -------------------- | ------------ | ----------- | ---------------------------- | -------------- |
+| **Docker + Railway** | ⭐⭐         | ⭐⭐⭐⭐⭐  | **Production (Recommended)** | 5 min          |
+| **Docker Compose**   | ⭐⭐         | ⭐⭐⭐⭐⭐  | **Local Development**        | 2 min          |
+| **Manual Railway**   | ⭐⭐⭐       | ⭐⭐        | Quick testing                | 10 min         |
+| **VPS + Docker**     | ⭐⭐⭐⭐     | ⭐⭐⭐⭐⭐  | Self-hosted                  | 30 min         |
 
 ---
 
@@ -20,19 +20,22 @@ Pilih metode deployment yang sesuai dengan kebutuhan Anda.
 **✅ Best for:** Production deployment dengan minimal effort
 
 **Pros:**
+
 - ✅ Consistent deployment (Docker image sama persis di local & production)
 - ✅ Auto-scaling & load balancing by Railway
 - ✅ Automatic SSL certificates
 - ✅ Zero downtime deployments
 - ✅ Built-in monitoring & logging
-- ✅ Free tier available ($5 credit/month)
+- ✅ Free tier available (\$5 credit/month)
 - ✅ Easy rollback ke previous version
 
 **Cons:**
+
 - ⚠️ Memerlukan Docker knowledge (minimal)
 - ⚠️ Railway pricing setelah free tier
 
 **Quick Start:**
+
 ```bash
 # 1. Push to GitHub
 git push origin main
@@ -54,6 +57,7 @@ git push origin main
 **✅ Best for:** Local development & testing
 
 **Pros:**
+
 - ✅ Full stack dalam 1 command (PostgreSQL + App)
 - ✅ Identical environment dengan production
 - ✅ Easy cleanup (`docker-compose down -v`)
@@ -61,10 +65,12 @@ git push origin main
 - ✅ Free!
 
 **Cons:**
+
 - ⚠️ Hanya untuk local development
 - ⚠️ Tidak untuk production
 
 **Quick Start:**
+
 ```bash
 # 1. Copy environment
 cp .env.docker .env
@@ -94,17 +100,20 @@ curl http://localhost:8080/health
 **✅ Best for:** Quick testing, POC, demo
 
 **Pros:**
+
 - ✅ Faster initial deployment (no Docker build)
 - ✅ Simpler setup
 - ✅ Auto-detect Node.js
 
 **Cons:**
+
 - ⚠️ Less consistent (environment bisa beda dengan local)
 - ⚠️ Harder to debug deployment issues
 - ⚠️ Nixpacks build bisa unpredictable
 - ⚠️ Tidak recommended untuk production
 
 **Quick Start:**
+
 ```bash
 # 1. Update railway.json ke NIXPACKS
 # 2. Push to GitHub
@@ -126,6 +135,7 @@ curl http://localhost:8080/health
 **✅ Best for:** Full control, self-hosted, enterprise
 
 **Pros:**
+
 - ✅ Full control atas infrastructure
 - ✅ No vendor lock-in
 - ✅ Custom configurations
@@ -133,12 +143,14 @@ curl http://localhost:8080/health
 - ✅ Dapat use existing VPS
 
 **Cons:**
+
 - ⚠️ Memerlukan DevOps knowledge
 - ⚠️ Manual setup Nginx, SSL, monitoring
 - ⚠️ Maintenance overhead
 - ⚠️ No auto-scaling
 
 **Quick Start:**
+
 ```bash
 # 1. Setup VPS (DigitalOcean, AWS EC2, etc)
 # 2. Install Docker & Docker Compose
@@ -154,24 +166,29 @@ curl http://localhost:8080/health
 **Time:** 30 minutes
 
 **Cost Estimate:**
-- VPS: $5-20/month (DigitalOcean, Linode, Vultr)
-- Domain: $10-15/year
-- Total: ~$7/month
+
+- VPS: \$5-20/month (DigitalOcean, Linode, Vultr)
+- Domain: \$10-15/year
+- Total: ~\$7/month
 
 ---
 
 ## 🎯 Recommendation by Use Case
 
 ### Use Case: "Saya mau deploy cepat untuk production"
+
 **→ Docker + Railway** ([RAILWAY_DOCKER_GUIDE.md](./RAILWAY_DOCKER_GUIDE.md))
 
 ### Use Case: "Saya mau development di laptop"
+
 **→ Docker Compose** ([DOCKER_DEPLOYMENT.md](./DOCKER_DEPLOYMENT.md))
 
 ### Use Case: "Saya mau full control dan punya VPS"
+
 **→ VPS + Docker** ([DOCKER_DEPLOYMENT.md](./DOCKER_DEPLOYMENT.md))
 
 ### Use Case: "Saya mau test cepat, nggak masalah kalau environment beda"
+
 **→ Manual Railway** ([DEPLOYMENT.md](./DEPLOYMENT.md))
 
 ---
@@ -179,20 +196,23 @@ curl http://localhost:8080/health
 ## 🔥 Fix Error: "Environment variable not found: DATABASE_URL"
 
 **Problem:**
+
 ```
 Error: Environment variable not found: DATABASE_URL.
   -->  prisma/schema.prisma:9
 ```
 
 **Root Cause:**
+
 - Nixpacks build order tidak consistent
 - Environment variables tidak available saat Prisma generate
 - Build process tidak predictable
 
 **Solution:**
-✅ **USE DOCKER!** 
+✅ **USE DOCKER!**
 
 Docker ensures:
+
 1. Environment variables available saat build
 2. Consistent build order
 3. Prisma generate runs dengan proper env
@@ -241,12 +261,15 @@ Semua file Docker sudah di-setup untuk Anda:
 ## 🆘 Need Help?
 
 **Stuck dengan Docker?**
+
 - [DOCKER_DEPLOYMENT.md](./DOCKER_DEPLOYMENT.md) - Troubleshooting section
 
 **Stuck dengan Railway?**
+
 - [RAILWAY_DOCKER_GUIDE.md](./RAILWAY_DOCKER_GUIDE.md) - Troubleshooting section
 
 **Pertanyaan umum?**
+
 - Check [README.md](./README.md)
 - Check [API_DOCUMENTATION.md](./API_DOCUMENTATION.md)
 

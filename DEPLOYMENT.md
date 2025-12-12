@@ -1,6 +1,7 @@
 # Railway Deployment Guide
 
 ## Prerequisites
+
 - Railway account (sign up at https://railway.app)
 - GitHub repository connected to Railway
 
@@ -158,21 +159,25 @@ If something goes wrong:
 ## Troubleshooting
 
 ### Build Fails:
+
 - Check if all dependencies are in `package.json`
 - Verify `NODE_VERSION` is compatible (16+)
 - Check build logs for specific errors
 
 ### Migration Fails:
+
 - Ensure `DATABASE_URL` is correctly set
 - Check if migration files are committed to git
 - Try running migrations manually in Railway terminal
 
 ### App Crashes on Start:
+
 - Check environment variables are set
 - Verify `PORT` variable is using Railway's `${{PORT}}`
 - Review startup logs for errors
 
 ### Database Connection Issues:
+
 - Verify `DATABASE_URL` format
 - Check if PostgreSQL service is running
 - Ensure Prisma Client is generated

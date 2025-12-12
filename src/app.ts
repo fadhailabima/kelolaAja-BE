@@ -15,7 +15,7 @@ const app: Application = express();
 const port = process.env.PORT || 8080;
 
 const corsOptions = {
-  origin: process.env.WEB_URL 
+  origin: process.env.WEB_URL
     ? process.env.WEB_URL.split(",").map(url => url.trim())
     : ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "http://localhost:5174"],
   credentials: true,

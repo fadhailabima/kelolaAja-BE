@@ -51,7 +51,7 @@ DATABASE_URL=${{PGDATABASE.DATABASE_URL}}
 # Generate ACCESS_TOKEN_SECRET
 openssl rand -base64 64
 
-# Generate REFRESH_TOKEN_SECRET  
+# Generate REFRESH_TOKEN_SECRET
 openssl rand -base64 64
 
 # Generate SECRET_KEY
@@ -79,12 +79,14 @@ WEB_URL=https://your-frontend-domain.com
 ### Step 5: Deploy!
 
 Railway akan otomatis:
+
 1. ✅ Detect Dockerfile
 2. ✅ Build Docker image
 3. ✅ Run migrations (`prisma migrate deploy`)
 4. ✅ Start application
 
 **Monitor deployment:**
+
 - Klik **"Deployments"** untuk lihat progress
 - Klik **"View Logs"** untuk lihat logs real-time
 
@@ -103,6 +105,7 @@ curl https://your-app.up.railway.app/api
 ```
 
 Expected response:
+
 ```json
 {
   "status": "healthy",
@@ -140,11 +143,13 @@ railway run npm run seed
 ### Problem: Build fails dengan error Prisma
 
 **Error:**
+
 ```
 Error: Environment variable not found: DATABASE_URL
 ```
 
 **Solution:**
+
 1. Pastikan PostgreSQL database sudah di-add
 2. Pastikan `DATABASE_URL=${{PGDATABASE.DATABASE_URL}}` sudah di-set
 3. Redeploy: Klik **"Deploy"** → **"Redeploy"**
@@ -152,16 +157,19 @@ Error: Environment variable not found: DATABASE_URL
 ### Problem: Container crashes setelah deploy
 
 **Check logs:**
+
 ```bash
 railway logs
 ```
 
 **Common causes:**
+
 1. Missing environment variables
 2. Database connection failed
 3. Migration error
 
 **Solution:**
+
 ```bash
 # Verify all env vars are set
 railway variables
@@ -173,11 +181,13 @@ railway up --detach
 ### Problem: Migration fails
 
 **Error:**
+
 ```
 Migration failed: Database connection timeout
 ```
 
 **Solution:**
+
 1. Tunggu 30-60 detik (database masih starting)
 2. Klik **"Redeploy"**
 3. Check database status di Railway dashboard
@@ -185,15 +195,18 @@ Migration failed: Database connection timeout
 ### Problem: Port binding error
 
 **Error:**
+
 ```
 Error: listen EADDRINUSE: address already in use :::8080
 ```
 
 **Solution:**
 Railway auto-assign PORT. Pastikan environment variable:
+
 ```env
 PORT=${{PORT}}
 ```
+
 Sudah di-set (TIDAK hardcode 8080!)
 
 ---
@@ -209,6 +222,7 @@ Sudah di-set (TIDAK hardcode 8080!)
 ### Setup DNS (untuk custom domain)
 
 **A Record:**
+
 ```
 Type: CNAME
 Name: api (atau @)
@@ -237,6 +251,7 @@ railway logs --follow
 ### Check Metrics
 
 Railway dashboard shows:
+
 - ✅ CPU usage
 - ✅ Memory usage
 - ✅ Network traffic
@@ -271,15 +286,18 @@ git push origin main
 ## 💰 Pricing Estimate
 
 **Railway Free Tier:**
-- $5 credit/month (cukup untuk small app)
+
+- \$5 credit/month (cukup untuk small app)
 - Auto-sleep after 30 min inactivity
 
-**Hobby Plan ($5/month):**
+**Hobby Plan (\$5/month):**
+
 - No auto-sleep
 - Better performance
 - More resources
 
-**Pro Plan ($20/month):**
+**Pro Plan (\$20/month):**
+
 - Production-ready
 - Priority support
 - Higher limits
@@ -345,14 +363,17 @@ curl https://your-app.up.railway.app/api/users \
 ## 📞 Support
 
 **Railway Documentation:**
+
 - https://docs.railway.app
 
 **KelolaAja Guides:**
+
 - [DOCKER_DEPLOYMENT.md](./DOCKER_DEPLOYMENT.md) - Full Docker guide
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - General deployment guide
 - [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) - API reference
 
 **Stuck?**
+
 1. Check Railway logs: `railway logs`
 2. Verify environment variables: `railway variables`
 3. Test locally first: `docker-compose up`
@@ -365,6 +386,7 @@ curl https://your-app.up.railway.app/api/users \
 Your KelolaAja Backend is now live on Railway with Docker! 🚀
 
 Next steps:
+
 1. Configure frontend to use new API URL
 2. Setup monitoring & alerts
 3. Plan database backup strategy

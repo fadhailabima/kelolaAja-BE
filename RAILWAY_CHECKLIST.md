@@ -3,6 +3,7 @@
 ## ✅ Pre-Deployment Checklist
 
 ### 1. Code Quality
+
 - [x] TypeScript compilation successful (`npm run build`)
 - [x] No console errors in production code
 - [x] All dependencies in `package.json`
@@ -10,6 +11,7 @@
 - [x] All migrations committed to git
 
 ### 2. Configuration Files
+
 - [x] `railway.json` configured
 - [x] `package.json` scripts updated:
   - [x] `postinstall`: Generates Prisma Client
@@ -20,6 +22,7 @@
 - [x] `.env.railway` template created
 
 ### 3. Application Setup
+
 - [x] Health check endpoint (`/health`)
 - [x] Environment variables properly used
 - [x] PORT from Railway (`${{PORT}}`)
@@ -29,12 +32,14 @@
 - [x] Error handling middleware in place
 
 ### 4. Database
+
 - [x] Prisma schema validated
 - [x] Migrations created and tested locally
 - [x] Seed script working
 - [x] No manual database edits
 
 ### 5. Security
+
 - [ ] Generate strong JWT secrets (min 64 chars)
 - [ ] Generate strong session secret (min 32 chars)
 - [ ] Change default admin passwords after first deploy
@@ -42,6 +47,7 @@
 - [ ] Review and update sensitive configs
 
 ### 6. Documentation
+
 - [x] README.md updated
 - [x] DEPLOYMENT.md created
 - [x] API_DOCUMENTATION.md updated
@@ -50,6 +56,7 @@
 ## 🚀 Railway Deployment Steps
 
 ### Step 1: Push to GitHub
+
 ```bash
 git add .
 git commit -m "Prepare for Railway deployment"
@@ -57,6 +64,7 @@ git push origin main
 ```
 
 ### Step 2: Create Railway Project
+
 1. Go to https://railway.app/dashboard
 2. Click "New Project"
 3. Select "Deploy from GitHub repo"
@@ -64,6 +72,7 @@ git push origin main
 5. Railway auto-detects configuration
 
 ### Step 3: Add PostgreSQL Database
+
 1. In your project, click "+ New"
 2. Select "Database" → "PostgreSQL"
 3. Railway provisions a PostgreSQL instance
@@ -74,6 +83,7 @@ git push origin main
 Go to your service → Settings → Variables:
 
 **Required Variables:**
+
 ```bash
 NODE_ENV=production
 PORT=${{PORT}}
@@ -85,6 +95,7 @@ WEB_URL=https://your-frontend-domain.com
 ```
 
 **Optional Variables:**
+
 ```bash
 MAX_FILE_SIZE=5242880
 UPLOAD_DIR=./uploads
@@ -93,6 +104,7 @@ MAX_PAGE_SIZE=100
 ```
 
 **Generate Secrets:**
+
 ```bash
 # JWT Secrets (64 chars)
 openssl rand -base64 64
@@ -102,13 +114,16 @@ openssl rand -base64 32
 ```
 
 ### Step 5: Deploy
+
 Railway automatically:
+
 1. ✅ Installs dependencies
 2. ✅ Runs `npm run build` (generates Prisma + compiles TS)
 3. ✅ Runs `npm run deploy` (migrations + start server)
 4. ✅ Starts application
 
 ### Step 6: Run Initial Seed (One-Time)
+
 After first successful deployment:
 
 1. Go to your service in Railway
@@ -124,11 +139,13 @@ This creates default admin users.
 ### Step 7: Verify Deployment
 
 **Check Health:**
+
 ```bash
 curl https://your-app.up.railway.app/health
 ```
 
 **Expected Response:**
+
 ```json
 {
   "status": "healthy",
@@ -139,11 +156,13 @@ curl https://your-app.up.railway.app/health
 ```
 
 **Test API:**
+
 ```bash
 curl https://your-app.up.railway.app/api/v1
 ```
 
 **Login Test:**
+
 ```bash
 curl -X POST https://your-app.up.railway.app/api/v1/auth/login \
   -H "Content-Type: application/json" \
@@ -151,6 +170,7 @@ curl -X POST https://your-app.up.railway.app/api/v1/auth/login \
 ```
 
 ### Step 8: Change Default Passwords
+
 **CRITICAL SECURITY STEP!**
 
 After first login, immediately change default admin passwords:
@@ -168,6 +188,7 @@ curl -X PUT https://your-app.up.railway.app/api/v1/users/me/password \
 Do this for all 3 default users!
 
 ### Step 9: Monitor
+
 - Check Railway logs for errors
 - Monitor resource usage
 - Set up alerts if needed
@@ -175,6 +196,7 @@ Do this for all 3 default users!
 ## 📊 Post-Deployment
 
 ### Custom Domain (Optional)
+
 1. Go to service Settings → Domains
 2. Click "Add Domain"
 3. Enter your domain
@@ -182,17 +204,21 @@ Do this for all 3 default users!
 5. Update `WEB_URL` in environment variables
 
 ### Database Backups
+
 Railway automatically backs up PostgreSQL daily. To manual backup:
+
 1. Go to PostgreSQL service
 2. Click "Backups" tab
 3. Create manual backup
 
 ### Monitoring
+
 - **Logs**: View real-time in Railway dashboard
 - **Metrics**: CPU, Memory, Network usage
 - **Alerts**: Configure in project settings
 
 ### Updates & Redeployment
+
 ```bash
 # Make changes locally
 git add .
@@ -204,6 +230,7 @@ git push origin main
 ## 🔧 Troubleshooting
 
 ### Build Fails
+
 **Problem:** `prisma generate` fails
 **Solution:** Ensure `postinstall` script runs Prisma generate
 
@@ -211,6 +238,7 @@ git push origin main
 **Solution:** Run `npm run build` locally first
 
 ### Migration Fails
+
 **Problem:** Migration history mismatch
 **Solution:** Check all migrations are committed to git
 
@@ -218,6 +246,7 @@ git push origin main
 **Solution:** Verify `DATABASE_URL` uses Railway reference variable
 
 ### App Crashes
+
 **Problem:** Missing environment variables
 **Solution:** Check all required vars are set in Railway
 
@@ -225,6 +254,7 @@ git push origin main
 **Solution:** Ensure using `process.env.PORT` not hardcoded port
 
 ### CORS Errors
+
 **Problem:** Frontend can't connect
 **Solution:** Add frontend URL to `WEB_URL` environment variable
 
@@ -253,10 +283,10 @@ Before going live:
 
 ---
 
-**Deployment Date:** _____________
+**Deployment Date:** ******\_******
 
-**Deployed By:** _____________
+**Deployed By:** ******\_******
 
-**Railway Project URL:** _____________
+**Railway Project URL:** ******\_******
 
-**Production API URL:** _____________
+**Production API URL:** ******\_******

@@ -318,12 +318,14 @@ sudo certbot --nginx -d api.kelolaaja.com
 ### Security
 
 1. **Never commit secrets to Git**
+
    ```bash
    # Ensure .env is in .gitignore
    echo ".env" >> .gitignore
    ```
 
 2. **Use strong secrets**
+
    ```bash
    # Generate random secrets
    openssl rand -base64 64
@@ -340,25 +342,28 @@ sudo certbot --nginx -d api.kelolaaja.com
 ### Monitoring
 
 1. **Check container health**
+
    ```bash
    docker ps
    docker stats kelolaaja-app
    ```
 
 2. **View logs**
+
    ```bash
    # Real-time logs
    docker-compose logs -f app
-   
+
    # Last 100 lines
    docker-compose logs --tail=100 app
    ```
 
 3. **Database backup**
+
    ```bash
    # Backup
    docker-compose exec postgres pg_dump -U kelolaaja kelolaaja_db > backup.sql
-   
+
    # Restore
    docker-compose exec -T postgres psql -U kelolaaja kelolaaja_db < backup.sql
    ```
@@ -372,6 +377,7 @@ sudo certbot --nginx -d api.kelolaaja.com
 ### Maintenance
 
 1. **Update dependencies**
+
    ```bash
    npm update
    docker-compose build --no-cache
@@ -379,6 +385,7 @@ sudo certbot --nginx -d api.kelolaaja.com
    ```
 
 2. **Database migrations**
+
    ```bash
    # Auto-run on startup
    # Manual: docker-compose exec app npx prisma migrate deploy
@@ -406,6 +413,7 @@ docker-compose logs app
 ```
 
 **Solution:**
+
 ```bash
 # Verify environment variables
 docker-compose exec app env | grep DATABASE_URL
@@ -432,6 +440,7 @@ docker-compose exec postgres psql -U kelolaaja -d kelolaaja_db
 ```
 
 **Solution:**
+
 ```bash
 # Wait for postgres to be ready
 docker-compose up -d postgres
@@ -474,6 +483,7 @@ docker volume prune
 ## 📞 Support
 
 Jika ada masalah:
+
 1. Check logs: `docker-compose logs -f app`
 2. Verify environment: `docker-compose exec app env`
 3. Test health: `curl http://localhost:8080/health`
