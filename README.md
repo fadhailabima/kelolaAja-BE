@@ -346,7 +346,59 @@ npm run dev          # Development mode dengan hot reload
 npm run build        # Build untuk production
 npm start            # Run production build
 npm run seed         # Run database seeder
+npm run deploy       # Deploy: Run migrations + start server
 ```
+
+## 🐳 Docker Deployment
+
+### Quick Start dengan Docker Compose
+
+```bash
+# 1. Copy environment template
+cp .env.docker .env
+
+# 2. Generate secrets (WAJIB untuk production!)
+openssl rand -base64 64  # ACCESS_TOKEN_SECRET
+openssl rand -base64 64  # REFRESH_TOKEN_SECRET
+openssl rand -base64 32  # SECRET_KEY
+
+# 3. Update .env dengan secrets di atas
+
+# 4. Start services (PostgreSQL + App)
+docker-compose up -d
+
+# 5. Check logs
+docker-compose logs -f app
+
+# 6. Run seed (opsional)
+docker-compose exec app npm run seed
+
+# 7. Test API
+curl http://localhost:8080/health
+```
+
+### Deploy ke Railway dengan Docker
+
+Railway akan otomatis detect Dockerfile dan build image.
+
+**Step-by-step:**
+
+1. Push code ke GitHub
+2. Import project di Railway.app
+3. Add PostgreSQL database (klik "New" → "Database" → "PostgreSQL")
+4. Set environment variables di Railway:
+   ```env
+   NODE_ENV=production
+   PORT=${{PORT}}
+   DATABASE_URL=${{PGDATABASE.DATABASE_URL}}
+   ACCESS_TOKEN_SECRET=<generated-secret>
+   REFRESH_TOKEN_SECRET=<generated-secret>
+   SECRET_KEY=<generated-key>
+   WEB_URL=https://your-frontend.com
+   ```
+5. Deploy akan auto-run!
+
+**📚 Panduan lengkap:** Lihat [DOCKER_DEPLOYMENT.md](./DOCKER_DEPLOYMENT.md)
 
 ## 🧪 Testing
 

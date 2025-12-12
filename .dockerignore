@@ -1,14 +1,70 @@
-node_modules
-dist
+# Node modules
+node_modules/
+npm-debug.log*
+
+# Build output
+dist/
+build/
+
+# Environment files
 .env
 .env.local
 .env.*.local
+.env.railway
+.env.docker
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Test files
+coverage/
+.nyc_output/
+test/
+tests/
+*.test.ts
+*.spec.ts
+
+# Documentation
+README.md
+DEPLOYMENT.md
+RAILWAY_CHECKLIST.md
+DOCKER_DEPLOYMENT.md
+API_DOCUMENTATION.md
+*.md
+
+# Docker
+.dockerignore
+docker-compose.yml
+
+# Postman
+*.postman_collection.json
+*.postman_environment.json
+
+# Uploads
 uploads/*
 !uploads/.gitkeep
-*.log
-npm-debug.log*
-.DS_Store
-.vscode
-.idea
-coverage
+
+# Cache
 .cache
+
+# Misc
+.prettierrc
+.eslintrc
+.editorconfig
+tsconfig.json
