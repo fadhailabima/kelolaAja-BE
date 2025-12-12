@@ -4,12 +4,13 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
-    "build": "prisma generate && tsc",
+    "build": "prisma generate && tsc && tsc -p tsconfig.seed.json",
     "dev": "nodemon --exec \"ts-node --transpile-only\" src/app.ts",
     "start": "node dist/app.js",
     "postinstall": "prisma generate",
     "deploy": "prisma migrate deploy && npm run start",
     "seed": "ts-node prisma/seed.ts",
+    "seed:prod": "node dist/prisma/seed.js",
     "seed:all": "ts-node prisma/seed-all.ts",
     "test": "jest --runInBand"
   },

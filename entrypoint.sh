@@ -10,7 +10,7 @@ npx prisma migrate deploy
 # Check if seeding is enabled
 if [ "$RUN_SEED" = "true" ]; then
   echo "🌱 Seeding database..."
-  npm run seed
+  npm run seed:prod
   echo "✅ Database seeded successfully"
 else
   echo "⏭️  Skipping database seeding (RUN_SEED not set to 'true')"
