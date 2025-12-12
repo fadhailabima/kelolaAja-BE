@@ -45,6 +45,9 @@ RUN npm ci --omit=dev && npm cache clean --force
 # Copy built application from builder stage
 COPY --chown=nodejs:nodejs --from=builder /app/dist ./dist
 
+# Create uploads directory with proper permissions
+RUN mkdir -p uploads && chown -R nodejs:nodejs uploads
+
 # Switch to non-root user
 USER nodejs
 
