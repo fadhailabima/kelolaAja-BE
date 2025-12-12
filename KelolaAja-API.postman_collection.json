@@ -2439,6 +2439,1476 @@
           ]
         }
       ]
+    },
+    {
+      "name": "14. Industries",
+      "item": [
+        {
+          "name": "Public - Get All Industries",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/industries?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Industry by Slug",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/industries/retail?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "retail"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get All Industries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/all?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "all"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "retail",
+                  "disabled": true
+                },
+                {
+                  "key": "isActive",
+                  "value": "true",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get Industry Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Industry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"industryCode\": \"retail\",\n  \"slug\": \"retail\",\n  \"iconName\": \"shopping-cart\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Retail & E-commerce\",\n      \"description\": \"Solusi lengkap untuk bisnis retail dan toko online\"\n    },\n    {\n      \"locale\": \"en\",\n      \"title\": \"Retail & E-commerce\",\n      \"description\": \"Complete solution for retail and online stores\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Industry",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 2,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Industry",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get Industry Problems",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/1/problems",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "1", "problems"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Problem",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"problem\": \"Kesulitan mengelola stok barang\"\n    },\n    \"en\": {\n      \"problem\": \"Difficulty managing inventory\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/1/problems",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "1", "problems"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Problem",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 1,\n  \"isActive\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/problems/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "problems", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Problem",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/problems/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "problems", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get Industry Solutions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/1/solutions",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "1", "solutions"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Solution",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"solution\": \"Sistem inventory real-time yang terintegrasi\"\n    },\n    \"en\": {\n      \"solution\": \"Real-time integrated inventory system\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/1/solutions",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "1", "solutions"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Solution",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 2,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/solutions/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "solutions", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Solution",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/solutions/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "solutions", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get Industry Media",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/1/media",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "1", "media"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Add Media",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mediaFileId\": 1,\n  \"mediaType\": \"image\",\n  \"usage\": \"hero\",\n  \"caption\": \"Dashboard retail management\",\n  \"displayOrder\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/1/media",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "1", "media"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Media",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 2,\n  \"caption\": \"Updated caption\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/media/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "media", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Media",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/industries/admin/media/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["industries", "admin", "media", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "15. Feature Pages",
+      "item": [
+        {
+          "name": "Public - Get All Feature Pages",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/feature-pages?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["feature-pages"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Feature Page by Slug",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/feature-pages/inventory-management?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["feature-pages", "inventory-management"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get All Pages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feature-pages/admin/all?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["feature-pages", "admin", "all"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get Page Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feature-pages/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["feature-pages", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Page",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pageSlug\": \"inventory-management\",\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"heroTitle\": \"Manajemen Inventory Terpadu\",\n      \"heroSubtitle\": \"Kelola stok barang dengan mudah\",\n      \"aboutTitle\": \"Tentang Fitur\",\n      \"aboutDescription\": \"Sistem inventory real-time yang terintegrasi\",\n      \"ctaTitle\": \"Mulai Sekarang\",\n      \"ctaDescription\": \"Coba gratis 14 hari\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/feature-pages/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["feature-pages", "admin"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Page",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/feature-pages/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["feature-pages", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Page",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feature-pages/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["feature-pages", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get Page Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feature-pages/admin/1/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["feature-pages", "admin", "1", "items"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"iconName\": \"box\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"title\": \"Tracking Real-time\",\n      \"description\": \"Pantau stok barang secara real-time\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/feature-pages/admin/1/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["feature-pages", "admin", "1", "items"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/feature-pages/admin/items/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["feature-pages", "admin", "items", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feature-pages/admin/items/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["feature-pages", "admin", "items", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "16. Core Values",
+      "item": [
+        {
+          "name": "Public - Get All Core Values",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/core-values?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["core-values"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get All Core Values",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/core-values/admin?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["core-values", "admin"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "innovation",
+                  "disabled": true
+                },
+                {
+                  "key": "is_active",
+                  "value": "true",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Core Value",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"valueCode\": \"innovation\",\n  \"iconName\": \"lightbulb\",\n  \"imageFileId\": 1,\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Inovasi\",\n      \"description\": \"Kami selalu berinovasi untuk memberikan solusi terbaik\"\n    },\n    {\n      \"locale\": \"en\",\n      \"title\": \"Innovation\",\n      \"description\": \"We always innovate to provide the best solutions\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/core-values/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["core-values", "admin"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Core Value",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 2,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/core-values/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["core-values", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Core Value",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/core-values/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["core-values", "admin", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "17. Our Philosophy",
+      "item": [
+        {
+          "name": "Public - Get All Philosophies",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/our-philosophies?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["our-philosophies"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get All Philosophies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/our-philosophies/admin?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["our-philosophies", "admin"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "customer",
+                  "disabled": true
+                },
+                {
+                  "key": "is_active",
+                  "value": "true",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Philosophy",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"philosophyCode\": \"customer_first\",\n  \"iconName\": \"users\",\n  \"imageFileId\": 2,\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Pelanggan Adalah Prioritas\",\n      \"description\": \"Kepuasan pelanggan adalah prioritas utama kami\"\n    },\n    {\n      \"locale\": \"en\",\n      \"title\": \"Customer First\",\n      \"description\": \"Customer satisfaction is our top priority\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/our-philosophies/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["our-philosophies", "admin"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Philosophy",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 2,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/our-philosophies/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["our-philosophies", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Philosophy",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/our-philosophies/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["our-philosophies", "admin", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "18. About Cards",
+      "item": [
+        {
+          "name": "Public - Get All About Cards",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/about-cards?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["about-cards"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get All About Cards",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/about-cards/admin?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["about-cards", "admin"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create About Card",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"iconName\": \"trophy\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"10+ Tahun Pengalaman\",\n      \"description\": \"Berpengalaman dalam industri ERP\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/about-cards/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["about-cards", "admin"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update About Card",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/about-cards/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["about-cards", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete About Card",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/about-cards/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["about-cards", "admin", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "19. Content Sections",
+      "item": [
+        {
+          "name": "Public - Get All Content Sections",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/content-sections?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["content-sections"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Content by Key",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/content-sections/key/hero_section?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["content-sections", "key", "hero_section"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get All Content Sections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/content-sections/admin?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["content-sections", "admin"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Content Section",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectionKey\": \"hero_section\",\n  \"sectionType\": \"hero\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Solusi ERP Terbaik untuk Bisnis Anda\",\n      \"content\": \"Kelola bisnis dengan mudah dan efisien\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/content-sections/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["content-sections", "admin"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Content Section",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/content-sections/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["content-sections", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Content Section",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/content-sections/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["content-sections", "admin", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "20. Advanced Features",
+      "item": [
+        {
+          "name": "Public - Get All Advanced Features",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/advanced-features?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["advanced-features"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get All Advanced Features",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/advanced-features/admin?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["advanced-features", "admin"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Advanced Feature",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"iconName\": \"chart-line\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Advanced Analytics\",\n      \"description\": \"Analisis mendalam untuk keputusan bisnis\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/advanced-features/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["advanced-features", "admin"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Advanced Feature",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/advanced-features/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["advanced-features", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Advanced Feature",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/advanced-features/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["advanced-features", "admin", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "21. KelolaAja Features",
+      "item": [
+        {
+          "name": "Public - Get All KelolaAja Features",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/kelolaaja-features?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["kelolaaja-features"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get All KelolaAja Features",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/kelolaaja-features/admin?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["kelolaaja-features", "admin"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create KelolaAja Feature",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"iconName\": \"database\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Cloud Storage\",\n      \"description\": \"Penyimpanan data aman di cloud\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/kelolaaja-features/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["kelolaaja-features", "admin"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update KelolaAja Feature",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/kelolaaja-features/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["kelolaaja-features", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete KelolaAja Feature",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/kelolaaja-features/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["kelolaaja-features", "admin", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "22. Detail Feature Sections",
+      "item": [
+        {
+          "name": "Public - Get All Detail Feature Sections",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "id",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/detail-feature-sections?locale={{locale}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["detail-feature-sections"],
+              "query": [
+                {
+                  "key": "locale",
+                  "value": "{{locale}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get All Detail Feature Sections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/detail-feature-sections/admin?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["detail-feature-sections", "admin"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Detail Feature Section",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"iconName\": \"file-text\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Detail Fitur 1\",\n      \"description\": \"Deskripsi lengkap fitur\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/detail-feature-sections/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["detail-feature-sections", "admin"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Detail Feature Section",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayOrder\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/detail-feature-sections/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["detail-feature-sections", "admin", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Detail Feature Section",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/detail-feature-sections/admin/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["detail-feature-sections", "admin", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "23. Audit Logs",
+      "item": [
+        {
+          "name": "Admin - Get All Audit Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/audit-logs/admin?page=1&limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["audit-logs", "admin"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "action",
+                  "value": "CREATE",
+                  "disabled": true
+                },
+                {
+                  "key": "entityType",
+                  "value": "PricingPlan",
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get Audit Log Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/audit-logs/admin/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["audit-logs", "admin", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get Logs by Entity",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/audit-logs/admin/entity/PricingPlan/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["audit-logs", "admin", "entity", "PricingPlan", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Get Logs by User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/audit-logs/admin/user/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["audit-logs", "admin", "user", "1"]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Manual Log",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"CUSTOM\",\n  \"entityType\": \"System\",\n  \"entityId\": 0,\n  \"changes\": {\n    \"description\": \"Manual system maintenance performed\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/audit-logs/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["audit-logs", "admin"]
+            }
+          }
+        }
+      ]
     }
   ],
   "event": [

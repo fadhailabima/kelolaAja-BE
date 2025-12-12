@@ -62,7 +62,18 @@ app.get("/", (_req: Request, res: Response) => {
   res.json({
     message: "KelolaAja API Server",
     version: "1.0.0",
-    status: "running"
+    status: "running",
+    environment: process.env.NODE_ENV || "development"
+  });
+});
+
+// Health check endpoint for Railway
+app.get("/health", (_req: Request, res: Response) => {
+  res.status(200).json({
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || "development"
   });
 });
 

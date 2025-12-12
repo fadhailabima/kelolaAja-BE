@@ -4,9 +4,11 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "dev": "nodemon --exec \"ts-node --transpile-only\" src/app.ts",
     "start": "node dist/app.js",
+    "postinstall": "prisma generate",
+    "deploy": "prisma migrate deploy && npm run start",
     "seed": "ts-node prisma/seed.ts",
     "seed:all": "ts-node prisma/seed-all.ts",
     "test": "jest --runInBand"
