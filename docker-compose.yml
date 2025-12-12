@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # PostgreSQL Database
@@ -37,6 +37,7 @@ services:
       REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET:-your-refresh-token-secret-change-this}
       SECRET_KEY: ${SECRET_KEY:-your-secret-key-change-this}
       WEB_URL: ${WEB_URL:-http://localhost:3000}
+      RUN_SEED: ${RUN_SEED:-false}
     ports:
       - "8080:8080"
     depends_on:
@@ -45,7 +46,13 @@ services:
     networks:
       - kelolaaja-network
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8080/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:8080/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})",
+        ]
       interval: 30s
       timeout: 3s
       start_period: 40s

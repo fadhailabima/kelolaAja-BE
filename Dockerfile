@@ -45,6 +45,10 @@ RUN npm ci --omit=dev && npm cache clean --force
 # Copy built application from builder stage
 COPY --chown=nodejs:nodejs --from=builder /app/dist ./dist
 
+# Copy entrypoint script
+COPY --chown=nodejs:nodejs entrypoint.sh ./
+RUN chmod +x entrypoint.sh
+
 # Create uploads directory with proper permissions
 RUN mkdir -p uploads && chown -R nodejs:nodejs uploads
 
@@ -61,5 +65,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
 # Use dumb-init to handle signals properly
 ENTRYPOINT ["dumb-init", "--"]
 
-# Start command
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/app.js"]
+# Start command with entrypoint script
+CMD ["./entrypoint.sh"]
