@@ -67,4 +67,3 @@ uploads/*
 .prettierrc
 .eslintrc
 .editorconfig
-tsconfig.json

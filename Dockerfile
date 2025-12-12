@@ -36,17 +36,14 @@ RUN addgroup -g 1001 -S nodejs && \
 # Copy package files
 COPY package*.json ./
 
+# Copy Prisma schema BEFORE npm ci (needed for postinstall script)
+COPY prisma ./prisma/
+
 # Install production dependencies only
 RUN npm ci --omit=dev && npm cache clean --force
 
-# Copy Prisma schema and migrations
-COPY --chown=nodejs:nodejs prisma ./prisma/
-
 # Copy built application from builder stage
 COPY --chown=nodejs:nodejs --from=builder /app/dist ./dist
-
-# Copy node_modules from builder (includes Prisma Client)
-COPY --chown=nodejs:nodejs --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 # Switch to non-root user
 USER nodejs
