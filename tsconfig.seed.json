@@ -5,5 +5,5 @@
     "rootDir": "."
   },
   "include": ["prisma/**/*.ts"],
-  "exclude": ["node_modules", "dist", "prisma/config.ts"]
+  "exclude": ["node_modules", "dist"]
 }

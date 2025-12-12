@@ -1,21 +1,22 @@
-# Node modules
+# Dependencies
 node_modules/
 npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
 
 # Build output
 dist/
 build/
+*.tsbuildinfo
 
 # Environment files
-.env
-.env.local
-.env.*.local
-.env.railway
-.env.docker
+.env*
+!.env.docker
 
 # Git
 .git/
 .gitignore
+.gitattributes
 
 # IDE
 .vscode/
@@ -27,6 +28,7 @@ build/
 # OS files
 .DS_Store
 Thumbs.db
+ehthumbs.db
 
 # Logs
 logs/
@@ -37,33 +39,41 @@ coverage/
 .nyc_output/
 test/
 tests/
+__tests__/
 *.test.ts
+*.test.js
 *.spec.ts
+*.spec.js
+jest.config.*
 
 # Documentation
-README.md
-DEPLOYMENT.md
-RAILWAY_CHECKLIST.md
-DOCKER_DEPLOYMENT.md
-API_DOCUMENTATION.md
 *.md
+!README.md
+docs/
 
 # Docker
 .dockerignore
-docker-compose.yml
+docker-compose*.yml
+Dockerfile*
 
 # Postman
 *.postman_collection.json
 *.postman_environment.json
 
-# Uploads
-uploads/*
-!uploads/.gitkeep
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Uploads (recreated at runtime)
+uploads/
 
 # Cache
-.cache
+.cache/
+.npm/
+.eslintcache
 
-# Misc
-.prettierrc
-.eslintrc
+# Config
+.prettierrc*
+.eslintrc*
 .editorconfig
