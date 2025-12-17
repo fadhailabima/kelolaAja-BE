@@ -37,10 +37,10 @@ export class PartnerService {
         description: translation.description || "",
         logo: partner.logoFile
           ? {
-              fileId: partner.logoFile.fileId,
-              filePath: partner.logoFile.filePath,
-              altText: partner.logoFile.altText
-            }
+            fileId: partner.logoFile.fileId,
+            filePath: partner.logoFile.filePath,
+            altText: partner.logoFile.altText
+          }
           : null
       };
     });
@@ -129,7 +129,7 @@ export class PartnerService {
    * Create new partner
    */
   static async createPartner(data: any, userId: number) {
-    const { partnerName, logoFileId, displayOrder, translations } = data;
+    const { partnerName, logoFileId, websiteUrl, displayOrder, translations } = data;
 
     // Validation
     if (!partnerName || displayOrder === undefined) {
@@ -156,6 +156,7 @@ export class PartnerService {
       data: {
         partnerName,
         logoFileId: logoFileId || null,
+        websiteUrl: websiteUrl || null,
         displayOrder,
         isActive: true,
         createdBy: userId,
@@ -168,11 +169,11 @@ export class PartnerService {
             },
             ...(translations.en
               ? [
-                  {
-                    locale: Locale.en,
-                    description: translations.en.description || null
-                  }
-                ]
+                {
+                  locale: Locale.en,
+                  description: translations.en.description || null
+                }
+              ]
               : [])
           ]
         }
@@ -206,7 +207,7 @@ export class PartnerService {
    * Update partner
    */
   static async updatePartner(partnerId: number, data: any, userId: number) {
-    const { partnerName, logoFileId, displayOrder, isActive, translations } = data;
+    const { partnerName, logoFileId, websiteUrl, displayOrder, isActive, translations } = data;
 
     // Check exists
     const existingPartner = await prisma.partner.findUnique({
@@ -235,6 +236,7 @@ export class PartnerService {
 
     if (partnerName) updateData.partnerName = partnerName;
     if (logoFileId !== undefined) updateData.logoFileId = logoFileId;
+    if (websiteUrl !== undefined) updateData.websiteUrl = websiteUrl;
     if (displayOrder !== undefined) updateData.displayOrder = displayOrder;
     if (isActive !== undefined) updateData.isActive = isActive;
 
@@ -245,8 +247,12 @@ export class PartnerService {
 
     // Update translations if provided
     if (translations) {
-      for (const locale of Object.values(Locale)) {
-        if (translations[locale]) {
+      const transData = translations as Record<string, any>;
+      // Iterate strictly over the keys present in the payload
+      for (const localeKey of Object.keys(transData)) {
+        // Validate if key is a valid Locale
+        if (Object.values(Locale).includes(localeKey as Locale)) {
+          const locale = localeKey as Locale;
           await prisma.partnerTranslation.upsert({
             where: {
               partnerId_locale: {
@@ -257,10 +263,10 @@ export class PartnerService {
             create: {
               partnerId,
               locale,
-              description: translations[locale].description || null
+              description: transData[locale].description || null
             },
             update: {
-              description: translations[locale].description || null
+              description: transData[locale].description || null
             }
           });
         }
