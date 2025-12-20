@@ -212,8 +212,16 @@ async function main() {
   ];
 
   for (const config of configs) {
-    await prisma.siteConfig.create({
-      data: {
+    await prisma.siteConfig.upsert({
+      where: { configKey: config.configKey },
+      update: {
+        configValue: config.configValue,
+        valueType: config.valueType,
+        category: config.category,
+        description: config.description,
+        updatedBy: adminUser.userId
+      },
+      create: {
         configKey: config.configKey,
         configValue: config.configValue,
         valueType: config.valueType,
@@ -224,8 +232,7 @@ async function main() {
     });
 
     console.log(
-      `✅ Config created: ${config.configKey} = ${config.configValue.substring(0, 50)}${
-        config.configValue.length > 50 ? "..." : ""
+      `✅ Config created: ${config.configKey} = ${config.configValue.substring(0, 50)}${config.configValue.length > 50 ? "..." : ""
       }`
     );
   }

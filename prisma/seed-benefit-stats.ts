@@ -12,52 +12,27 @@ async function main() {
     process.exit(1);
   }
 
-  // Create benefit stats
+  // Create benefit stats from frontend data
   const stats = [
-    {
-      statCode: "BUSINESSES_SERVED",
-      statValue: "1,000+",
-      displayOrder: 1,
-      translations: {
-        id: { label: "Bisnis Terlayani" },
-        en: { label: "Businesses Served" }
-      }
-    },
-    {
-      statCode: "INVOICES_PROCESSED",
-      statValue: "10,000+",
-      displayOrder: 2,
-      translations: {
-        id: { label: "Invoice Diproses" },
-        en: { label: "Invoices Processed" }
-      }
-    },
-    {
-      statCode: "CUSTOMER_SATISFACTION",
-      statValue: "98%",
-      displayOrder: 3,
-      translations: {
-        id: { label: "Kepuasan Pelanggan" },
-        en: { label: "Customer Satisfaction" }
-      }
-    },
-    {
-      statCode: "YEARS_EXPERIENCE",
-      statValue: "5+",
-      displayOrder: 4,
-      translations: {
-        id: { label: "Tahun Pengalaman" },
-        en: { label: "Years Experience" }
-      }
-    }
+    { code: 'reduceErrors', value: '90%', label: { id: 'Kurangi kesalahan hingga 90%', en: 'Reduce errors by up to 90%' } },
+    { code: 'cutManualProcess', value: '80%', label: { id: 'Pangkas Proses Manual 80%', en: 'Cut Manual Processes by 80%' } },
+    { code: 'accessReports', value: '100%', label: { id: 'Akses Laporan Real-time 100%', en: 'Access Reports Anytime Anywhere 100%' } },
+    { code: 'customerSupport', value: '100%', label: { id: 'Kepuasan Customer Support 100%', en: '24/7 Customer Support' } },
   ];
 
-  for (const stat of stats) {
-    const created = await prisma.benefitStat.create({
+  for (const [index, stat] of stats.entries()) {
+    const existing = await prisma.benefitStat.findUnique({ where: { statCode: stat.code } });
+
+    if (existing) {
+      console.log(`⏭️  Stat ${stat.code} already exists`);
+      continue;
+    }
+
+    await prisma.benefitStat.create({
       data: {
-        statCode: stat.statCode,
-        statValue: stat.statValue,
-        displayOrder: stat.displayOrder,
+        statCode: stat.code,
+        statValue: stat.value,
+        displayOrder: index + 1,
         isActive: true,
         createdBy: adminUser.userId,
         updatedBy: adminUser.userId,
@@ -65,11 +40,11 @@ async function main() {
           create: [
             {
               locale: Locale.id,
-              label: stat.translations.id.label
+              label: stat.label.id
             },
             {
               locale: Locale.en,
-              label: stat.translations.en.label
+              label: stat.label.en
             }
           ]
         }
@@ -79,10 +54,10 @@ async function main() {
       }
     });
 
-    console.log(`✅ Stat created: ${stat.translations.id.label} (ID: ${created.statId})`);
+    console.log(`✅ Stat created: ${stat.code}`);
   }
 
-  console.log(`\n✨ Seeding completed! Total stats: ${stats.length}`);
+  console.log(`\n✨ Seeding completed!`);
 }
 
 main()

@@ -34,7 +34,8 @@ const seeders = [
   { name: "Benefit Stats", file: "seed-benefit-stats.ts", required: false },
   { name: "Process Steps", file: "seed-process-steps.ts", required: false },
   { name: "ERP Benefits", file: "seed-erp-benefits.ts", required: false },
-  { name: "KelolaAja Features", file: "seed-kelolaaja-features.ts", required: false }
+  { name: "KelolaAja Features", file: "seed-kelolaaja-features.ts", required: false },
+  { name: "Advanced Features", file: "seed-advanced-features.ts", required: false }
 ];
 
 async function runSeeder(name: string, file: string, required: boolean) {

@@ -5,134 +5,61 @@ const prisma = new PrismaClient();
 async function seedPartners() {
   console.log("🤝 Seeding partners...");
 
-  const admin = await prisma.adminUser.findFirst({
-    where: { role: "Admin" }
-  });
-
+  const admin = await prisma.adminUser.findFirst();
   if (!admin) {
     console.log("⚠️  No admin user found. Please run main seed first.");
     return;
   }
 
-  // Define partners with translations
   const partners = [
-    {
-      partnerName: "PT Mitra Teknologi Indonesia",
-      websiteUrl: "https://mitratekno.id",
-      displayOrder: 1,
-      translations: {
-        id: {
-          description: "Partner strategis dalam solusi teknologi bisnis"
-        },
-        en: {
-          description: "Strategic partner in business technology solutions"
-        }
-      }
-    },
-    {
-      partnerName: "CV Digital Nusantara",
-      websiteUrl: "https://digitalnusantara.co.id",
-      displayOrder: 2,
-      translations: {
-        id: {
-          description: "Penyedia layanan transformasi digital terpercaya"
-        },
-        en: {
-          description: "Trusted digital transformation service provider"
-        }
-      }
-    },
-    {
-      partnerName: "PT Solusi Bisnis Modern",
-      websiteUrl: "https://solusimodern.com",
-      displayOrder: 3,
-      translations: {
-        id: {
-          description: "Konsultan ERP dan sistem manajemen bisnis"
-        },
-        en: {
-          description: "ERP and business management system consultant"
-        }
-      }
-    },
-    {
-      partnerName: "Koperasi Sejahtera Bersama",
-      websiteUrl: null,
-      displayOrder: 4,
-      translations: {
-        id: {
-          description: "Klien terpercaya sejak 2020"
-        },
-        en: {
-          description: "Trusted client since 2020"
-        }
-      }
-    },
-    {
-      partnerName: "PT Retail Indonesia Jaya",
-      websiteUrl: "https://retailjaya.id",
-      displayOrder: 5,
-      translations: {
-        id: {
-          description: "Perusahaan retail terkemuka di Indonesia"
-        },
-        en: {
-          description: "Leading retail company in Indonesia"
-        }
-      }
-    },
-    {
-      partnerName: "UD Makmur Sentosa",
-      websiteUrl: null,
-      displayOrder: 6,
-      translations: {
-        id: {
-          description: "UMKM yang berkembang dengan KelolaAja"
-        },
-        en: {
-          description: "Growing SME with KelolaAja"
-        }
-      }
-    }
+    { name: 'Sri', image: '/images/partners/sri.png' },
+    { name: 'Sriendo Foods', image: '/images/partners/sriendofoods.png' },
+    { name: 'Aura Food', image: '/images/partners/aurafood.png' },
+    { name: 'Damika', image: '/images/partners/logo-damika.png' },
+    { name: 'KAS', image: '/images/partners/logo-kas.png' },
+    { name: 'MB Furnistore', image: '/images/partners/logo-mb-furnistore.jpg' },
+    { name: 'MML', image: '/images/partners/logo-mml.jpg' },
+    { name: 'SBS', image: '/images/partners/logo-sbs.jpg' },
   ];
 
-  for (const partnerData of partners) {
-    const { translations, ...partnerFields } = partnerData;
+  for (const [index, p] of partners.entries()) {
+    const existing = await prisma.partner.findFirst({ where: { partnerName: p.name } });
 
-    const existingPartner = await prisma.partner.findUnique({
-      where: { partnerName: partnerFields.partnerName }
-    });
-
-    if (existingPartner) {
-      console.log(`  ⏭️  Partner ${partnerFields.partnerName} already exists, skipping...`);
+    if (existing) {
+      console.log(`  ⏭️  Partner ${p.name} already exists, skipping...`);
       continue;
     }
 
+    // Create media file
+    const mediaFile = await prisma.mediaFile.create({
+      data: {
+        fileName: p.name.toLowerCase().replace(/\s/g, '-') + '.png',
+        filePath: '/seeds/partners/' + p.name.toLowerCase().replace(/\s/g, '-') + '.png',
+        mimeType: 'image/png',
+        fileSize: 1024,
+        storageUrl: p.image,
+        uploadedBy: admin.userId,
+      }
+    });
+
     const partner = await prisma.partner.create({
       data: {
-        ...partnerFields,
-        logoFileId: null, // Will be updated later when MediaFile is implemented
+        partnerName: p.name,
+        displayOrder: index + 1,
+        isActive: true,
+        logoFileId: mediaFile.fileId,
         createdBy: admin.userId,
         updatedBy: admin.userId,
         translations: {
           create: [
-            {
-              locale: Locale.id,
-              description: translations.id.description
-            },
-            {
-              locale: Locale.en,
-              description: translations.en.description
-            }
+            { locale: Locale.id, description: `Partner ${p.name}` },
+            { locale: Locale.en, description: `Partner ${p.name}` }
           ]
         }
-      },
-      include: {
-        translations: true
       }
     });
 
-    console.log(`  ✅ Partner created: ${partner.partnerName} (ID: ${partner.partnerId})`);
+    console.log(`  ✅ Partner created: ${partner.partnerName}`);
   }
 
   console.log("✅ Partners seeding completed!");

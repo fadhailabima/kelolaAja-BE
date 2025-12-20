@@ -10,7 +10,7 @@ router.get("/serve/:id", MediaFileController.serveFile);
 router.get("/download/:id", MediaFileController.downloadFile);
 
 // Admin routes (require authentication)
-router.get("/admin", authenticate, authorize("Admin", "Editor"), MediaFileController.listAll);
+router.get("/admin/all", authenticate, authorize("Admin", "Editor"), MediaFileController.listAll);
 router.get("/admin/stats", authenticate, authorize("Admin", "Editor"), MediaFileController.getStats);
 router.get("/admin/:id", authenticate, authorize("Admin", "Editor"), MediaFileController.getById);
 router.post(

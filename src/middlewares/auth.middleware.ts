@@ -18,13 +18,19 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
   try {
     // Get token from header
     const authHeader = req.headers.authorization;
+    let token = '';
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.substring(7); // Remove 'Bearer ' prefix
+    } else if (req.cookies && (req.cookies.token || req.cookies.access_token)) {
+      // Check cookies
+      token = req.cookies.token || req.cookies.access_token;
+    }
+
+    if (!token) {
       ResponseUtil.unauthorized(res, "No token provided");
       return;
     }
-
-    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
 
     // Verify token
     const decoded = JwtUtil.verifyAccessToken(token);

@@ -52,6 +52,21 @@ export class AuthController {
         role: user.role || "Viewer"
       });
 
+      // Set cookies
+      const cookieOptions = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' as const : 'lax' as const,
+        path: '/'
+      };
+
+      res.cookie('access_token', tokens.accessToken, cookieOptions);
+      if (tokens.refreshToken) {
+        res.cookie('refresh_token', tokens.refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
+      }
+      res.cookie('token', tokens.accessToken, cookieOptions); // Legacy/Fallback support
+
       // Return user data and tokens
       return ResponseUtil.success(res, "Login successful", {
         user: {

@@ -12,71 +12,26 @@ async function main() {
     process.exit(1);
   }
 
-  // Create process steps
+  // Create process steps from frontend data
   const steps = [
-    {
-      stepCode: "STEP_REGISTER",
-      displayOrder: 1,
-      translations: {
-        id: {
-          title: "Daftar & Pilih Paket",
-          description: "Pilih paket yang sesuai dengan kebutuhan bisnis Anda dan lakukan pendaftaran dalam hitungan menit."
-        },
-        en: {
-          title: "Register & Choose Plan",
-          description: "Select the plan that suits your business needs and complete registration in minutes."
-        }
-      }
-    },
-    {
-      stepCode: "STEP_SETUP",
-      displayOrder: 2,
-      translations: {
-        id: {
-          title: "Setup Sistem",
-          description: "Konfigurasikan pengaturan awal seperti data perusahaan, produk, dan kategori dengan mudah."
-        },
-        en: {
-          title: "Setup System",
-          description: "Easily configure initial settings such as company data, products, and categories."
-        }
-      }
-    },
-    {
-      stepCode: "STEP_MANAGE",
-      displayOrder: 3,
-      translations: {
-        id: {
-          title: "Kelola Bisnis",
-          description: "Mulai kelola penjualan, stok, pelanggan, dan laporan keuangan dari satu dashboard."
-        },
-        en: {
-          title: "Manage Business",
-          description: "Start managing sales, inventory, customers, and financial reports from one dashboard."
-        }
-      }
-    },
-    {
-      stepCode: "STEP_GROW",
-      displayOrder: 4,
-      translations: {
-        id: {
-          title: "Kembangkan Usaha",
-          description: "Gunakan data dan insights untuk mengembangkan bisnis Anda ke level berikutnya."
-        },
-        en: {
-          title: "Grow Your Business",
-          description: "Use data and insights to grow your business to the next level."
-        }
-      }
-    }
+    { code: 'analysis', title: { id: 'Analisa Proses Bisnis', en: 'Business Process Analysis' }, desc: { id: 'Tim konsultan kami akan mengidentifikasi masalah dan kebutuhan bisnismu', en: 'Our consultant team will identify problems and your business needs' } },
+    { code: 'planning', title: { id: 'Perencanaan', en: 'Planning' }, desc: { id: 'Kami pastikan sistem bekerja sesuai dengan proses bisnismu.', en: 'We ensure the system works according to your business processes.' } },
+    { code: 'training', title: { id: 'Pelatihan', en: 'Training' }, desc: { id: 'Membantu user lewat pelatihan khusus untuk setiap divisi.', en: 'Help users through special training for each division.' } },
+    { code: 'goingLive', title: { id: 'Going Live', en: 'Going Live' }, desc: { id: 'Memastikan semua proses berjalan baik setelah going live.', en: 'Ensuring all processes run smoothly after going live.' } },
   ];
 
-  for (const step of steps) {
-    const created = await prisma.processStep.create({
+  for (const [index, step] of steps.entries()) {
+    const existing = await prisma.processStep.findUnique({ where: { stepCode: step.code } });
+
+    if (existing) {
+      console.log(`⏭️  Step ${step.code} already exists`);
+      continue;
+    }
+
+    await prisma.processStep.create({
       data: {
-        stepCode: step.stepCode,
-        displayOrder: step.displayOrder,
+        stepCode: step.code,
+        displayOrder: index + 1,
         isActive: true,
         createdBy: adminUser.userId,
         updatedBy: adminUser.userId,
@@ -84,13 +39,13 @@ async function main() {
           create: [
             {
               locale: Locale.id,
-              title: step.translations.id.title,
-              description: step.translations.id.description
+              title: step.title.id,
+              description: step.desc.id
             },
             {
               locale: Locale.en,
-              title: step.translations.en.title,
-              description: step.translations.en.description
+              title: step.title.en,
+              description: step.desc.en
             }
           ]
         }
@@ -100,10 +55,10 @@ async function main() {
       }
     });
 
-    console.log(`✅ Step created: ${step.translations.id.title} (ID: ${created.stepId})`);
+    console.log(`✅ Step created: ${step.title.id}`);
   }
 
-  console.log(`\n✨ Seeding completed! Total steps: ${steps.length}`);
+  console.log(`\n✨ Seeding completed!`);
 }
 
 main()
