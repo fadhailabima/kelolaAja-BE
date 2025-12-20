@@ -75,8 +75,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "login"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
             }
           }
         },
@@ -113,8 +118,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/refresh",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "refresh"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
             }
           }
         },
@@ -128,8 +138,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/auth/logout",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "logout"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
             }
           }
         },
@@ -140,8 +155,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/auth/me",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "me"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
             }
           }
         }
@@ -166,8 +186,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/me",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "me"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
             }
           }
         },
@@ -187,8 +212,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/me/password",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "me", "password"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "password"
+              ]
             }
           }
         },
@@ -199,8 +230,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["users"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -236,8 +271,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
             }
           }
         },
@@ -257,8 +297,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users",
-              "host": ["{{baseUrl}}"],
-              "path": ["users"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
             }
           }
         },
@@ -278,8 +322,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/2",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "2"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "2"
+              ]
             }
           }
         },
@@ -290,8 +339,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/2",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "2"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "2"
+              ]
             }
           }
         }
@@ -313,8 +367,12 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/pricing-plans?locale={{locale}}",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["pricing-plans"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing-plans"
+                  ],
                   "query": [
                     {
                       "key": "locale",
@@ -334,8 +392,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/pricing-plans/1?locale={{locale}}",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["pricing-plans", "1"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing-plans",
+                    "1"
+                  ],
                   "query": [
                     {
                       "key": "locale",
@@ -355,8 +418,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/pricing-plans/1/features?locale={{locale}}",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["pricing-plans", "1", "features"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing-plans",
+                    "1",
+                    "features"
+                  ],
                   "query": [
                     {
                       "key": "locale",
@@ -378,8 +447,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/pricing-plans/admin/all?page=1&limit=10",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["pricing-plans", "admin", "all"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing-plans",
+                    "admin",
+                    "all"
+                  ],
                   "query": [
                     {
                       "key": "page",
@@ -405,12 +480,17 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"planName\": \"enterprise\",\n  \"price\": 2000000,\n  \"billingCycle\": \"monthly\",\n  \"displayOrder\": 4,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"displayName\": \"Paket Enterprise\",\n      \"description\": \"Solusi lengkap untuk perusahaan besar\"\n    },\n    {\n      \"locale\": \"en\",\n      \"displayName\": \"Enterprise Plan\",\n      \"description\": \"Complete solution for large enterprises\"\n    }\n  ]\n}"
+                  "raw": "{\n  \"planCode\": \"enterprise_plan\",\n  \"pricePerUserMonth\": 2000000,\n  \"minUsers\": 10,\n  \"displayOrder\": 4,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"planName\": \"Paket Enterprise\",\n      \"description\": \"Solusi lengkap untuk perusahaan besar\",\n      \"pricePeriod\": \"monthly\",\n      \"userRange\": \"10-100 Users\"\n    },\n     \"en\": {\n      \"planName\": \"Enterprise Plan\",\n      \"description\": \"Complete solution for large enterprises\",\n      \"pricePeriod\": \"monthly\",\n      \"userRange\": \"10-100 Users\"\n    }\n  }\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/pricing-plans/admin",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["pricing-plans", "admin"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing-plans",
+                    "admin"
+                  ]
                 }
               }
             },
@@ -430,8 +510,14 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/pricing-plans/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["pricing-plans", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing-plans",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             },
@@ -442,8 +528,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/pricing-plans/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["pricing-plans", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing-plans",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             },
@@ -463,8 +555,15 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/pricing-plans/admin/1/features",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["pricing-plans", "admin", "1", "features"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing-plans",
+                    "admin",
+                    "1",
+                    "features"
+                  ]
                 }
               }
             },
@@ -484,8 +583,16 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/pricing-plans/admin/1/features/bulk",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["pricing-plans", "admin", "1", "features", "bulk"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing-plans",
+                    "admin",
+                    "1",
+                    "features",
+                    "bulk"
+                  ]
                 }
               }
             },
@@ -505,8 +612,16 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/pricing-plans/admin/1/features/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["pricing-plans", "admin", "1", "features", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing-plans",
+                    "admin",
+                    "1",
+                    "features",
+                    "1"
+                  ]
                 }
               }
             },
@@ -517,8 +632,16 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/pricing-plans/admin/1/features/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["pricing-plans", "admin", "1", "features", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing-plans",
+                    "admin",
+                    "1",
+                    "features",
+                    "1"
+                  ]
                 }
               }
             }
@@ -539,8 +662,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/features?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["features"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "features"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -560,8 +687,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/features/1?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["features", "1"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "features",
+                "1"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -578,8 +710,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/features/admin/all",
-              "host": ["{{baseUrl}}"],
-              "path": ["features", "admin", "all"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "features",
+                "admin",
+                "all"
+              ]
             }
           }
         },
@@ -590,8 +728,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/features/admin/categories",
-              "host": ["{{baseUrl}}"],
-              "path": ["features", "admin", "categories"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "features",
+                "admin",
+                "categories"
+              ]
             }
           }
         },
@@ -607,12 +751,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"featureName\": \"crm_module\",\n  \"category\": \"advanced\",\n  \"iconName\": \"users\",\n  \"displayOrder\": 10,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Modul CRM\",\n      \"description\": \"Kelola hubungan pelanggan dengan baik\"\n    }\n  ]\n}"
+              "raw": "{\n  \"featureCode\": \"crm_module_01\",\n  \"category\": \"advanced\",\n  \"displayOrder\": 10,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"featureName\": \"Modul CRM\",\n      \"description\": \"Kelola hubungan pelanggan dengan baik\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/features/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["features", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "features",
+                "admin"
+              ]
             }
           }
         },
@@ -632,8 +781,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/features/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["features", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "features",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -644,8 +799,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/features/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["features", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "features",
+                "admin",
+                "1"
+              ]
             }
           }
         }
@@ -664,8 +825,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/partners?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["partners"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "partners"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -682,8 +847,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/partners/admin/all",
-              "host": ["{{baseUrl}}"],
-              "path": ["partners", "admin", "all"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "partners",
+                "admin",
+                "all"
+              ]
             }
           }
         },
@@ -699,12 +870,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"partnerName\": \"shopee\",\n  \"logoUrl\": \"https://example.com/logos/shopee.png\",\n  \"websiteUrl\": \"https://shopee.co.id\",\n  \"displayOrder\": 2,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"displayName\": \"Shopee\",\n      \"description\": \"Platform belanja online terpercaya\"\n    }\n  ]\n}"
+              "raw": "{\n  \"partnerName\": \"shopee\",\n  \"logoFileId\": 1,\n  \"websiteUrl\": \"https://shopee.co.id\",\n  \"displayOrder\": 2,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"description\": \"Platform belanja online terpercaya\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/partners/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["partners", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "partners",
+                "admin"
+              ]
             }
           }
         },
@@ -724,8 +900,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/partners/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["partners", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "partners",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -736,8 +918,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/partners/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["partners", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "partners",
+                "admin",
+                "1"
+              ]
             }
           }
         }
@@ -756,8 +944,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/testimonials?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["testimonials"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "testimonials"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -777,8 +969,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/testimonials/1?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["testimonials", "1"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "testimonials",
+                "1"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -795,8 +992,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/admin/testimonials",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "testimonials"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "testimonials"
+              ]
             }
           }
         },
@@ -812,12 +1014,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"customerName\": \"Siti Nurhaliza\",\n  \"companyName\": \"CV Berkah Selalu\",\n  \"position\": \"Owner\",\n  \"avatarUrl\": \"https://example.com/avatars/siti.jpg\",\n  \"rating\": 5,\n  \"displayOrder\": 2,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"content\": \"Dengan KelolaAja, pencatatan keuangan jadi lebih mudah\"\n    }\n  ]\n}"
+              "raw": "{\n  \"name\": \"Siti Nurhaliza\",\n  \"company\": \"CV Berkah Selalu\",\n  \"title\": \"Owner\",\n  \"photoFileId\": 1,\n  \"rating\": 5,\n  \"displayOrder\": 2,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"quote\": \"Dengan KelolaAja, pencatatan keuangan jadi lebih mudah\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/admin/testimonials",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "testimonials"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "testimonials"
+              ]
             }
           }
         },
@@ -837,8 +1044,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/testimonials/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "testimonials", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "testimonials",
+                "1"
+              ]
             }
           }
         },
@@ -849,8 +1062,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/admin/testimonials/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "testimonials", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "testimonials",
+                "1"
+              ]
             }
           }
         }
@@ -872,8 +1091,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/faqs/categories?locale={{locale}}",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["faqs", "categories"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "faqs",
+                    "categories"
+                  ],
                   "query": [
                     {
                       "key": "locale",
@@ -890,8 +1114,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/faq-categories",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["admin", "faq-categories"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "faq-categories"
+                  ]
                 }
               }
             },
@@ -911,8 +1140,13 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/faq-categories",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["admin", "faq-categories"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "faq-categories"
+                  ]
                 }
               }
             },
@@ -932,8 +1166,14 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/faq-categories/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["admin", "faq-categories", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "faq-categories",
+                    "1"
+                  ]
                 }
               }
             },
@@ -944,8 +1184,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/faq-categories/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["admin", "faq-categories", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "faq-categories",
+                    "1"
+                  ]
                 }
               }
             }
@@ -964,8 +1210,12 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/faqs?locale={{locale}}",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["faqs"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "faqs"
+                  ],
                   "query": [
                     {
                       "key": "locale",
@@ -985,8 +1235,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/faqs/by-category?categoryId=1&locale={{locale}}",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["faqs", "by-category"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "faqs",
+                    "by-category"
+                  ],
                   "query": [
                     {
                       "key": "categoryId",
@@ -1010,8 +1265,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/faqs/1?locale={{locale}}",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["faqs", "1"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "faqs",
+                    "1"
+                  ],
                   "query": [
                     {
                       "key": "locale",
@@ -1028,8 +1288,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/faqs",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["admin", "faqs"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "faqs"
+                  ]
                 }
               }
             },
@@ -1045,12 +1310,17 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"categoryId\": 1,\n  \"displayOrder\": 5,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"question\": \"Bagaimana cara memulai?\",\n      \"answer\": \"Anda bisa memulai dengan mendaftar dan memilih paket\"\n    }\n  ]\n}"
+                  "raw": "{\n  \"categoryId\": 1,\n  \"displayOrder\": 5,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"question\": \"Bagaimana cara memulai?\",\n      \"answer\": \"Anda bisa memulai dengan mendaftar dan memilih paket\"\n    }\n  }\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/faqs",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["admin", "faqs"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "faqs"
+                  ]
                 }
               }
             },
@@ -1070,8 +1340,14 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/faqs/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["admin", "faqs", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "faqs",
+                    "1"
+                  ]
                 }
               }
             },
@@ -1082,8 +1358,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/faqs/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["admin", "faqs", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "faqs",
+                    "1"
+                  ]
                 }
               }
             }
@@ -1107,8 +1389,12 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/benefit-stats?locale={{locale}}",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["benefit-stats"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "benefit-stats"
+                  ],
                   "query": [
                     {
                       "key": "locale",
@@ -1125,8 +1411,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/benefit-stats/admin",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["benefit-stats", "admin"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "benefit-stats",
+                    "admin"
+                  ]
                 }
               }
             },
@@ -1142,12 +1433,17 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"statKey\": \"years_experience\",\n  \"value\": \"10+\",\n  \"iconName\": \"calendar\",\n  \"displayOrder\": 2,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"label\": \"Tahun Pengalaman\",\n      \"description\": \"Pengalaman dalam industri ERP\"\n    }\n  ]\n}"
+                  "raw": "{\n  \"statValue\": \"10+\",\n  \"displayOrder\": 2,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"label\": \"Tahun Pengalaman\"\n    }\n  }\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/benefit-stats/admin",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["benefit-stats", "admin"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "benefit-stats",
+                    "admin"
+                  ]
                 }
               }
             },
@@ -1167,8 +1463,14 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/benefit-stats/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["benefit-stats", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "benefit-stats",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             },
@@ -1179,8 +1481,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/benefit-stats/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["benefit-stats", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "benefit-stats",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             }
@@ -1199,8 +1507,12 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/process-steps?locale={{locale}}",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["process-steps"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "process-steps"
+                  ],
                   "query": [
                     {
                       "key": "locale",
@@ -1217,8 +1529,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/process-steps/admin",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["process-steps", "admin"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "process-steps",
+                    "admin"
+                  ]
                 }
               }
             },
@@ -1234,12 +1551,17 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"stepNumber\": 4,\n  \"iconName\": \"rocket\",\n  \"displayOrder\": 4,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Implementasi & Pelatihan\",\n      \"description\": \"Implementasi sistem dan pelatihan pengguna\"\n    }\n  ]\n}"
+                  "raw": "{\n  \"displayOrder\": 4,\n  \"imageFileId\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"title\": \"Implementasi & Pelatihan\",\n      \"description\": \"Implementasi sistem dan pelatihan pengguna\"\n    }\n  }\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/process-steps/admin",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["process-steps", "admin"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "process-steps",
+                    "admin"
+                  ]
                 }
               }
             },
@@ -1259,8 +1581,14 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/process-steps/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["process-steps", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "process-steps",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             },
@@ -1271,8 +1599,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/process-steps/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["process-steps", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "process-steps",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             }
@@ -1291,8 +1625,12 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/erp-benefits?locale={{locale}}",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["erp-benefits"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "erp-benefits"
+                  ],
                   "query": [
                     {
                       "key": "locale",
@@ -1309,8 +1647,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/erp-benefits/admin",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["erp-benefits", "admin"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "erp-benefits",
+                    "admin"
+                  ]
                 }
               }
             },
@@ -1326,12 +1669,17 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"iconName\": \"shield-check\",\n  \"displayOrder\": 5,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Keamanan Data Terjamin\",\n      \"description\": \"Data bisnis Anda aman dengan enkripsi tingkat enterprise\"\n    }\n  ]\n}"
+                  "raw": "{\n  \"displayOrder\": 5,\n  \"imageFileId\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"title\": \"Keamanan Data Terjamin\",\n      \"description\": \"Data bisnis Anda aman dengan enkripsi tingkat enterprise\"\n    }\n  }\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/erp-benefits/admin",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["erp-benefits", "admin"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "erp-benefits",
+                    "admin"
+                  ]
                 }
               }
             },
@@ -1351,8 +1699,14 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/erp-benefits/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["erp-benefits", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "erp-benefits",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             },
@@ -1363,8 +1717,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/erp-benefits/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["erp-benefits", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "erp-benefits",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             }
@@ -1385,8 +1745,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/site-config",
-              "host": ["{{baseUrl}}"],
-              "path": ["site-config"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "site-config"
+              ]
             }
           }
         },
@@ -1400,8 +1764,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/site-config/key/contact_email",
-              "host": ["{{baseUrl}}"],
-              "path": ["site-config", "key", "contact_email"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "site-config",
+                "key",
+                "contact_email"
+              ]
             }
           }
         },
@@ -1412,8 +1782,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/site-config/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["site-config", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "site-config",
+                "admin"
+              ]
             }
           }
         },
@@ -1433,8 +1808,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/site-config/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["site-config", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "site-config",
+                "admin"
+              ]
             }
           }
         },
@@ -1454,8 +1834,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/site-config/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["site-config", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "site-config",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -1475,8 +1861,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/site-config/admin/key/contact_email",
-              "host": ["{{baseUrl}}"],
-              "path": ["site-config", "admin", "key", "contact_email"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "site-config",
+                "admin",
+                "key",
+                "contact_email"
+              ]
             }
           }
         },
@@ -1496,8 +1889,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/site-config/admin/bulk-update",
-              "host": ["{{baseUrl}}"],
-              "path": ["site-config", "admin", "bulk-update"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "site-config",
+                "admin",
+                "bulk-update"
+              ]
             }
           }
         },
@@ -1508,8 +1907,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/site-config/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["site-config", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "site-config",
+                "admin",
+                "1"
+              ]
             }
           }
         }
@@ -1537,8 +1942,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/contact-submissions",
-              "host": ["{{baseUrl}}"],
-              "path": ["contact-submissions"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact-submissions"
+              ]
             }
           }
         },
@@ -1549,8 +1958,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/contact-submissions/admin?page=1&limit=20",
-              "host": ["{{baseUrl}}"],
-              "path": ["contact-submissions", "admin"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact-submissions",
+                "admin"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -1576,8 +1990,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/contact-submissions/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["contact-submissions", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact-submissions",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -1597,8 +2017,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/contact-submissions/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["contact-submissions", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact-submissions",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -1609,8 +2035,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/contact-submissions/admin/stats",
-              "host": ["{{baseUrl}}"],
-              "path": ["contact-submissions", "admin", "stats"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact-submissions",
+                "admin",
+                "stats"
+              ]
             }
           }
         },
@@ -1621,8 +2053,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/contact-submissions/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["contact-submissions", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact-submissions",
+                "admin",
+                "1"
+              ]
             }
           }
         }
@@ -1650,8 +2088,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/analytics/visitors",
-              "host": ["{{baseUrl}}"],
-              "path": ["analytics", "visitors"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "visitors"
+              ]
             }
           }
         },
@@ -1674,8 +2117,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/analytics/page-views",
-              "host": ["{{baseUrl}}"],
-              "path": ["analytics", "page-views"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "page-views"
+              ]
             }
           }
         },
@@ -1686,8 +2134,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/analytics/admin/overview?rangeDays=30",
-              "host": ["{{baseUrl}}"],
-              "path": ["analytics", "admin", "overview"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "admin",
+                "overview"
+              ],
               "query": [
                 {
                   "key": "rangeDays",
@@ -1704,8 +2158,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/analytics/admin/visitors?page=1&limit=50",
-              "host": ["{{baseUrl}}"],
-              "path": ["analytics", "admin", "visitors"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "admin",
+                "visitors"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -1726,8 +2186,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/analytics/admin/visitors/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["analytics", "admin", "visitors", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "admin",
+                "visitors",
+                "1"
+              ]
             }
           }
         },
@@ -1738,8 +2205,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/analytics/admin/page-views?page=1&limit=50",
-              "host": ["{{baseUrl}}"],
-              "path": ["analytics", "admin", "page-views"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "admin",
+                "page-views"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -1790,8 +2263,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/media-files/admin/upload",
-              "host": ["{{baseUrl}}"],
-              "path": ["media-files", "admin", "upload"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media-files",
+                "admin",
+                "upload"
+              ]
             }
           }
         },
@@ -1802,8 +2281,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/media-files/admin?page=1&limit=20",
-              "host": ["{{baseUrl}}"],
-              "path": ["media-files", "admin"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media-files",
+                "admin"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -1834,8 +2318,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/media-files/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["media-files", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media-files",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -1855,8 +2345,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/media-files/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["media-files", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media-files",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -1867,8 +2363,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/media-files/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["media-files", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media-files",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -1879,8 +2381,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/media-files/admin/stats",
-              "host": ["{{baseUrl}}"],
-              "path": ["media-files", "admin", "stats"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media-files",
+                "admin",
+                "stats"
+              ]
             }
           }
         },
@@ -1894,8 +2402,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/media-files/serve/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["media-files", "serve", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media-files",
+                "serve",
+                "1"
+              ]
             }
           }
         },
@@ -1909,8 +2423,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/media-files/download/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["media-files", "download", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media-files",
+                "download",
+                "1"
+              ]
             }
           }
         }
@@ -1938,8 +2458,13 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/jobs/public?page=1&limit=10&locale=id&isActive=true",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["jobs", "public"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    "public"
+                  ],
                   "query": [
                     {
                       "key": "page",
@@ -2002,8 +2527,14 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/jobs/public/1?locale=id",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["jobs", "public", "1"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    "public",
+                    "1"
+                  ],
                   "query": [
                     {
                       "key": "locale",
@@ -2029,8 +2560,15 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/jobs/public/slug/senior-backend-developer?locale=id",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["jobs", "public", "slug", "senior-backend-developer"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    "public",
+                    "slug",
+                    "senior-backend-developer"
+                  ],
                   "query": [
                     {
                       "key": "locale",
@@ -2057,8 +2595,13 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/jobs/admin",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["jobs", "admin"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    "admin"
+                  ]
                 }
               }
             },
@@ -2079,8 +2622,14 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/jobs/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["jobs", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             },
@@ -2091,8 +2640,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/jobs/admin?page=1&limit=20",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["jobs", "admin"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    "admin"
+                  ],
                   "query": [
                     {
                       "key": "page",
@@ -2113,8 +2667,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/jobs/admin/stats",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["jobs", "admin", "stats"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    "admin",
+                    "stats"
+                  ]
                 }
               }
             },
@@ -2125,8 +2685,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/jobs/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["jobs", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             }
@@ -2231,8 +2797,13 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/job-applications/apply",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["job-applications", "apply"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "job-applications",
+                    "apply"
+                  ]
                 },
                 "description": "Submit job application with CV upload. All communication with candidate (feedback, interview schedule, etc.) will be done MANUALLY via email/phone by HR."
               }
@@ -2244,8 +2815,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/job-applications/admin?page=1&limit=20&status=Pending",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["job-applications", "admin"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "job-applications",
+                    "admin"
+                  ],
                   "query": [
                     {
                       "key": "page",
@@ -2285,8 +2861,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/job-applications/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["job-applications", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "job-applications",
+                    "admin",
+                    "1"
+                  ]
                 },
                 "description": "Get application detail. HR will use applicantEmail and applicantPhone from this response to contact candidate manually."
               }
@@ -2298,8 +2880,15 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/job-applications/admin/job/1?page=1&limit=10",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["job-applications", "admin", "job", "1"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "job-applications",
+                    "admin",
+                    "job",
+                    "1"
+                  ],
                   "query": [
                     {
                       "key": "page",
@@ -2330,8 +2919,14 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/job-applications/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["job-applications", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "job-applications",
+                    "admin",
+                    "1"
+                  ]
                 },
                 "description": "Update application after HR manually contacts candidate. HR will:\n1. Review application in admin panel\n2. Copy applicantEmail from response\n3. Send email manually to candidate\n4. Update status here after sending email"
               }
@@ -2353,8 +2948,14 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/job-applications/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["job-applications", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "job-applications",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             },
@@ -2375,8 +2976,14 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/job-applications/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["job-applications", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "job-applications",
+                    "admin",
+                    "1"
+                  ]
                 },
                 "description": "Update to Interview status. interviewedAt timestamp will be auto-set."
               }
@@ -2398,8 +3005,14 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/job-applications/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["job-applications", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "job-applications",
+                    "admin",
+                    "1"
+                  ]
                 },
                 "description": "Reject application. rejectionReason can be used as template for manual email to candidate."
               }
@@ -2411,8 +3024,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/job-applications/admin/stats",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["job-applications", "admin", "stats"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "job-applications",
+                    "admin",
+                    "stats"
+                  ],
                   "query": [
                     {
                       "key": "jobId",
@@ -2431,8 +3050,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/job-applications/admin/1",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["job-applications", "admin", "1"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "job-applications",
+                    "admin",
+                    "1"
+                  ]
                 }
               }
             }
@@ -2459,8 +3084,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/industries?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -2486,8 +3115,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/industries/retail?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "retail"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "retail"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -2504,8 +3138,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/industries/admin/all?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "all"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "all"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -2536,8 +3176,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/industries/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -2553,12 +3199,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"industryCode\": \"retail\",\n  \"slug\": \"retail\",\n  \"iconName\": \"shopping-cart\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Retail & E-commerce\",\n      \"description\": \"Solusi lengkap untuk bisnis retail dan toko online\"\n    },\n    {\n      \"locale\": \"en\",\n      \"title\": \"Retail & E-commerce\",\n      \"description\": \"Complete solution for retail and online stores\"\n    }\n  ]\n}"
+              "raw": "{\n  \"industryCode\": \"retail\",\n  \"slug\": \"retail\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"title\": \"Retail & E-commerce\",\n      \"description\": \"Solusi lengkap untuk bisnis retail dan toko online\"\n    },\n    \"en\": {\n      \"title\": \"Retail & E-commerce\",\n      \"description\": \"Complete solution for retail and online stores\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/industries/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin"
+              ]
             }
           }
         },
@@ -2578,8 +3229,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/industries/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -2590,8 +3247,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/industries/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -2602,8 +3265,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/industries/admin/1/problems",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "1", "problems"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "1",
+                "problems"
+              ]
             }
           }
         },
@@ -2623,8 +3293,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/industries/admin/1/problems",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "1", "problems"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "1",
+                "problems"
+              ]
             }
           }
         },
@@ -2644,8 +3321,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/industries/admin/problems/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "problems", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "problems",
+                "1"
+              ]
             }
           }
         },
@@ -2656,8 +3340,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/industries/admin/problems/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "problems", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "problems",
+                "1"
+              ]
             }
           }
         },
@@ -2668,8 +3359,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/industries/admin/1/solutions",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "1", "solutions"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "1",
+                "solutions"
+              ]
             }
           }
         },
@@ -2689,8 +3387,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/industries/admin/1/solutions",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "1", "solutions"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "1",
+                "solutions"
+              ]
             }
           }
         },
@@ -2710,8 +3415,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/industries/admin/solutions/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "solutions", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "solutions",
+                "1"
+              ]
             }
           }
         },
@@ -2722,8 +3434,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/industries/admin/solutions/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "solutions", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "solutions",
+                "1"
+              ]
             }
           }
         },
@@ -2734,8 +3453,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/industries/admin/1/media",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "1", "media"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "1",
+                "media"
+              ]
             }
           }
         },
@@ -2755,8 +3481,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/industries/admin/1/media",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "1", "media"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "1",
+                "media"
+              ]
             }
           }
         },
@@ -2776,8 +3509,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/industries/admin/media/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "media", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "media",
+                "1"
+              ]
             }
           }
         },
@@ -2788,8 +3528,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/industries/admin/media/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["industries", "admin", "media", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "industries",
+                "admin",
+                "media",
+                "1"
+              ]
             }
           }
         }
@@ -2814,8 +3561,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/feature-pages?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["feature-pages"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "feature-pages"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -2841,8 +3592,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/feature-pages/inventory-management?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["feature-pages", "inventory-management"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "feature-pages",
+                "inventory-management"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -2859,8 +3615,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/feature-pages/admin/all?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["feature-pages", "admin", "all"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "feature-pages",
+                "admin",
+                "all"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -2881,8 +3643,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/feature-pages/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["feature-pages", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "feature-pages",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -2898,12 +3666,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"pageSlug\": \"inventory-management\",\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"heroTitle\": \"Manajemen Inventory Terpadu\",\n      \"heroSubtitle\": \"Kelola stok barang dengan mudah\",\n      \"aboutTitle\": \"Tentang Fitur\",\n      \"aboutDescription\": \"Sistem inventory real-time yang terintegrasi\",\n      \"ctaTitle\": \"Mulai Sekarang\",\n      \"ctaDescription\": \"Coba gratis 14 hari\"\n    }\n  ]\n}"
+              "raw": "{\n  \"pageSlug\": \"inventory-management\",\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"heroTitle\": \"Manajemen Inventory Terpadu\",\n      \"heroSubtitle\": \"Kelola stok barang dengan mudah\",\n      \"aboutTitle\": \"Tentang Fitur\",\n      \"aboutDescription\": \"Sistem inventory real-time yang terintegrasi\",\n      \"ctaTitle\": \"Mulai Sekarang\",\n      \"ctaDescription\": \"Coba gratis 14 hari\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/feature-pages/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["feature-pages", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "feature-pages",
+                "admin"
+              ]
             }
           }
         },
@@ -2923,8 +3696,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/feature-pages/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["feature-pages", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "feature-pages",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -2935,8 +3714,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/feature-pages/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["feature-pages", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "feature-pages",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -2947,8 +3732,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/feature-pages/admin/1/items",
-              "host": ["{{baseUrl}}"],
-              "path": ["feature-pages", "admin", "1", "items"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "feature-pages",
+                "admin",
+                "1",
+                "items"
+              ]
             }
           }
         },
@@ -2968,8 +3760,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/feature-pages/admin/1/items",
-              "host": ["{{baseUrl}}"],
-              "path": ["feature-pages", "admin", "1", "items"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "feature-pages",
+                "admin",
+                "1",
+                "items"
+              ]
             }
           }
         },
@@ -2989,8 +3788,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/feature-pages/admin/items/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["feature-pages", "admin", "items", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "feature-pages",
+                "admin",
+                "items",
+                "1"
+              ]
             }
           }
         },
@@ -3001,8 +3807,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/feature-pages/admin/items/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["feature-pages", "admin", "items", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "feature-pages",
+                "admin",
+                "items",
+                "1"
+              ]
             }
           }
         }
@@ -3027,8 +3840,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/core-values?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["core-values"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "core-values"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -3045,8 +3862,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/core-values/admin?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["core-values", "admin"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "core-values",
+                "admin"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -3082,12 +3904,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"valueCode\": \"innovation\",\n  \"iconName\": \"lightbulb\",\n  \"imageFileId\": 1,\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Inovasi\",\n      \"description\": \"Kami selalu berinovasi untuk memberikan solusi terbaik\"\n    },\n    {\n      \"locale\": \"en\",\n      \"title\": \"Innovation\",\n      \"description\": \"We always innovate to provide the best solutions\"\n    }\n  ]\n}"
+              "raw": "{\n  \"iconName\": \"lightbulb\",\n  \"imageFileId\": 1,\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"title\": \"Inovasi\",\n      \"description\": \"Kami selalu berinovasi untuk memberikan solusi terbaik\"\n    },\n    \"en\": {\n      \"title\": \"Innovation\",\n      \"description\": \"We always innovate to provide the best solutions\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/core-values/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["core-values", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "core-values",
+                "admin"
+              ]
             }
           }
         },
@@ -3107,8 +3934,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/core-values/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["core-values", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "core-values",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -3119,8 +3952,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/core-values/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["core-values", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "core-values",
+                "admin",
+                "1"
+              ]
             }
           }
         }
@@ -3145,8 +3984,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/our-philosophies?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["our-philosophies"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "our-philosophies"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -3163,8 +4006,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/our-philosophies/admin?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["our-philosophies", "admin"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "our-philosophies",
+                "admin"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -3200,12 +4048,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"philosophyCode\": \"customer_first\",\n  \"iconName\": \"users\",\n  \"imageFileId\": 2,\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Pelanggan Adalah Prioritas\",\n      \"description\": \"Kepuasan pelanggan adalah prioritas utama kami\"\n    },\n    {\n      \"locale\": \"en\",\n      \"title\": \"Customer First\",\n      \"description\": \"Customer satisfaction is our top priority\"\n    }\n  ]\n}"
+              "raw": "{\n  \"iconName\": \"users\",\n  \"imageFileId\": 2,\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"title\": \"Pelanggan Adalah Prioritas\",\n      \"description\": \"Kepuasan pelanggan adalah prioritas utama kami\"\n    },\n    \"en\": {\n      \"title\": \"Customer First\",\n      \"description\": \"Customer satisfaction is our top priority\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/our-philosophies/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["our-philosophies", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "our-philosophies",
+                "admin"
+              ]
             }
           }
         },
@@ -3225,8 +4078,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/our-philosophies/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["our-philosophies", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "our-philosophies",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -3237,8 +4096,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/our-philosophies/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["our-philosophies", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "our-philosophies",
+                "admin",
+                "1"
+              ]
             }
           }
         }
@@ -3263,8 +4128,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/about-cards?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["about-cards"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "about-cards"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -3281,8 +4150,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/about-cards/admin?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["about-cards", "admin"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "about-cards",
+                "admin"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -3308,12 +4182,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"iconName\": \"trophy\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"10+ Tahun Pengalaman\",\n      \"description\": \"Berpengalaman dalam industri ERP\"\n    }\n  ]\n}"
+              "raw": "{\n  \"imageFileId\": 1,\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"title\": \"10+ Tahun Pengalaman\",\n      \"description\": \"Berpengalaman dalam industri ERP\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/about-cards/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["about-cards", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "about-cards",
+                "admin"
+              ]
             }
           }
         },
@@ -3333,8 +4212,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/about-cards/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["about-cards", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "about-cards",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -3345,8 +4230,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/about-cards/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["about-cards", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "about-cards",
+                "admin",
+                "1"
+              ]
             }
           }
         }
@@ -3371,8 +4262,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/content-sections?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["content-sections"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "content-sections"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -3398,8 +4293,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/content-sections/key/hero_section?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["content-sections", "key", "hero_section"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "content-sections",
+                "key",
+                "hero_section"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -3416,8 +4317,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/content-sections/admin?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["content-sections", "admin"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "content-sections",
+                "admin"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -3443,12 +4349,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"sectionKey\": \"hero_section\",\n  \"sectionType\": \"hero\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Solusi ERP Terbaik untuk Bisnis Anda\",\n      \"content\": \"Kelola bisnis dengan mudah dan efisien\"\n    }\n  ]\n}"
+              "raw": "{\n  \"sectionKey\": \"hero_section\",\n  \"sectionType\": \"hero\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"title\": \"Solusi ERP Terbaik untuk Bisnis Anda\",\n      \"content\": \"Kelola bisnis dengan mudah dan efisien\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/content-sections/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["content-sections", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "content-sections",
+                "admin"
+              ]
             }
           }
         },
@@ -3468,8 +4379,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/content-sections/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["content-sections", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "content-sections",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -3480,8 +4397,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/content-sections/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["content-sections", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "content-sections",
+                "admin",
+                "1"
+              ]
             }
           }
         }
@@ -3506,8 +4429,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/advanced-features?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["advanced-features"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "advanced-features"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -3524,8 +4451,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/advanced-features/admin?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["advanced-features", "admin"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "advanced-features",
+                "admin"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -3551,12 +4483,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"iconName\": \"chart-line\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Advanced Analytics\",\n      \"description\": \"Analisis mendalam untuk keputusan bisnis\"\n    }\n  ]\n}"
+              "raw": "{\n  \"imageFileId\": 1,\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"title\": \"Advanced Analytics\",\n      \"description\": \"Analisis mendalam untuk keputusan bisnis\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/advanced-features/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["advanced-features", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "advanced-features",
+                "admin"
+              ]
             }
           }
         },
@@ -3576,8 +4513,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/advanced-features/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["advanced-features", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "advanced-features",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -3588,8 +4531,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/advanced-features/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["advanced-features", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "advanced-features",
+                "admin",
+                "1"
+              ]
             }
           }
         }
@@ -3614,8 +4563,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/kelolaaja-features?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["kelolaaja-features"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kelolaaja-features"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -3632,8 +4585,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/kelolaaja-features/admin?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["kelolaaja-features", "admin"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kelolaaja-features",
+                "admin"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -3659,12 +4617,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"iconName\": \"database\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Cloud Storage\",\n      \"description\": \"Penyimpanan data aman di cloud\"\n    }\n  ]\n}"
+              "raw": "{\n  \"iconName\": \"database\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"title\": \"Cloud Storage\",\n      \"description\": \"Penyimpanan data aman di cloud\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/kelolaaja-features/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["kelolaaja-features", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kelolaaja-features",
+                "admin"
+              ]
             }
           }
         },
@@ -3684,8 +4647,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/kelolaaja-features/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["kelolaaja-features", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kelolaaja-features",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -3696,8 +4665,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/kelolaaja-features/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["kelolaaja-features", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kelolaaja-features",
+                "admin",
+                "1"
+              ]
             }
           }
         }
@@ -3722,8 +4697,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/detail-feature-sections?locale={{locale}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["detail-feature-sections"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "detail-feature-sections"
+              ],
               "query": [
                 {
                   "key": "locale",
@@ -3740,8 +4719,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/detail-feature-sections/admin?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["detail-feature-sections", "admin"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "detail-feature-sections",
+                "admin"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -3767,12 +4751,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"iconName\": \"file-text\",\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": [\n    {\n      \"locale\": \"id\",\n      \"title\": \"Detail Fitur 1\",\n      \"description\": \"Deskripsi lengkap fitur\"\n    }\n  ]\n}"
+              "raw": "{\n  \"iconFileId\": 1,\n  \"displayOrder\": 1,\n  \"isActive\": true,\n  \"translations\": {\n    \"id\": {\n      \"title\": \"Detail Fitur 1\",\n      \"description\": \"Deskripsi lengkap fitur\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/detail-feature-sections/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["detail-feature-sections", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "detail-feature-sections",
+                "admin"
+              ]
             }
           }
         },
@@ -3792,8 +4781,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/detail-feature-sections/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["detail-feature-sections", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "detail-feature-sections",
+                "admin",
+                "1"
+              ]
             }
           }
         },
@@ -3804,8 +4799,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/detail-feature-sections/admin/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["detail-feature-sections", "admin", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "detail-feature-sections",
+                "admin",
+                "1"
+              ]
             }
           }
         }
@@ -3821,8 +4822,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/audit-logs/admin?page=1&limit=50",
-              "host": ["{{baseUrl}}"],
-              "path": ["audit-logs", "admin"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit-logs",
+                "admin"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -3858,8 +4864,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/audit-logs/admin/stats",
-              "host": ["{{baseUrl}}"],
-              "path": ["audit-logs", "admin", "stats"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit-logs",
+                "admin",
+                "stats"
+              ]
             }
           }
         },
@@ -3870,8 +4882,16 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/audit-logs/admin/entity/PricingPlan/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["audit-logs", "admin", "entity", "PricingPlan", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit-logs",
+                "admin",
+                "entity",
+                "PricingPlan",
+                "1"
+              ]
             }
           }
         },
@@ -3882,8 +4902,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/audit-logs/admin/user/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["audit-logs", "admin", "user", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit-logs",
+                "admin",
+                "user",
+                "1"
+              ]
             }
           }
         },
@@ -3903,8 +4930,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/audit-logs/admin",
-              "host": ["{{baseUrl}}"],
-              "path": ["audit-logs", "admin"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit-logs",
+                "admin"
+              ]
             }
           }
         }
@@ -3916,14 +4948,18 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [""]
+        "exec": [
+          ""
+        ]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "exec": [""]
+        "exec": [
+          ""
+        ]
       }
     }
   ]
