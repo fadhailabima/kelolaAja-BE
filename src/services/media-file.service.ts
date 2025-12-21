@@ -47,8 +47,14 @@ export class MediaFileService {
       prisma.mediaFile.count({ where }),
     ]);
 
+    // Convert BigInt to Number for JSON serialization
+    const serializedFiles = files.map(file => ({
+      ...file,
+      fileSize: file.fileSize ? Number(file.fileSize) : 0
+    }));
+
     return {
-      data: files,
+      data: serializedFiles,
       pagination: {
         page,
         limit,

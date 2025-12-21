@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "INDUSTRY" ADD COLUMN     "icon_name" VARCHAR(100);
+
+-- AlterTable
+ALTER TABLE "PROCESS_STEP" ADD COLUMN     "icon_name" VARCHAR(100);
