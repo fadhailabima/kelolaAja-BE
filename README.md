@@ -402,7 +402,18 @@ Railway akan otomatis detect Dockerfile dan build image.
 
 ## 🧪 Testing
 
-Gunakan file `api-test.http` untuk testing API menggunakan REST Client extension di VS Code.
+Untuk manual testing API, gunakan koleksi Postman yang tersedia di folder `tests/postman/`:
+
+- `kelolaaja-landing.postman_collection.json` - Koleksi endpoint API
+- `kelolaaja-landing.postman_environment.json` - Environment variables
+
+Import kedua file tersebut ke Postman untuk mulai testing. Lihat `tests/postman/README.md` untuk panduan lengkap.
+
+Untuk unit testing, jalankan:
+
+```bash
+npm test
+```
 
 ## 📦 Database Schema
 
