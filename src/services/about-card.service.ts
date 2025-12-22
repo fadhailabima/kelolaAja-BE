@@ -2,6 +2,7 @@ import { prisma } from "../utils/prisma";
 import { ValidationError, NotFoundError } from "../utils/errors";
 import { Locale } from "@prisma/client";
 import { mergeAllTranslations } from "../utils/translation";
+import { FileUtil } from "../utils/file.util";
 
 export class AboutCardService {
   /**
@@ -40,6 +41,7 @@ export class AboutCardService {
           ? {
               fileId: card.imageFile.fileId,
               filePath: card.imageFile.filePath,
+              fileUrl: FileUtil.getFileUrl(card.imageFile.filePath),
               altText: card.imageFile.altText
             }
           : null
@@ -110,7 +112,10 @@ export class AboutCardService {
       isActive: card.isActive,
       createdAt: card.createdAt,
       updatedAt: card.updatedAt,
-      image: card.imageFile,
+      image: card.imageFile ? {
+        ...card.imageFile,
+        fileUrl: FileUtil.getFileUrl(card.imageFile.filePath)
+      } : null,
       creator: card.creator,
       updater: card.updater,
       translations: mergeAllTranslations(card.translations)

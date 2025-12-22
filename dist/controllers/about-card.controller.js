@@ -9,6 +9,9 @@ class AboutCardController {
         try {
             const locale = req.locale || client_1.Locale.id;
             const cards = await about_card_service_1.AboutCardService.getPublicCards(locale);
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
             response_1.ResponseUtil.success(res, "About cards retrieved successfully", cards);
         }
         catch (error) {

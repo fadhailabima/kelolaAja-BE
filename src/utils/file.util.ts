@@ -136,4 +136,26 @@ export class FileUtil {
 
     return `${fileSize.toFixed(2)} ${units[unitIndex]}`;
   }
+
+  /**
+   * Convert file path to full URL
+   * Handles both local file paths and already complete URLs
+   */
+  static getFileUrl(filePath: string | null): string | null {
+    if (!filePath) return null;
+    
+    // If it's already a full URL, return as is
+    if (filePath.startsWith('http://') || filePath.startsWith('https://')) {
+      return filePath;
+    }
+    
+    // Get the base URL from environment or use default
+    const baseUrl = process.env.BASE_URL || process.env.API_URL || 'http://localhost:3000';
+    
+    // Ensure filePath starts with /
+    const normalizedPath = filePath.startsWith('/') ? filePath : `/${filePath}`;
+    
+    // Combine base URL with file path
+    return `${baseUrl}${normalizedPath}`;
+  }
 }

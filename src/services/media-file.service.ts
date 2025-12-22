@@ -47,10 +47,11 @@ export class MediaFileService {
       prisma.mediaFile.count({ where }),
     ]);
 
-    // Convert BigInt to Number for JSON serialization
+    // Convert BigInt to Number for JSON serialization and add file URLs
     const serializedFiles = files.map(file => ({
       ...file,
-      fileSize: file.fileSize ? Number(file.fileSize) : 0
+      fileSize: file.fileSize ? Number(file.fileSize) : 0,
+      fileUrl: FileUtil.getFileUrl(file.filePath)
     }));
 
     return {
@@ -85,7 +86,11 @@ export class MediaFileService {
       throw new Error('Media file not found');
     }
 
-    return file;
+    return {
+      ...file,
+      fileSize: file.fileSize ? Number(file.fileSize) : 0,
+      fileUrl: FileUtil.getFileUrl(file.filePath)
+    };
   }
 
   /**

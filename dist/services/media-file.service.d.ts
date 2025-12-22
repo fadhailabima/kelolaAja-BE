@@ -7,6 +7,7 @@ export declare class MediaFileService {
     }): Promise<{
         data: {
             fileSize: number;
+            fileUrl: string | null;
             uploader: {
                 userId: number;
                 username: string;
@@ -35,12 +36,13 @@ export declare class MediaFileService {
         };
     }>;
     static getFileById(fileId: number): Promise<{
+        fileSize: number;
+        fileUrl: string | null;
         uploader: {
             userId: number;
             username: string;
             email: string;
         } | null;
-    } & {
         createdAt: Date;
         deletedAt: Date | null;
         fileId: number;
@@ -48,7 +50,6 @@ export declare class MediaFileService {
         filePath: string;
         fileType: string | null;
         mimeType: string | null;
-        fileSize: bigint | null;
         width: number | null;
         height: number | null;
         altText: string | null;

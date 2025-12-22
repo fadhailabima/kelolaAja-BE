@@ -102,6 +102,16 @@ class FileUtil {
         }
         return `${fileSize.toFixed(2)} ${units[unitIndex]}`;
     }
+    static getFileUrl(filePath) {
+        if (!filePath)
+            return null;
+        if (filePath.startsWith('http://') || filePath.startsWith('https://')) {
+            return filePath;
+        }
+        const baseUrl = process.env.BASE_URL || process.env.API_URL || 'http://localhost:3000';
+        const normalizedPath = filePath.startsWith('/') ? filePath : `/${filePath}`;
+        return `${baseUrl}${normalizedPath}`;
+    }
 }
 exports.FileUtil = FileUtil;
 //# sourceMappingURL=file.util.js.map

@@ -13,5 +13,6 @@ export declare class FileUtil {
     static getRelativePath(absolutePath: string): string;
     static getAbsolutePath(relativePath: string): string;
     static formatFileSize(bytes: bigint | number): string;
+    static getFileUrl(filePath: string | null): string | null;
 }
 //# sourceMappingURL=file.util.d.ts.map

@@ -38,7 +38,8 @@ class MediaFileService {
         ]);
         const serializedFiles = files.map(file => ({
             ...file,
-            fileSize: file.fileSize ? Number(file.fileSize) : 0
+            fileSize: file.fileSize ? Number(file.fileSize) : 0,
+            fileUrl: file_util_1.FileUtil.getFileUrl(file.filePath)
         }));
         return {
             data: serializedFiles,
@@ -66,7 +67,11 @@ class MediaFileService {
         if (!file || file.deletedAt) {
             throw new Error('Media file not found');
         }
-        return file;
+        return {
+            ...file,
+            fileSize: file.fileSize ? Number(file.fileSize) : 0,
+            fileUrl: file_util_1.FileUtil.getFileUrl(file.filePath)
+        };
     }
     static async createFile(data) {
         const file = await prisma.mediaFile.create({

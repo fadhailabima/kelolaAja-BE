@@ -320,7 +320,7 @@ model DetailFeatureTranslation {
 
 model ContentSection {
   sectionId      Int                  @id @default(autoincrement()) @map("section_id")
-  sectionType    String               @unique @map("section_type") @db.VarChar(100)
+  sectionType    String               @map("section_type") @db.VarChar(100)
   sectionKey     String               @unique @map("section_key") @db.VarChar(100)
   pageLocation   String?              @map("page_location") @db.VarChar(50)
   displayOrder   Int                  @map("display_order")

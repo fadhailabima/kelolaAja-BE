@@ -5,6 +5,7 @@ const prisma_1 = require("../utils/prisma");
 const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
+const file_util_1 = require("../utils/file.util");
 class PartnerService {
     static async getPublicPartners(locale) {
         const partners = await prisma_1.prisma.partner.findMany({
@@ -37,6 +38,7 @@ class PartnerService {
                     ? {
                         fileId: partner.logoFile.fileId,
                         filePath: partner.logoFile.filePath,
+                        fileUrl: file_util_1.FileUtil.getFileUrl(partner.logoFile.filePath),
                         altText: partner.logoFile.altText
                     }
                     : null
@@ -98,7 +100,10 @@ class PartnerService {
             isActive: partner.isActive,
             createdAt: partner.createdAt,
             updatedAt: partner.updatedAt,
-            logo: partner.logoFile,
+            logo: partner.logoFile ? {
+                ...partner.logoFile,
+                fileUrl: file_util_1.FileUtil.getFileUrl(partner.logoFile.filePath)
+            } : null,
             creator: partner.creator,
             updater: partner.updater,
             translations: (0, translation_1.mergeAllTranslations)(partner.translations)

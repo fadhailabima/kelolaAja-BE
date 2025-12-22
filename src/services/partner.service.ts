@@ -2,6 +2,7 @@ import { prisma } from "../utils/prisma";
 import { ValidationError, NotFoundError } from "../utils/errors";
 import { Locale } from "@prisma/client";
 import { mergeAllTranslations } from "../utils/translation";
+import { FileUtil } from "../utils/file.util";
 
 export class PartnerService {
   /**
@@ -41,6 +42,7 @@ export class PartnerService {
           ? {
             fileId: partner.logoFile.fileId,
             filePath: partner.logoFile.filePath,
+            fileUrl: FileUtil.getFileUrl(partner.logoFile.filePath),
             altText: partner.logoFile.altText
           }
           : null
@@ -110,7 +112,10 @@ export class PartnerService {
       isActive: partner.isActive,
       createdAt: partner.createdAt,
       updatedAt: partner.updatedAt,
-      logo: partner.logoFile,
+      logo: partner.logoFile ? {
+        ...partner.logoFile,
+        fileUrl: FileUtil.getFileUrl(partner.logoFile.filePath)
+      } : null,
       creator: partner.creator,
       updater: partner.updater,
       translations: mergeAllTranslations(partner.translations)

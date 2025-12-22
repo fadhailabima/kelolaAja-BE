@@ -5,6 +5,7 @@ const prisma_1 = require("../utils/prisma");
 const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
+const file_util_1 = require("../utils/file.util");
 class AboutCardService {
     static async getPublicCards(locale) {
         const cards = await prisma_1.prisma.aboutCard.findMany({
@@ -38,6 +39,7 @@ class AboutCardService {
                     ? {
                         fileId: card.imageFile.fileId,
                         filePath: card.imageFile.filePath,
+                        fileUrl: file_util_1.FileUtil.getFileUrl(card.imageFile.filePath),
                         altText: card.imageFile.altText
                     }
                     : null
@@ -100,7 +102,10 @@ class AboutCardService {
             isActive: card.isActive,
             createdAt: card.createdAt,
             updatedAt: card.updatedAt,
-            image: card.imageFile,
+            image: card.imageFile ? {
+                ...card.imageFile,
+                fileUrl: file_util_1.FileUtil.getFileUrl(card.imageFile.filePath)
+            } : null,
             creator: card.creator,
             updater: card.updater,
             translations: (0, translation_1.mergeAllTranslations)(card.translations)
