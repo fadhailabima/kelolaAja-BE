@@ -98,6 +98,7 @@ export class MediaFileController {
         uploadedBy: userId,
       });
 
+      return ResponseUtil.success(res, 'Media file uploaded successfully', file, 201);
       // Convert BigInt to string for JSON serialization
       const serializedFile = {
         ...file,

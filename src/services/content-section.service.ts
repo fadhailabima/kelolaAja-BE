@@ -37,7 +37,7 @@ export class ContentSectionService {
     });
 
     return sections.map((section: any) => {
-      const translation = extractTranslation(section, locale);
+      const translation = extractTranslation(section.translations, locale);
       return {
         sectionId: section.sectionId,
         sectionType: section.sectionType,
@@ -92,7 +92,7 @@ export class ContentSectionService {
       throw new Error('Content section not found');
     }
 
-    const translation = extractTranslation(section, locale);
+    const translation = extractTranslation(section.translations, locale);
     return {
       sectionId: section.sectionId,
       sectionType: section.sectionType,
