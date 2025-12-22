@@ -2280,13 +2280,14 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/media-files/admin?page=1&limit=20",
+              "raw": "{{baseUrl}}/media-files/admin/all?page=1&limit=20&fileType=image&mimeType=image%2Fjpeg&isPublic=true&uploadedBy=1",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "media-files",
-                "admin"
+                "admin",
+                "all"
               ],
               "query": [
                 {
@@ -2303,12 +2304,23 @@
                   "disabled": true
                 },
                 {
+                  "key": "mimeType",
+                  "value": "image/jpeg",
+                  "disabled": true
+                },
+                {
                   "key": "isPublic",
                   "value": "true",
                   "disabled": true
+                },
+                {
+                  "key": "uploadedBy",
+                  "value": "1",
+                  "disabled": true
                 }
               ]
-            }
+            },
+            "description": "Get all media files (admin only). Supports pagination and filtering by fileType, mimeType, isPublic, uploadedBy. Requires Admin or Editor authentication."
           }
         },
         {

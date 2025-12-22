@@ -114,7 +114,7 @@ class PartnerService {
         };
     }
     static async createPartner(data, userId) {
-        const { partnerName, logoFileId, displayOrder, translations } = data;
+        const { partnerName, logoFileId, websiteUrl, displayOrder, translations } = data;
         if (!partnerName || displayOrder === undefined) {
             throw new errors_1.ValidationError("partnerName and displayOrder are required");
         }
@@ -133,6 +133,7 @@ class PartnerService {
             data: {
                 partnerName,
                 logoFileId: logoFileId || null,
+                websiteUrl: websiteUrl || null,
                 displayOrder,
                 isActive: true,
                 createdBy: userId,
@@ -178,7 +179,7 @@ class PartnerService {
         };
     }
     static async updatePartner(partnerId, data, userId) {
-        const { partnerName, logoFileId, displayOrder, isActive, translations } = data;
+        const { partnerName, logoFileId, websiteUrl, displayOrder, isActive, translations } = data;
         const existingPartner = await prisma_1.prisma.partner.findUnique({
             where: { partnerId }
         });
@@ -200,6 +201,8 @@ class PartnerService {
             updateData.partnerName = partnerName;
         if (logoFileId !== undefined)
             updateData.logoFileId = logoFileId;
+        if (websiteUrl !== undefined)
+            updateData.websiteUrl = websiteUrl;
         if (displayOrder !== undefined)
             updateData.displayOrder = displayOrder;
         if (isActive !== undefined)
@@ -209,8 +212,10 @@ class PartnerService {
             data: updateData
         });
         if (translations) {
-            for (const locale of Object.values(client_1.Locale)) {
-                if (translations[locale]) {
+            const transData = translations;
+            for (const localeKey of Object.keys(transData)) {
+                if (Object.values(client_1.Locale).includes(localeKey)) {
+                    const locale = localeKey;
                     await prisma_1.prisma.partnerTranslation.upsert({
                         where: {
                             partnerId_locale: {
@@ -221,10 +226,10 @@ class PartnerService {
                         create: {
                             partnerId,
                             locale,
-                            description: translations[locale].description || null
+                            description: transData[locale].description || null
                         },
                         update: {
-                            description: translations[locale].description || null
+                            description: transData[locale].description || null
                         }
                     });
                 }

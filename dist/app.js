@@ -16,9 +16,20 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 8080;
 const corsOptions = {
-    origin: process.env.WEB_URL
-        ? process.env.WEB_URL.split(",").map(url => url.trim())
-        : ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "http://localhost:5174"],
+    origin: (origin, callback) => {
+        const allowedOrigins = process.env.WEB_URL
+            ? process.env.WEB_URL.split(",").map(url => url.trim())
+            : ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "http://localhost:5174"];
+        if (!origin)
+            return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            console.warn(`CORS blocked origin: ${origin}`);
+            callback(new Error(`Origin ${origin} not allowed by CORS`));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept-Language"]

@@ -6,11 +6,17 @@ const response_1 = require("../utils/response");
 const authenticate = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        let token = '';
+        if (authHeader && authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7);
+        }
+        else if (req.cookies && (req.cookies.token || req.cookies.access_token)) {
+            token = req.cookies.token || req.cookies.access_token;
+        }
+        if (!token) {
             response_1.ResponseUtil.unauthorized(res, "No token provided");
             return;
         }
-        const token = authHeader.substring(7);
         const decoded = jwt_1.JwtUtil.verifyAccessToken(token);
         req.user = decoded;
         next();

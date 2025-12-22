@@ -10,7 +10,7 @@ export declare class DetailFeatureSectionService {
             iconFileId: any;
             isActive: any;
             icon: any;
-            translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<import("../../src/utils/translation").Translation, "locale">>;
+            translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
             createdBy: any;
             createdAt: any;
             updatedAt: any;
@@ -39,13 +39,13 @@ export declare class DetailFeatureSectionService {
         };
         createdBy: number;
     }): Promise<{
-        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<{
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<{
             createdAt: Date;
             updatedAt: Date;
             sectionId: number;
             title: string | null;
             description: string | null;
-            locale: import(".prisma/client/client").$Enums.Locale;
+            locale: import(".prisma/client").$Enums.Locale;
             translationId: number;
         }, "locale">>;
         iconFile: {
@@ -83,13 +83,13 @@ export declare class DetailFeatureSectionService {
         };
         updatedBy: number;
     }): Promise<{
-        translations: Record<import(".prisma/client/client").$Enums.Locale, Omit<{
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<{
             createdAt: Date;
             updatedAt: Date;
             sectionId: number;
             title: string | null;
             description: string | null;
-            locale: import(".prisma/client/client").$Enums.Locale;
+            locale: import(".prisma/client").$Enums.Locale;
             translationId: number;
         }, "locale">>;
         iconFile?: {

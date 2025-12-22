@@ -35,6 +35,18 @@ class AuthController {
                 email: user.email,
                 role: user.role || "Viewer"
             });
+            const cookieOptions = {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: 24 * 60 * 60 * 1000,
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+                path: '/'
+            };
+            res.cookie('access_token', tokens.accessToken, cookieOptions);
+            if (tokens.refreshToken) {
+                res.cookie('refresh_token', tokens.refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
+            }
+            res.cookie('token', tokens.accessToken, cookieOptions);
             return response_1.ResponseUtil.success(res, "Login successful", {
                 user: {
                     userId: user.userId,

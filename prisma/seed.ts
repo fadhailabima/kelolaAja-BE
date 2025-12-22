@@ -30,7 +30,13 @@ async function main() {
   // 2. SEED PRICING PLANS
   // ============================================
   console.log('💰 Seeding Pricing Plans...');
-  const pricingPlansData = [
+  
+  // Check if pricing plans already exist
+  const existingPlansCount = await prisma.pricingPlan.count();
+  if (existingPlansCount > 0) {
+    console.log('⏭️  Pricing Plans already exist, skipping...\n');
+  } else {
+    const pricingPlansData = [
     {
       planCode: 'SMALL',
       pricePerUserMonth: 250000,
@@ -109,15 +115,32 @@ async function main() {
   ];
 
   for (const plan of pricingPlansData) {
-    await prisma.pricingPlan.create({ data: plan });
+    await prisma.pricingPlan.upsert({
+      where: { planCode: plan.planCode },
+      update: {
+        pricePerUserMonth: plan.pricePerUserMonth,
+        minUsers: plan.minUsers,
+        displayOrder: plan.displayOrder,
+        isActive: plan.isActive,
+        updatedBy: plan.updatedBy,
+      },
+      create: plan,
+    });
   }
   console.log('✅ Pricing Plans seeded (3 plans)\n');
+  }
+
 
   // ============================================
   // 3. SEED TESTIMONIALS
   // ============================================
   console.log('💬 Seeding Testimonials...');
-  const testimonialsData = [
+  
+  const existingTestimonialsCount = await prisma.testimonial.count();
+  if (existingTestimonialsCount > 0) {
+    console.log('⏭️  Testimonials already exist, skipping...\n');
+  } else {
+    const testimonialsData = [
     {
       name: 'Puji Waluyo',
       title: 'Manager',
@@ -189,16 +212,22 @@ async function main() {
     },
   ];
 
-  for (const testimonial of testimonialsData) {
-    await prisma.testimonial.create({ data: testimonial });
+    for (const testimonial of testimonialsData) {
+      await prisma.testimonial.create({ data: testimonial });
+    }
+    console.log('✅ Testimonials seeded (3 testimonials)\n');
   }
-  console.log('✅ Testimonials seeded (3 testimonials)\n');
 
   // ============================================
   // 4. SEED PARTNERS
   // ============================================
   console.log('🤝 Seeding Partners...');
-  const partnersData = [
+  
+  const existingPartnersCount = await prisma.partner.count();
+  if (existingPartnersCount > 0) {
+    console.log('⏭️  Partners already exist, skipping...\n');
+  } else {
+    const partnersData = [
     { name: 'Sri', order: 1 },
     { name: 'Sriendo Foods', order: 2 },
     { name: 'Aura Food', order: 3 },
@@ -227,14 +256,20 @@ async function main() {
         },
       },
     });
+    }
+    console.log('✅ Partners seeded (8 partners - logos need to be uploaded separately)\n');
   }
-  console.log('✅ Partners seeded (8 partners - logos need to be uploaded separately)\n');
 
   // ============================================
   // 5. SEED PROCESS STEPS
   // ============================================
   console.log('📋 Seeding Process Steps...');
-  const processStepsData = [
+  
+  const existingProcessStepsCount = await prisma.processStep.count();
+  if (existingProcessStepsCount > 0) {
+    console.log('⏭️  Process Steps already exist, skipping...\n');
+  } else {
+    const processStepsData = [
     {
       stepCode: 'ANALYSIS',
       iconName: 'analysis',
@@ -325,16 +360,22 @@ async function main() {
     },
   ];
 
-  for (const step of processStepsData) {
-    await prisma.processStep.create({ data: step });
+    for (const step of processStepsData) {
+      await prisma.processStep.create({ data: step });
+    }
+    console.log('✅ Process Steps seeded (4 steps)\n');
   }
-  console.log('✅ Process Steps seeded (4 steps)\n');
 
   // ============================================
   // 6. SEED ERP BENEFITS
   // ============================================
   console.log('🎯 Seeding ERP Benefits...');
-  const erpBenefitsData = [
+  
+  const existingERPBenefitsCount = await prisma.eRPBenefit.count();
+  if (existingERPBenefitsCount > 0) {
+    console.log('⏭️  ERP Benefits already exist, skipping...\n');
+  } else {
+    const erpBenefitsData = [
     {
       benefitCode: 'SALES',
       imageFileId: null,
@@ -447,16 +488,22 @@ async function main() {
     },
   ];
 
-  for (const benefit of erpBenefitsData) {
-    await prisma.eRPBenefit.create({ data: benefit });
+    for (const benefit of erpBenefitsData) {
+      await prisma.eRPBenefit.create({ data: benefit });
+    }
+    console.log('✅ ERP Benefits seeded (5 benefits)\n');
   }
-  console.log('✅ ERP Benefits seeded (5 benefits)\n');
 
   // ============================================
   // 7. SEED ADVANCED FEATURES
   // ============================================
   console.log('⚡ Seeding Advanced Features...');
-  const advancedFeaturesData = [
+  
+  const existingAdvancedFeaturesCount = await prisma.advancedFeature.count();
+  if (existingAdvancedFeaturesCount > 0) {
+    console.log('⏭️  Advanced Features already exist, skipping...\n');
+  } else {
+    const advancedFeaturesData = [
     {
       featureCode: 'FINANCE',
       imageFileId: null,
@@ -591,16 +638,22 @@ async function main() {
     },
   ];
 
-  for (const feature of advancedFeaturesData) {
-    await prisma.advancedFeature.create({ data: feature });
+    for (const feature of advancedFeaturesData) {
+      await prisma.advancedFeature.create({ data: feature });
+    }
+    console.log('✅ Advanced Features seeded (6 features)\n');
   }
-  console.log('✅ Advanced Features seeded (6 features)\n');
 
   // ============================================
   // 8. SEED BENEFIT STATS
   // ============================================
   console.log('📊 Seeding Benefit Stats...');
-  const benefitStatsData = [
+  
+  const existingBenefitStatsCount = await prisma.benefitStat.count();
+  if (existingBenefitStatsCount > 0) {
+    console.log('⏭️  Benefit Stats already exist, skipping...\n');
+  } else {
+    const benefitStatsData = [
     {
       statCode: 'COMPANIES',
       statValue: '500',
@@ -683,16 +736,22 @@ async function main() {
     },
   ];
 
-  for (const stat of benefitStatsData) {
-    await prisma.benefitStat.create({ data: stat });
+    for (const stat of benefitStatsData) {
+      await prisma.benefitStat.create({ data: stat });
+    }
+    console.log('✅ Benefit Stats seeded (4 stats)\n');
   }
-  console.log('✅ Benefit Stats seeded (4 stats)\n');
 
   // ============================================
   // 9. SEED ABOUT CARDS
   // ============================================
   console.log('ℹ️  Seeding About Cards...');
-  const aboutCardsData = [
+  
+  const existingAboutCardsCount = await prisma.aboutCard.count();
+  if (existingAboutCardsCount > 0) {
+    console.log('⏭️  About Cards already exist, skipping...\n');
+  } else {
+    const aboutCardsData = [
     {
       cardCode: 'VISION',
       displayOrder: 1,
@@ -758,16 +817,22 @@ async function main() {
     },
   ];
 
-  for (const card of aboutCardsData) {
-    await prisma.aboutCard.create({ data: card });
+    for (const card of aboutCardsData) {
+      await prisma.aboutCard.create({ data: card });
+    }
+    console.log('✅ About Cards seeded (3 cards)\n');
   }
-  console.log('✅ About Cards seeded (3 cards)\n');
 
   // ============================================
   // 10. SEED KELOLAAJA FEATURES
   // ============================================
   console.log('🎨 Seeding KelolaAja Features...');
-  const kelolaAjaFeaturesData = [
+  
+  const existingKelolaAjaFeaturesCount = await prisma.kelolaAjaFeature.count();
+  if (existingKelolaAjaFeaturesCount > 0) {
+    console.log('⏭️  KelolaAja Features already exist, skipping...\n');
+  } else {
+    const kelolaAjaFeaturesData = [
     {
       featureCode: 'EASY_TO_USE',
       iconName: 'easy',
@@ -880,16 +945,22 @@ async function main() {
     },
   ];
 
-  for (const feature of kelolaAjaFeaturesData) {
-    await prisma.kelolaAjaFeature.create({ data: feature });
+    for (const feature of kelolaAjaFeaturesData) {
+      await prisma.kelolaAjaFeature.create({ data: feature });
+    }
+    console.log('✅ KelolaAja Features seeded (5 features)\n');
   }
-  console.log('✅ KelolaAja Features seeded (5 features)\n');
 
   // ============================================
   // 11. SEED INDUSTRIES
   // ============================================
   console.log('🏭 Seeding Industries...');
-  const industriesData = [
+  
+  const existingIndustriesCount = await prisma.industry.count();
+  if (existingIndustriesCount > 0) {
+    console.log('⏭️  Industries already exist, skipping...\n');
+  } else {
+    const industriesData = [
     {
       industryCode: 'FNB',
       slug: 'fnb',
@@ -1007,17 +1078,22 @@ async function main() {
     },
   ];
 
-  for (const industry of industriesData) {
-    await prisma.industry.create({ data: industry });
+    for (const industry of industriesData) {
+      await prisma.industry.create({ data: industry });
+    }
+    console.log('✅ Industries seeded (5 industries)\n');
   }
-  console.log('✅ Industries seeded (5 industries)\n');
 
   // ============================================
   // 12. SEED FAQ CATEGORIES & FAQS
   // ============================================
   console.log('❓ Seeding FAQs...');
 
-  const generalCategory = await prisma.fAQCategory.create({
+  const existingFAQCategoriesCount = await prisma.fAQCategory.count();
+  if (existingFAQCategoriesCount > 0) {
+    console.log('⏭️  FAQs already exist, skipping...\n');
+  } else {
+    const generalCategory = await prisma.fAQCategory.create({
     data: {
       categoryCode: 'GENERAL',
       displayOrder: 1,
@@ -1210,16 +1286,22 @@ async function main() {
     },
   ];
 
-  for (const faq of faqsData) {
-    await prisma.fAQ.create({ data: faq });
+    for (const faq of faqsData) {
+      await prisma.fAQ.create({ data: faq });
+    }
+    console.log('✅ FAQs seeded (1 category, 8 FAQs)\n');
   }
-  console.log('✅ FAQs seeded (1 category, 8 FAQs)\n');
 
   // ============================================
   // 13. SEED FEATURES (FEATURE MASTER)
   // ============================================
   console.log('⭐ Seeding Features...');
-  const featuresData = [
+  
+  const existingFeaturesCount = await prisma.featureMaster.count();
+  if (existingFeaturesCount > 0) {
+    console.log('⏭️  Features already exist, skipping...\n');
+  } else {
+    const featuresData = [
     {
       featureCode: 'ACCOUNTING',
       category: 'finance',
@@ -1332,10 +1414,11 @@ async function main() {
     },
   ];
 
-  for (const feature of featuresData) {
-    await prisma.featureMaster.create({ data: feature });
+    for (const feature of featuresData) {
+      await prisma.featureMaster.create({ data: feature });
+    }
+    console.log('✅ Features seeded (5 features)\n');
   }
-  console.log('✅ Features seeded (5 features)\n');
 
   console.log('�🎉 Database seeding completed successfully!\n');
   // ============================================
@@ -1343,7 +1426,13 @@ async function main() {
   // ============================================
   console.log('🖼️  Seeding Media Files...');
 
-  const mediaFilesData = [
+  let seededMediaFiles: any[] = [];
+  const existingMediaFilesCount = await prisma.mediaFile.count();
+  if (existingMediaFilesCount > 0) {
+    console.log('⏭️  Media Files already exist, fetching existing files...\n');
+    seededMediaFiles = await prisma.mediaFile.findMany();
+  } else {
+    const mediaFilesData = [
     // Home & General
     { fileName: 'hero-image.jpg', filePath: 'public/images/home/hero-image.jpg', storageUrl: '/images/home/hero-image.jpg', fileType: 'image/jpeg', mimeType: 'image/jpeg' },
     { fileName: 'laptop-besar.png', filePath: 'public/images/home/laptop-besar.png', storageUrl: '/images/home/laptop-besar.png', fileType: 'image/png', mimeType: 'image/png' },
@@ -1367,7 +1456,6 @@ async function main() {
     { fileName: 'multi-gudang.png', filePath: 'public/images/benefits/multi-gudang.png', storageUrl: '/images/benefits/multi-gudang.png', fileType: 'image/png', mimeType: 'image/png' },
   ];
 
-  const seededMediaFiles: any[] = [];
   for (const file of mediaFilesData) {
     const createdFile = await prisma.mediaFile.create({
       data: {
@@ -1384,19 +1472,24 @@ async function main() {
     seededMediaFiles.push(createdFile);
   }
   console.log(`✅ Media Files seeded (${seededMediaFiles.length} files)\n`);
+  }
 
   // ============================================
   // 15. SEED FEATURE PAGES
   // ============================================
   console.log('📄 Seeding Feature Pages...');
 
-  // Helper to find media file ID by partial name
-  const findImageId = (namePart: string) => {
-    const found = seededMediaFiles.find(f => f.fileName.includes(namePart));
-    return found ? found.fileId : null;
-  };
+  const existingFeaturePagesCount = await prisma.featurePage.count();
+  if (existingFeaturePagesCount > 0) {
+    console.log('⏭️  Feature Pages already exist, skipping...\n');
+  } else {
+    // Helper to find media file ID by partial name
+    const findImageId = (namePart: string) => {
+      const found = seededMediaFiles.find(f => f.fileName.includes(namePart));
+      return found ? found.fileId : null;
+    };
 
-  const featurePagesData = [
+    const featurePagesData = [
     {
       featureCode: 'ACCOUNTING', // Must match FeatureMaster
       pageCode: 'PAGE_ACCOUNTING',
@@ -1556,6 +1649,7 @@ async function main() {
     }
   }
   console.log('✅ Feature Pages seeded (5 pages)\n');
+  }
 
   console.log('🎉 Database seeding completed successfully!\n');
   console.log('📊 Summary:');

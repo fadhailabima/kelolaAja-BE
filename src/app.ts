@@ -19,10 +19,10 @@ const corsOptions = {
     const allowedOrigins = process.env.WEB_URL
       ? process.env.WEB_URL.split(",").map(url => url.trim())
       : ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "http://localhost:5174"];
-    
+
     // Allow requests with no origin (like mobile apps, Postman, curl)
     if (!origin) return callback(null, true);
-    
+
     // Check if origin is allowed
     if (allowedOrigins.includes(origin)) {
       callback(null, true);

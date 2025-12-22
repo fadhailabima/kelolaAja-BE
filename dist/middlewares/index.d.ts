@@ -1,6 +1,6 @@
-export * from "../../src/middlewares/auth.middleware";
-export * from "../../src/middlewares/error.middleware";
-export * from "../../src/middlewares/locale.middleware";
-export * from "../../src/middlewares/upload.middleware";
-export * from "../../src/middlewares/validate.middleware";
+export * from "./auth.middleware";
+export * from "./error.middleware";
+export * from "./locale.middleware";
+export * from "./upload.middleware";
+export * from "./validate.middleware";
 //# sourceMappingURL=index.d.ts.map
