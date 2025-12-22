@@ -107,7 +107,11 @@ class MediaFileController {
                 isPublic,
                 uploadedBy: userId,
             });
-            return response_1.ResponseUtil.success(res, 'Media file uploaded successfully', file, 201);
+            const serializedFile = {
+                ...file,
+                fileSize: file.fileSize ? (typeof file.fileSize === 'bigint' ? file.fileSize.toString() : file.fileSize) : null,
+            };
+            return response_1.ResponseUtil.success(res, 'Media file uploaded successfully', serializedFile, 201);
         }
         catch (error) {
             return response_1.ResponseUtil.error(res, error.message);

@@ -34,7 +34,7 @@ class ContentSectionService {
             orderBy: { displayOrder: 'asc' },
         });
         return sections.map((section) => {
-            const translation = (0, translation_1.extractTranslation)(section, locale);
+            const translation = (0, translation_1.extractTranslation)(section.translations, locale);
             return {
                 sectionId: section.sectionId,
                 sectionType: section.sectionType,
@@ -83,7 +83,7 @@ class ContentSectionService {
         if (!section || !section.isActive || section.deletedAt) {
             throw new Error('Content section not found');
         }
-        const translation = (0, translation_1.extractTranslation)(section, locale);
+        const translation = (0, translation_1.extractTranslation)(section.translations, locale);
         return {
             sectionId: section.sectionId,
             sectionType: section.sectionType,

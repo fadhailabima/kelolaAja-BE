@@ -32,6 +32,8 @@ class PartnerService {
             return {
                 partnerId: partner.partnerId,
                 partnerName: partner.partnerName,
+                logoUrl: partner.logoFile ? partner.logoFile.filePath : null,
+                websiteUrl: partner.websiteUrl,
                 displayOrder: partner.displayOrder,
                 description: translation.description || "",
                 logo: partner.logoFile
