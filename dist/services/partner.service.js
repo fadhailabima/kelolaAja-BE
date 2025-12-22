@@ -97,6 +97,7 @@ class PartnerService {
         const result = partners.map((partner) => ({
             partnerId: partner.partnerId,
             partnerName: partner.partnerName,
+            websiteUrl: partner.websiteUrl,
             logoFileId: partner.logoFileId,
             displayOrder: partner.displayOrder,
             isActive: partner.isActive,

@@ -136,7 +136,12 @@ export class MediaFileService {
       },
     });
 
-    return file;
+    // Serialize BigInt and add fileUrl
+    return {
+      ...file,
+      fileSize: file.fileSize ? Number(file.fileSize) : 0,
+      fileUrl: FileUtil.getFileUrl(file.filePath)
+    };
   }
 
   /**
@@ -176,7 +181,12 @@ export class MediaFileService {
       },
     });
 
-    return updatedFile;
+    // Serialize BigInt and add fileUrl
+    return {
+      ...updatedFile,
+      fileSize: updatedFile.fileSize ? Number(updatedFile.fileSize) : 0,
+      fileUrl: FileUtil.getFileUrl(updatedFile.filePath)
+    };
   }
 
   /**

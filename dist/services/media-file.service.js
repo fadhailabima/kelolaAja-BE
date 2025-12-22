@@ -99,7 +99,11 @@ class MediaFileService {
                 },
             },
         });
-        return file;
+        return {
+            ...file,
+            fileSize: file.fileSize ? Number(file.fileSize) : 0,
+            fileUrl: file_util_1.FileUtil.getFileUrl(file.filePath)
+        };
     }
     static async updateFile(fileId, data) {
         const file = await prisma.mediaFile.findUnique({
@@ -125,7 +129,11 @@ class MediaFileService {
                 },
             },
         });
-        return updatedFile;
+        return {
+            ...updatedFile,
+            fileSize: updatedFile.fileSize ? Number(updatedFile.fileSize) : 0,
+            fileUrl: file_util_1.FileUtil.getFileUrl(updatedFile.filePath)
+        };
     }
     static async deleteFile(fileId) {
         const file = await prisma.mediaFile.findUnique({

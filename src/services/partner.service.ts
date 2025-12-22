@@ -107,6 +107,7 @@ export class PartnerService {
     const result = partners.map((partner: any) => ({
       partnerId: partner.partnerId,
       partnerName: partner.partnerName,
+      websiteUrl: partner.websiteUrl,
       logoFileId: partner.logoFileId,
       displayOrder: partner.displayOrder,
       isActive: partner.isActive,

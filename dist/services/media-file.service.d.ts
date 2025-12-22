@@ -72,12 +72,13 @@ export declare class MediaFileService {
         isPublic?: boolean;
         uploadedBy?: number;
     }): Promise<{
+        fileSize: number;
+        fileUrl: string | null;
         uploader: {
             userId: number;
             username: string;
             email: string;
         } | null;
-    } & {
         createdAt: Date;
         deletedAt: Date | null;
         fileId: number;
@@ -85,7 +86,6 @@ export declare class MediaFileService {
         filePath: string;
         fileType: string | null;
         mimeType: string | null;
-        fileSize: bigint | null;
         width: number | null;
         height: number | null;
         altText: string | null;
@@ -99,12 +99,13 @@ export declare class MediaFileService {
         altText?: string;
         isPublic?: boolean;
     }): Promise<{
+        fileSize: number;
+        fileUrl: string | null;
         uploader: {
             userId: number;
             username: string;
             email: string;
         } | null;
-    } & {
         createdAt: Date;
         deletedAt: Date | null;
         fileId: number;
@@ -112,7 +113,6 @@ export declare class MediaFileService {
         filePath: string;
         fileType: string | null;
         mimeType: string | null;
-        fileSize: bigint | null;
         width: number | null;
         height: number | null;
         altText: string | null;
