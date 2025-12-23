@@ -1,6 +1,6 @@
 import { Locale } from "@prisma/client";
 export declare class FAQCategoryService {
-    static getPublicCategories(locale: Locale): Promise<any>;
+    static getPublicCategories(_locale: Locale): Promise<any>;
     static getAllCategories(page: number, limit: number, search?: string, isActive?: string): Promise<{
         data: any;
         pagination: {

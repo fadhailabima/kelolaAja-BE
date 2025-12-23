@@ -6,16 +6,14 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class PricingService {
-    static async getPublicPlans(locale) {
+    static async getPublicPlans(_locale) {
         const plans = await prisma_1.prisma.pricingPlan.findMany({
             where: {
                 isActive: true,
                 deletedAt: null,
             },
             include: {
-                translations: {
-                    where: { locale },
-                },
+                translations: true,
                 planFeatures: {
                     where: {
                         isIncluded: true,
@@ -23,9 +21,7 @@ class PricingService {
                     include: {
                         feature: {
                             include: {
-                                translations: {
-                                    where: { locale },
-                                },
+                                translations: true,
                             },
                         },
                     },
@@ -35,11 +31,9 @@ class PricingService {
             orderBy: { displayOrder: 'asc' },
         });
         return plans.map((plan) => {
-            const translation = plan.translations[0] || {};
             const features = plan.planFeatures.map((pf) => ({
                 featureCode: pf.feature.featureCode,
-                featureName: pf.feature.translations[0]?.featureName || '',
-                description: pf.feature.translations[0]?.description || '',
+                translations: (0, translation_1.mergeAllTranslations)(pf.feature.translations),
                 category: pf.feature.category,
                 displayOrder: pf.displayOrder,
             }));
@@ -51,15 +45,12 @@ class PricingService {
                 maxUsers: plan.maxUsers,
                 displayOrder: plan.displayOrder,
                 badgeColor: plan.badgeColor,
-                planName: translation.planName || '',
-                pricePeriod: translation.pricePeriod || '',
-                userRange: translation.userRange || '',
-                description: translation.description || '',
+                translations: (0, translation_1.mergeAllTranslations)(plan.translations),
                 features,
             };
         });
     }
-    static async getPublicPlanById(planId, locale) {
+    static async getPublicPlanById(planId, _locale) {
         const plan = await prisma_1.prisma.pricingPlan.findFirst({
             where: {
                 planId,
@@ -67,9 +58,7 @@ class PricingService {
                 deletedAt: null,
             },
             include: {
-                translations: {
-                    where: { locale },
-                },
+                translations: true,
                 planFeatures: {
                     where: {
                         isIncluded: true,
@@ -77,9 +66,7 @@ class PricingService {
                     include: {
                         feature: {
                             include: {
-                                translations: {
-                                    where: { locale },
-                                },
+                                translations: true,
                             },
                         },
                     },
@@ -90,11 +77,9 @@ class PricingService {
         if (!plan) {
             throw new errors_1.NotFoundError('Pricing plan not found');
         }
-        const translation = plan.translations[0] || {};
         const features = plan.planFeatures.map((pf) => ({
             featureCode: pf.feature.featureCode,
-            featureName: pf.feature.translations[0]?.featureName || '',
-            description: pf.feature.translations[0]?.description || '',
+            translations: (0, translation_1.mergeAllTranslations)(pf.feature.translations),
             category: pf.feature.category,
             displayOrder: pf.displayOrder,
         }));
@@ -106,10 +91,7 @@ class PricingService {
             maxUsers: plan.maxUsers,
             displayOrder: plan.displayOrder,
             badgeColor: plan.badgeColor,
-            planName: translation.planName || '',
-            pricePeriod: translation.pricePeriod || '',
-            userRange: translation.userRange || '',
-            description: translation.description || '',
+            translations: (0, translation_1.mergeAllTranslations)(plan.translations),
             features,
         };
     }

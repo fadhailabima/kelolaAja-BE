@@ -40,7 +40,7 @@ export declare class FeaturePageService {
     private static ensureMedia;
     private static formatPagePublic;
     private static formatItemPublic;
-    static getPublicPages(locale: Locale, featureId?: number): Promise<{
+    static getPublicPages(_locale: Locale, featureId?: number): Promise<{
         pageId: any;
         pageCode: any;
         slug: any;
@@ -50,25 +50,14 @@ export declare class FeaturePageService {
             filePath: any;
             altText: any;
         } | null;
-        heroTitle: any;
-        heroSubtitle: any;
-        heroDescription: any;
-        aboutTitle: any;
-        aboutSubtitle: any;
-        aboutDescription1: any;
-        aboutDescription2: any;
-        ctaTitle: any;
-        ctaDescription: any;
-        ctaButtonText: any;
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
     }[]>;
-    static getPublicPageBySlug(slug: string, locale: Locale): Promise<{
+    static getPublicPageBySlug(slug: string, _locale: Locale): Promise<{
         items: {
             itemId: any;
             itemType: any;
             displayOrder: any;
-            title: any;
-            description: any;
-            shortDescription: any;
+            translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
             image: {
                 fileId: any;
                 filePath: any;
@@ -84,16 +73,7 @@ export declare class FeaturePageService {
             filePath: any;
             altText: any;
         } | null;
-        heroTitle: any;
-        heroSubtitle: any;
-        heroDescription: any;
-        aboutTitle: any;
-        aboutSubtitle: any;
-        aboutDescription1: any;
-        aboutDescription2: any;
-        ctaTitle: any;
-        ctaDescription: any;
-        ctaButtonText: any;
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
     }>;
     static getPages(page: number, limit: number, search?: string, featureId?: number, isActive?: string): Promise<{
         data: {

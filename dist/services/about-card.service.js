@@ -7,16 +7,14 @@ const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 const file_util_1 = require("../utils/file.util");
 class AboutCardService {
-    static async getPublicCards(locale) {
+    static async getPublicCards(_locale) {
         const cards = await prisma_1.prisma.aboutCard.findMany({
             where: {
                 isActive: true,
                 deletedAt: null,
             },
             include: {
-                translations: {
-                    where: { locale },
-                },
+                translations: true,
                 imageFile: {
                     select: {
                         fileId: true,
@@ -28,13 +26,11 @@ class AboutCardService {
             orderBy: { displayOrder: "asc" },
         });
         return cards.map((card) => {
-            const translation = card.translations[0] || {};
             return {
                 cardId: card.cardId,
                 displayOrder: card.displayOrder,
                 cardLink: card.cardLink,
-                title: translation.title || "",
-                description: translation.description || "",
+                translations: (0, translation_1.mergeAllTranslations)(card.translations),
                 image: card.imageFile
                     ? {
                         fileId: card.imageFile.fileId,

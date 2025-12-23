@@ -1,6 +1,6 @@
 import { Locale } from "@prisma/client";
 export declare class AdvancedFeatureService {
-    static getPublicFeatures(locale: Locale): Promise<any>;
+    static getPublicFeatures(_locale: Locale): Promise<any>;
     static getAllFeatures(page: number, limit: number, search?: string, isActive?: string): Promise<{
         data: any;
         pagination: {

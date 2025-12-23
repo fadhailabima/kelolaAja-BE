@@ -42,8 +42,7 @@ class FeaturePageService {
         }
         return file;
     }
-    static formatPagePublic(page, locale) {
-        const translation = (0, translation_1.extractTranslation)(this.normalizeTranslations(page.translations), locale) || {};
+    static formatPagePublic(page) {
         return {
             pageId: page.pageId,
             pageCode: page.pageCode,
@@ -56,27 +55,15 @@ class FeaturePageService {
                     altText: page.heroImageFile.altText
                 }
                 : null,
-            heroTitle: translation.heroTitle || "",
-            heroSubtitle: translation.heroSubtitle || "",
-            heroDescription: translation.heroDescription || "",
-            aboutTitle: translation.aboutTitle || "",
-            aboutSubtitle: translation.aboutSubtitle || "",
-            aboutDescription1: translation.aboutDescription1 || "",
-            aboutDescription2: translation.aboutDescription2 || "",
-            ctaTitle: translation.ctaTitle || "",
-            ctaDescription: translation.ctaDescription || "",
-            ctaButtonText: translation.ctaButtonText || ""
+            translations: (0, translation_1.mergeAllTranslations)(page.translations)
         };
     }
-    static formatItemPublic(item, locale) {
-        const translation = (0, translation_1.extractTranslation)(this.normalizeTranslations(item.translations), locale) || {};
+    static formatItemPublic(item) {
         return {
             itemId: item.itemId,
             itemType: item.itemType,
             displayOrder: item.displayOrder,
-            title: translation.title || "",
-            description: translation.description || "",
-            shortDescription: translation.shortDescription || "",
+            translations: (0, translation_1.mergeAllTranslations)(item.translations),
             image: item.imageFile
                 ? {
                     fileId: item.imageFile.fileId,
@@ -86,7 +73,7 @@ class FeaturePageService {
                 : null
         };
     }
-    static async getPublicPages(locale, featureId) {
+    static async getPublicPages(_locale, featureId) {
         const pages = await prisma_1.prisma.featurePage.findMany({
             where: {
                 deletedAt: null,
@@ -105,9 +92,9 @@ class FeaturePageService {
             },
             orderBy: { createdAt: "asc" }
         });
-        return pages.map(page => this.formatPagePublic(page, locale));
+        return pages.map(page => this.formatPagePublic(page));
     }
-    static async getPublicPageBySlug(slug, locale) {
+    static async getPublicPageBySlug(slug, _locale) {
         const page = await prisma_1.prisma.featurePage.findFirst({
             where: {
                 slug,
@@ -142,10 +129,10 @@ class FeaturePageService {
         if (!page) {
             throw new errors_1.NotFoundError("Feature page not found");
         }
-        const base = this.formatPagePublic(page, locale);
+        const base = this.formatPagePublic(page);
         return {
             ...base,
-            items: page.items.map(item => this.formatItemPublic(item, locale))
+            items: page.items.map(item => this.formatItemPublic(item))
         };
     }
     static async getPages(page, limit, search, featureId, isActive) {

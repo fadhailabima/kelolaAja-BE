@@ -6,16 +6,14 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class ERPBenefitService {
-    static async getPublicBenefits(locale) {
+    static async getPublicBenefits(_locale) {
         const benefits = await prisma_1.prisma.eRPBenefit.findMany({
             where: {
                 isActive: true,
                 deletedAt: null
             },
             include: {
-                translations: {
-                    where: { locale }
-                },
+                translations: true,
                 imageFile: {
                     select: {
                         fileId: true,
@@ -26,22 +24,18 @@ class ERPBenefitService {
             },
             orderBy: { displayOrder: "asc" }
         });
-        return benefits.map((benefit) => {
-            const translation = benefit.translations[0] || {};
-            return {
-                benefitId: benefit.benefitId,
-                displayOrder: benefit.displayOrder,
-                title: translation.title || "",
-                description: translation.description || "",
-                image: benefit.imageFile
-                    ? {
-                        fileId: benefit.imageFile.fileId,
-                        filePath: benefit.imageFile.filePath,
-                        altText: benefit.imageFile.altText
-                    }
-                    : null
-            };
-        });
+        return benefits.map((benefit) => ({
+            benefitId: benefit.benefitId,
+            displayOrder: benefit.displayOrder,
+            translations: (0, translation_1.mergeAllTranslations)(benefit.translations),
+            image: benefit.imageFile
+                ? {
+                    fileId: benefit.imageFile.fileId,
+                    filePath: benefit.imageFile.filePath,
+                    altText: benefit.imageFile.altText
+                }
+                : null
+        }));
     }
     static async getAllBenefits(page, limit, search, isActive) {
         const skip = (page - 1) * limit;

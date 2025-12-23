@@ -6,7 +6,7 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class FAQService {
-    static async getPublicFAQs(locale, categoryId) {
+    static async getPublicFAQs(_locale, categoryId) {
         const where = {
             isActive: true,
             deletedAt: null,
@@ -17,56 +17,45 @@ class FAQService {
         const faqs = await prisma_1.prisma.fAQ.findMany({
             where,
             include: {
-                translations: {
-                    where: { locale },
-                },
+                translations: true,
                 category: {
                     include: {
-                        translations: {
-                            where: { locale },
-                        },
+                        translations: true,
                     },
                 },
             },
             orderBy: { displayOrder: 'asc' },
         });
         return faqs.map((faq) => {
-            const translation = faq.translations[0] || {};
-            const categoryTranslation = faq.category?.translations[0] || {};
             return {
                 faqId: faq.faqId,
                 displayOrder: faq.displayOrder,
-                question: translation.question || '',
-                answer: translation.answer || '',
+                translations: (0, translation_1.mergeAllTranslations)(faq.translations),
                 category: faq.category
                     ? {
                         categoryId: faq.category.categoryId,
                         categoryCode: faq.category.categoryCode,
-                        categoryName: categoryTranslation.categoryName || '',
+                        translations: (0, translation_1.mergeAllTranslations)(faq.category.translations),
                     }
                     : null,
             };
         });
     }
-    static async getPublicFAQsByCategory(locale) {
+    static async getPublicFAQsByCategory(_locale) {
         const categories = await prisma_1.prisma.fAQCategory.findMany({
             where: {
                 isActive: true,
                 deletedAt: null,
             },
             include: {
-                translations: {
-                    where: { locale },
-                },
+                translations: true,
                 faqs: {
                     where: {
                         isActive: true,
                         deletedAt: null,
                     },
                     include: {
-                        translations: {
-                            where: { locale },
-                        },
+                        translations: true,
                     },
                     orderBy: { displayOrder: 'asc' },
                 },
@@ -74,25 +63,22 @@ class FAQService {
             orderBy: { displayOrder: 'asc' },
         });
         return categories.map((category) => {
-            const categoryTranslation = category.translations[0] || {};
             return {
                 categoryId: category.categoryId,
                 categoryCode: category.categoryCode,
-                categoryName: categoryTranslation.categoryName || '',
+                translations: (0, translation_1.mergeAllTranslations)(category.translations),
                 displayOrder: category.displayOrder,
                 faqs: category.faqs.map((faq) => {
-                    const translation = faq.translations[0] || {};
                     return {
                         faqId: faq.faqId,
                         displayOrder: faq.displayOrder,
-                        question: translation.question || '',
-                        answer: translation.answer || '',
+                        translations: (0, translation_1.mergeAllTranslations)(faq.translations),
                     };
                 }),
             };
         });
     }
-    static async getPublicFAQById(faqId, locale) {
+    static async getPublicFAQById(faqId, _locale) {
         const faq = await prisma_1.prisma.fAQ.findFirst({
             where: {
                 faqId,
@@ -100,14 +86,10 @@ class FAQService {
                 deletedAt: null,
             },
             include: {
-                translations: {
-                    where: { locale },
-                },
+                translations: true,
                 category: {
                     include: {
-                        translations: {
-                            where: { locale },
-                        },
+                        translations: true,
                     },
                 },
             },
@@ -115,18 +97,15 @@ class FAQService {
         if (!faq) {
             throw new errors_1.NotFoundError('FAQ not found');
         }
-        const translation = faq.translations[0] || {};
-        const categoryTranslation = faq.category?.translations[0] || {};
         return {
             faqId: faq.faqId,
             displayOrder: faq.displayOrder,
-            question: translation.question || '',
-            answer: translation.answer || '',
+            translations: (0, translation_1.mergeAllTranslations)(faq.translations),
             category: faq.category
                 ? {
                     categoryId: faq.category.categoryId,
                     categoryCode: faq.category.categoryCode,
-                    categoryName: categoryTranslation.categoryName || '',
+                    translations: (0, translation_1.mergeAllTranslations)(faq.category.translations),
                 }
                 : null,
         };

@@ -6,16 +6,14 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class OurPhilosophyService {
-    static async getPublicPhilosophies(locale) {
+    static async getPublicPhilosophies(_locale) {
         const philosophies = await prisma_1.prisma.ourPhilosophy.findMany({
             where: {
                 isActive: true,
                 deletedAt: null
             },
             include: {
-                translations: {
-                    where: { locale }
-                },
+                translations: true,
                 imageFile: {
                     select: {
                         fileId: true,
@@ -27,13 +25,11 @@ class OurPhilosophyService {
             orderBy: { displayOrder: "asc" }
         });
         return philosophies.map((philosophy) => {
-            const translation = philosophy.translations[0] || {};
             return {
                 philosophyId: philosophy.philosophyId,
                 displayOrder: philosophy.displayOrder,
                 iconName: philosophy.iconName,
-                title: translation.title || "",
-                description: translation.description || "",
+                translations: (0, translation_1.mergeAllTranslations)(philosophy.translations),
                 image: philosophy.imageFile
                     ? {
                         fileId: philosophy.imageFile.fileId,

@@ -24,27 +24,22 @@ class IndustryService {
             locale: translation.locale || client_1.Locale.id
         }));
     }
-    static formatContentPublic(item, locale) {
-        const translation = (0, translation_1.extractTranslation)(this.normalizeTranslations(item.translations), locale) || {};
+    static formatContentPublic(item) {
         return {
             id: item.problemId ?? item.solutionId,
             displayOrder: item.displayOrder,
-            title: translation.title || "",
-            description: translation.description || ""
+            translations: (0, translation_1.mergeAllTranslations)(item.translations)
         };
     }
-    static formatIndustryPublic(industry, locale) {
-        const translation = (0, translation_1.extractTranslation)(this.normalizeTranslations(industry.translations), locale) || {};
+    static formatIndustryPublic(industry) {
         return {
             industryId: industry.industryId,
             industryCode: industry.industryCode,
             slug: industry.slug,
             displayOrder: industry.displayOrder,
-            title: translation?.title || "",
-            description: translation?.description || "",
-            introText: translation?.introText || "",
-            problems: (industry.problems || []).map((problem) => this.formatContentPublic(problem, locale)),
-            solutions: (industry.solutions || []).map((solution) => this.formatContentPublic(solution, locale)),
+            translations: (0, translation_1.mergeAllTranslations)(industry.translations),
+            problems: (industry.problems || []).map((problem) => this.formatContentPublic(problem)),
+            solutions: (industry.solutions || []).map((solution) => this.formatContentPublic(solution)),
             media: (industry.media || []).map((mediaItem) => ({
                 industryMediaId: mediaItem.industryMediaId,
                 mediaType: mediaItem.mediaType,
@@ -90,7 +85,7 @@ class IndustryService {
         }
         return payload;
     }
-    static async getPublicIndustries(locale) {
+    static async getPublicIndustries(_locale) {
         const industries = await prisma_1.prisma.industry.findMany({
             where: {
                 deletedAt: null,
@@ -128,9 +123,9 @@ class IndustryService {
             },
             orderBy: { displayOrder: "asc" }
         });
-        return industries.map(industry => this.formatIndustryPublic(industry, locale));
+        return industries.map(industry => this.formatIndustryPublic(industry));
     }
-    static async getPublicIndustryBySlug(slug, locale) {
+    static async getPublicIndustryBySlug(slug, _locale) {
         const industry = await prisma_1.prisma.industry.findFirst({
             where: {
                 slug,
@@ -167,7 +162,7 @@ class IndustryService {
         if (!industry) {
             throw new errors_1.NotFoundError("Industry not found");
         }
-        return this.formatIndustryPublic(industry, locale);
+        return this.formatIndustryPublic(industry);
     }
     static async getIndustries(page, limit, search, isActive) {
         const skip = (page - 1) * limit;

@@ -1,6 +1,6 @@
 import { Locale } from "@prisma/client";
 export declare class OurPhilosophyService {
-    static getPublicPhilosophies(locale: Locale): Promise<any>;
+    static getPublicPhilosophies(_locale: Locale): Promise<any>;
     static getAllPhilosophies(page: number, limit: number, search?: string, isActive?: string): Promise<{
         data: any;
         pagination: {

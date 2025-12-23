@@ -6,16 +6,14 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class AdvancedFeatureService {
-    static async getPublicFeatures(locale) {
+    static async getPublicFeatures(_locale) {
         const features = await prisma_1.prisma.advancedFeature.findMany({
             where: {
                 isActive: true,
                 deletedAt: null
             },
             include: {
-                translations: {
-                    where: { locale }
-                },
+                translations: true,
                 imageFile: {
                     select: {
                         fileId: true,
@@ -26,23 +24,19 @@ class AdvancedFeatureService {
             },
             orderBy: { displayOrder: "asc" }
         });
-        return features.map((feature) => {
-            const translation = feature.translations[0] || {};
-            return {
-                featureId: feature.featureId,
-                displayOrder: feature.displayOrder,
-                linkUrl: feature.linkUrl,
-                title: translation.title || "",
-                description: translation.description || "",
-                image: feature.imageFile
-                    ? {
-                        fileId: feature.imageFile.fileId,
-                        filePath: feature.imageFile.filePath,
-                        altText: feature.imageFile.altText
-                    }
-                    : null
-            };
-        });
+        return features.map((feature) => ({
+            featureId: feature.featureId,
+            displayOrder: feature.displayOrder,
+            linkUrl: feature.linkUrl,
+            translations: (0, translation_1.mergeAllTranslations)(feature.translations),
+            image: feature.imageFile
+                ? {
+                    fileId: feature.imageFile.fileId,
+                    filePath: feature.imageFile.filePath,
+                    altText: feature.imageFile.altText
+                }
+                : null
+        }));
     }
     static async getAllFeatures(page, limit, search, isActive) {
         const skip = (page - 1) * limit;

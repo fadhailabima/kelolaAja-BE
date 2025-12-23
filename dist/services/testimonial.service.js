@@ -6,7 +6,7 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class TestimonialService {
-    static async getPublicTestimonials(locale, isFeatured) {
+    static async getPublicTestimonials(_locale, isFeatured) {
         const where = {
             isActive: true,
             deletedAt: null
@@ -17,9 +17,7 @@ class TestimonialService {
         const testimonials = await prisma_1.prisma.testimonial.findMany({
             where,
             include: {
-                translations: {
-                    where: { locale }
-                },
+                translations: true,
                 photoFile: {
                     select: {
                         fileId: true,
@@ -30,28 +28,25 @@ class TestimonialService {
             },
             orderBy: { displayOrder: "asc" }
         });
-        return testimonials.map((testimonial) => {
-            const translation = testimonial.translations[0] || {};
-            return {
-                testimonialId: testimonial.testimonialId,
-                name: testimonial.name,
-                title: testimonial.title,
-                company: testimonial.company,
-                rating: testimonial.rating,
-                isFeatured: testimonial.isFeatured,
-                displayOrder: testimonial.displayOrder,
-                quote: translation.quote || "",
-                photo: testimonial.photoFile
-                    ? {
-                        fileId: testimonial.photoFile.fileId,
-                        filePath: testimonial.photoFile.filePath,
-                        altText: testimonial.photoFile.altText
-                    }
-                    : null
-            };
-        });
+        return testimonials.map((testimonial) => ({
+            testimonialId: testimonial.testimonialId,
+            name: testimonial.name,
+            title: testimonial.title,
+            company: testimonial.company,
+            rating: testimonial.rating,
+            isFeatured: testimonial.isFeatured,
+            displayOrder: testimonial.displayOrder,
+            translations: (0, translation_1.mergeAllTranslations)(testimonial.translations),
+            photo: testimonial.photoFile
+                ? {
+                    fileId: testimonial.photoFile.fileId,
+                    filePath: testimonial.photoFile.filePath,
+                    altText: testimonial.photoFile.altText
+                }
+                : null
+        }));
     }
-    static async getPublicTestimonialById(testimonialId, locale) {
+    static async getPublicTestimonialById(testimonialId, _locale) {
         const testimonial = await prisma_1.prisma.testimonial.findFirst({
             where: {
                 testimonialId,
@@ -59,9 +54,7 @@ class TestimonialService {
                 deletedAt: null
             },
             include: {
-                translations: {
-                    where: { locale }
-                },
+                translations: true,
                 photoFile: {
                     select: {
                         fileId: true,
@@ -74,7 +67,6 @@ class TestimonialService {
         if (!testimonial) {
             throw new errors_1.NotFoundError("Testimonial not found");
         }
-        const translation = testimonial.translations[0] || {};
         return {
             testimonialId: testimonial.testimonialId,
             name: testimonial.name,
@@ -83,7 +75,7 @@ class TestimonialService {
             rating: testimonial.rating,
             isFeatured: testimonial.isFeatured,
             displayOrder: testimonial.displayOrder,
-            quote: translation.quote || "",
+            translations: (0, translation_1.mergeAllTranslations)(testimonial.translations),
             photo: testimonial.photoFile
                 ? {
                     fileId: testimonial.photoFile.fileId,

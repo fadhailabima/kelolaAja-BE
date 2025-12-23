@@ -7,16 +7,14 @@ const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 const file_util_1 = require("../utils/file.util");
 class PartnerService {
-    static async getPublicPartners(locale) {
+    static async getPublicPartners(_locale) {
         const partners = await prisma_1.prisma.partner.findMany({
             where: {
                 isActive: true,
                 deletedAt: null,
             },
             include: {
-                translations: {
-                    where: { locale },
-                },
+                translations: true,
                 logoFile: {
                     select: {
                         fileId: true,
@@ -27,25 +25,21 @@ class PartnerService {
             },
             orderBy: { displayOrder: "asc" },
         });
-        return partners.map((partner) => {
-            const translation = partner.translations[0] || {};
-            return {
-                partnerId: partner.partnerId,
-                partnerName: partner.partnerName,
-                logoUrl: partner.logoFile ? partner.logoFile.filePath : null,
-                websiteUrl: partner.websiteUrl,
-                displayOrder: partner.displayOrder,
-                description: translation.description || "",
-                logo: partner.logoFile
-                    ? {
-                        fileId: partner.logoFile.fileId,
-                        filePath: partner.logoFile.filePath,
-                        fileUrl: file_util_1.FileUtil.getFileUrl(partner.logoFile.filePath),
-                        altText: partner.logoFile.altText,
-                    }
-                    : null,
-            };
-        });
+        return partners.map((partner) => ({
+            partnerId: partner.partnerId,
+            partnerName: partner.partnerName,
+            websiteUrl: partner.websiteUrl,
+            displayOrder: partner.displayOrder,
+            translations: (0, translation_1.mergeAllTranslations)(partner.translations),
+            logo: partner.logoFile
+                ? {
+                    fileId: partner.logoFile.fileId,
+                    filePath: partner.logoFile.filePath,
+                    fileUrl: file_util_1.FileUtil.getFileUrl(partner.logoFile.filePath),
+                    altText: partner.logoFile.altText,
+                }
+                : null,
+        }));
     }
     static async getAllPartners(page, limit, search, isActive) {
         const skip = (page - 1) * limit;

@@ -1,6 +1,6 @@
 import { Locale } from '@prisma/client';
 export declare class DetailFeatureSectionService {
-    static getPublicSections(locale: Locale, category?: string): Promise<any>;
+    static getPublicSections(_locale: Locale, category?: string): Promise<any>;
     static getAllSections(page?: number, limit?: number, category?: string): Promise<{
         data: {
             sectionId: any;

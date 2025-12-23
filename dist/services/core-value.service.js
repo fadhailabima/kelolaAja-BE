@@ -6,16 +6,14 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class CoreValueService {
-    static async getPublicValues(locale) {
+    static async getPublicValues(_locale) {
         const values = await prisma_1.prisma.coreValue.findMany({
             where: {
                 isActive: true,
                 deletedAt: null
             },
             include: {
-                translations: {
-                    where: { locale }
-                },
+                translations: true,
                 imageFile: {
                     select: {
                         fileId: true,
@@ -26,23 +24,19 @@ class CoreValueService {
             },
             orderBy: { displayOrder: "asc" }
         });
-        return values.map((value) => {
-            const translation = value.translations[0] || {};
-            return {
-                valueId: value.valueId,
-                displayOrder: value.displayOrder,
-                iconName: value.iconName,
-                title: translation.title || "",
-                description: translation.description || "",
-                image: value.imageFile
-                    ? {
-                        fileId: value.imageFile.fileId,
-                        filePath: value.imageFile.filePath,
-                        altText: value.imageFile.altText
-                    }
-                    : null
-            };
-        });
+        return values.map((value) => ({
+            valueId: value.valueId,
+            displayOrder: value.displayOrder,
+            iconName: value.iconName,
+            translations: (0, translation_1.mergeAllTranslations)(value.translations),
+            image: value.imageFile
+                ? {
+                    fileId: value.imageFile.fileId,
+                    filePath: value.imageFile.filePath,
+                    altText: value.imageFile.altText
+                }
+                : null
+        }));
     }
     static async getAllValues(page, limit, search, isActive) {
         const skip = (page - 1) * limit;

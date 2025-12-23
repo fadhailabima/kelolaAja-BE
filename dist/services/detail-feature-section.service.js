@@ -5,7 +5,7 @@ const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 const prisma = new client_1.PrismaClient();
 class DetailFeatureSectionService {
-    static async getPublicSections(locale, category) {
+    static async getPublicSections(_locale, category) {
         const sections = await prisma.detailFeatureSection.findMany({
             where: {
                 isActive: true,
@@ -13,9 +13,7 @@ class DetailFeatureSectionService {
                 ...(category ? { category } : {}),
             },
             include: {
-                translations: {
-                    where: { locale },
-                },
+                translations: true,
                 iconFile: {
                     select: {
                         fileId: true,
@@ -28,14 +26,12 @@ class DetailFeatureSectionService {
             orderBy: { displayOrder: 'asc' },
         });
         return sections.map((section) => {
-            const translation = (0, translation_1.extractTranslation)(section, locale);
             return {
                 sectionId: section.sectionId,
                 sectionCode: section.sectionCode,
                 category: section.category,
                 displayOrder: section.displayOrder,
-                title: translation?.title ?? '',
-                description: translation?.description ?? null,
+                translations: (0, translation_1.mergeAllTranslations)(section.translations),
                 icon: section.iconFile
                     ? {
                         fileId: section.iconFile.fileId,

@@ -1,7 +1,7 @@
 import { Locale } from '@prisma/client';
 export declare class PricingService {
-    static getPublicPlans(locale: Locale): Promise<any>;
-    static getPublicPlanById(planId: number, locale: Locale): Promise<{
+    static getPublicPlans(_locale: Locale): Promise<any>;
+    static getPublicPlanById(planId: number, _locale: Locale): Promise<{
         planId: any;
         planCode: any;
         pricePerUserMonth: any;
@@ -9,10 +9,7 @@ export declare class PricingService {
         maxUsers: any;
         displayOrder: any;
         badgeColor: any;
-        planName: any;
-        pricePeriod: any;
-        userRange: any;
-        description: any;
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
         features: any;
     }>;
     static getAllPlans(page: number, limit: number, search?: string, isActive?: string): Promise<{

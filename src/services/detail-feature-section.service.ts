@@ -1,5 +1,5 @@
 import { PrismaClient, Locale } from '@prisma/client';
-import { extractTranslation, mergeAllTranslations } from '../utils/translation';
+import { mergeAllTranslations } from '../utils/translation';
 
 const prisma = new PrismaClient();
 

@@ -6,28 +6,23 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class BenefitStatService {
-    static async getPublicStats(locale) {
+    static async getPublicStats(_locale) {
         const stats = await prisma_1.prisma.benefitStat.findMany({
             where: {
                 isActive: true,
                 deletedAt: null
             },
             include: {
-                translations: {
-                    where: { locale }
-                }
+                translations: true
             },
             orderBy: { displayOrder: "asc" }
         });
-        return stats.map((stat) => {
-            const translation = stat.translations[0] || {};
-            return {
-                statId: stat.statId,
-                value: stat.statValue,
-                displayOrder: stat.displayOrder,
-                label: translation.label || ""
-            };
-        });
+        return stats.map((stat) => ({
+            statId: stat.statId,
+            value: stat.statValue,
+            displayOrder: stat.displayOrder,
+            translations: (0, translation_1.mergeAllTranslations)(stat.translations)
+        }));
     }
     static async getAllStats(page, limit, search, isActive) {
         const skip = (page - 1) * limit;

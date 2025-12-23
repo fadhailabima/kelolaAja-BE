@@ -6,29 +6,23 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class KelolaAjaFeatureService {
-    static async getPublicFeatures(locale) {
+    static async getPublicFeatures(_locale) {
         const features = await prisma_1.prisma.kelolaAjaFeature.findMany({
             where: {
                 isActive: true,
                 deletedAt: null
             },
             include: {
-                translations: {
-                    where: { locale }
-                }
+                translations: true
             },
             orderBy: { displayOrder: "asc" }
         });
-        return features.map((feature) => {
-            const translation = feature.translations[0] || {};
-            return {
-                featureId: feature.featureId,
-                displayOrder: feature.displayOrder,
-                iconName: feature.iconName,
-                title: translation.title || "",
-                description: translation.description || ""
-            };
-        });
+        return features.map((feature) => ({
+            featureId: feature.featureId,
+            displayOrder: feature.displayOrder,
+            iconName: feature.iconName,
+            translations: (0, translation_1.mergeAllTranslations)(feature.translations)
+        }));
     }
     static async getAllFeatures(page, limit, search, isActive) {
         const skip = (page - 1) * limit;

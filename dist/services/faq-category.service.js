@@ -6,16 +6,14 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class FAQCategoryService {
-    static async getPublicCategories(locale) {
+    static async getPublicCategories(_locale) {
         const categories = await prisma_1.prisma.fAQCategory.findMany({
             where: {
                 isActive: true,
                 deletedAt: null
             },
             include: {
-                translations: {
-                    where: { locale }
-                },
+                translations: true,
                 faqs: {
                     where: {
                         isActive: true,
@@ -29,12 +27,11 @@ class FAQCategoryService {
             orderBy: { displayOrder: "asc" }
         });
         return categories.map((category) => {
-            const translation = category.translations[0] || {};
             return {
                 categoryId: category.categoryId,
                 categoryCode: category.categoryCode,
                 displayOrder: category.displayOrder,
-                categoryName: translation.categoryName || "",
+                translations: (0, translation_1.mergeAllTranslations)(category.translations),
                 faqCount: category.faqs.length
             };
         });

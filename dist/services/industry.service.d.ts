@@ -36,26 +36,22 @@ export declare class IndustryService {
     private static formatIndustryPublic;
     private static buildIndustryTranslationPayload;
     private static buildTranslationPayload;
-    static getPublicIndustries(locale: Locale): Promise<{
+    static getPublicIndustries(_locale: Locale): Promise<{
         industryId: any;
         industryCode: any;
         slug: any;
         displayOrder: any;
-        title: any;
-        description: any;
-        introText: any;
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
         problems: any;
         solutions: any;
         media: any;
     }[]>;
-    static getPublicIndustryBySlug(slug: string, locale: Locale): Promise<{
+    static getPublicIndustryBySlug(slug: string, _locale: Locale): Promise<{
         industryId: any;
         industryCode: any;
         slug: any;
         displayOrder: any;
-        title: any;
-        description: any;
-        introText: any;
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
         problems: any;
         solutions: any;
         media: any;

@@ -1,7 +1,7 @@
 import { Locale } from "@prisma/client";
 export declare class TestimonialService {
-    static getPublicTestimonials(locale: Locale, isFeatured?: boolean): Promise<any>;
-    static getPublicTestimonialById(testimonialId: number, locale: Locale): Promise<{
+    static getPublicTestimonials(_locale: Locale, isFeatured?: boolean): Promise<any>;
+    static getPublicTestimonialById(testimonialId: number, _locale: Locale): Promise<{
         testimonialId: any;
         name: any;
         title: any;
@@ -9,7 +9,7 @@ export declare class TestimonialService {
         rating: any;
         isFeatured: any;
         displayOrder: any;
-        quote: any;
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
         photo: {
             fileId: any;
             filePath: any;

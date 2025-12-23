@@ -1,6 +1,6 @@
 import { Locale } from "@prisma/client";
 export declare class AboutCardService {
-    static getPublicCards(locale: Locale): Promise<any>;
+    static getPublicCards(_locale: Locale): Promise<any>;
     static getAllCards(page: number, limit: number, search?: string, isActive?: string): Promise<{
         data: any;
         pagination: {

@@ -6,7 +6,7 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class FeatureService {
-    static async getPublicFeatures(locale, category) {
+    static async getPublicFeatures(_locale, category) {
         const where = {
             isActive: true,
             deletedAt: null
@@ -17,25 +17,19 @@ class FeatureService {
         const features = await prisma_1.prisma.featureMaster.findMany({
             where,
             include: {
-                translations: {
-                    where: { locale }
-                }
+                translations: true
             },
             orderBy: [{ category: "asc" }, { displayOrder: "asc" }]
         });
-        return features.map((feature) => {
-            const translation = feature.translations[0] || {};
-            return {
-                featureId: feature.featureId,
-                featureCode: feature.featureCode,
-                category: feature.category,
-                displayOrder: feature.displayOrder,
-                featureName: translation.featureName || "",
-                description: translation.description || ""
-            };
-        });
+        return features.map((feature) => ({
+            featureId: feature.featureId,
+            featureCode: feature.featureCode,
+            category: feature.category,
+            displayOrder: feature.displayOrder,
+            translations: (0, translation_1.mergeAllTranslations)(feature.translations)
+        }));
     }
-    static async getPublicFeatureById(featureId, locale) {
+    static async getPublicFeatureById(featureId, _locale) {
         const feature = await prisma_1.prisma.featureMaster.findFirst({
             where: {
                 featureId,
@@ -43,22 +37,18 @@ class FeatureService {
                 deletedAt: null
             },
             include: {
-                translations: {
-                    where: { locale }
-                }
+                translations: true
             }
         });
         if (!feature) {
             throw new errors_1.NotFoundError("Feature not found");
         }
-        const translation = feature.translations[0] || {};
         return {
             featureId: feature.featureId,
             featureCode: feature.featureCode,
             category: feature.category,
             displayOrder: feature.displayOrder,
-            featureName: translation.featureName || "",
-            description: translation.description || ""
+            translations: (0, translation_1.mergeAllTranslations)(feature.translations)
         };
     }
     static async getCategories() {

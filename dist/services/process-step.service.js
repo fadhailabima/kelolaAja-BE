@@ -6,16 +6,14 @@ const errors_1 = require("../utils/errors");
 const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 class ProcessStepService {
-    static async getPublicSteps(locale) {
+    static async getPublicSteps(_locale) {
         const steps = await prisma_1.prisma.processStep.findMany({
             where: {
                 isActive: true,
                 deletedAt: null
             },
             include: {
-                translations: {
-                    where: { locale }
-                },
+                translations: true,
                 imageFile: {
                     select: {
                         fileId: true,
@@ -26,22 +24,18 @@ class ProcessStepService {
             },
             orderBy: { displayOrder: "asc" }
         });
-        return steps.map((step) => {
-            const translation = step.translations[0] || {};
-            return {
-                stepId: step.stepId,
-                displayOrder: step.displayOrder,
-                title: translation.title || "",
-                description: translation.description || "",
-                image: step.imageFile
-                    ? {
-                        fileId: step.imageFile.fileId,
-                        filePath: step.imageFile.filePath,
-                        altText: step.imageFile.altText
-                    }
-                    : null
-            };
-        });
+        return steps.map((step) => ({
+            stepId: step.stepId,
+            displayOrder: step.displayOrder,
+            translations: (0, translation_1.mergeAllTranslations)(step.translations),
+            image: step.imageFile
+                ? {
+                    fileId: step.imageFile.fileId,
+                    filePath: step.imageFile.filePath,
+                    altText: step.imageFile.altText
+                }
+                : null
+        }));
     }
     static async getAllSteps(page, limit, search, isActive) {
         const skip = (page - 1) * limit;

@@ -39,8 +39,6 @@ export class AdvancedFeatureService {
           }
         : null
     }));
-      };
-    });
   }
 
   /**

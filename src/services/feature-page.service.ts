@@ -1,7 +1,7 @@
 import { Locale } from "@prisma/client";
 import { prisma } from "../utils/prisma";
 import { NotFoundError, ValidationError } from "../utils/errors";
-import { extractTranslation, mergeAllTranslations } from "../utils/translation";
+import { mergeAllTranslations } from "../utils/translation";
 
 type PageTranslationInput = {
   heroTitle?: string;

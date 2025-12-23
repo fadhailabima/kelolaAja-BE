@@ -1,16 +1,15 @@
 import { Locale } from '@prisma/client';
 export declare class FAQService {
-    static getPublicFAQs(locale: Locale, categoryId?: number): Promise<any>;
-    static getPublicFAQsByCategory(locale: Locale): Promise<any>;
-    static getPublicFAQById(faqId: number, locale: Locale): Promise<{
+    static getPublicFAQs(_locale: Locale, categoryId?: number): Promise<any>;
+    static getPublicFAQsByCategory(_locale: Locale): Promise<any>;
+    static getPublicFAQById(faqId: number, _locale: Locale): Promise<{
         faqId: any;
         displayOrder: any;
-        question: any;
-        answer: any;
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
         category: {
             categoryId: any;
             categoryCode: any;
-            categoryName: any;
+            translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
         } | null;
     }>;
     static getAllFAQs(page: number, limit: number, search?: string, categoryId?: number, isActive?: string): Promise<{

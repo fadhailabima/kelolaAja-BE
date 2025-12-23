@@ -1,13 +1,12 @@
 import { Locale } from "@prisma/client";
 export declare class FeatureService {
-    static getPublicFeatures(locale: Locale, category?: string): Promise<any>;
-    static getPublicFeatureById(featureId: number, locale: Locale): Promise<{
+    static getPublicFeatures(_locale: Locale, category?: string): Promise<any>;
+    static getPublicFeatureById(featureId: number, _locale: Locale): Promise<{
         featureId: any;
         featureCode: any;
         category: any;
         displayOrder: any;
-        featureName: any;
-        description: any;
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
     }>;
     static getCategories(): Promise<(string | null)[]>;
     static getAllFeatures(page: number, limit: number, search?: string, category?: string, isActive?: string): Promise<{

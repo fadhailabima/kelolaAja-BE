@@ -1,6 +1,6 @@
 import { Locale } from "@prisma/client";
 export declare class CoreValueService {
-    static getPublicValues(locale: Locale): Promise<any>;
+    static getPublicValues(_locale: Locale): Promise<any>;
     static getAllValues(page: number, limit: number, search?: string, isActive?: string): Promise<{
         data: any;
         pagination: {
