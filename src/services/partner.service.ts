@@ -8,59 +8,62 @@ export class PartnerService {
   /**
    * Get all active partners for public (locale-aware)
    */
-  static async getPublicPartners(locale: Locale) {
+  static async getPublicPartners(_locale: Locale) {
     const partners: any = await prisma.partner.findMany({
       where: {
         isActive: true,
-        deletedAt: null
+        deletedAt: null,
       },
       include: {
-        translations: {
-          where: { locale }
-        },
+        translations: true,
         logoFile: {
           select: {
             fileId: true,
             filePath: true,
-            altText: true
-          }
-        }
+            altText: true,
+          },
+        },
       },
-      orderBy: { displayOrder: "asc" }
+      orderBy: { displayOrder: "asc" },
     });
 
-    return partners.map((partner: any) => {
-      const translation = partner.translations[0] || {};
-      return {
-        partnerId: partner.partnerId,
-        partnerName: partner.partnerName,
-        logoUrl: partner.logoFile ? partner.logoFile.filePath : null,
-        websiteUrl: partner.websiteUrl,
-        displayOrder: partner.displayOrder,
-        description: translation.description || "",
-        logo: partner.logoFile
-          ? {
+    return partners.map((partner: any) => ({
+      partnerId: partner.partnerId,
+      partnerName: partner.partnerName,
+      websiteUrl: partner.websiteUrl,
+      displayOrder: partner.displayOrder,
+      translations: mergeAllTranslations(partner.translations),
+      logo: partner.logoFile
+        ? {
             fileId: partner.logoFile.fileId,
             filePath: partner.logoFile.filePath,
             fileUrl: FileUtil.getFileUrl(partner.logoFile.filePath),
-            altText: partner.logoFile.altText
+            altText: partner.logoFile.altText,
           }
-          : null
-      };
-    });
+        : null,
+    }));
   }
 
   /**
    * Get all partners with all translations (Admin)
    */
-  static async getAllPartners(page: number, limit: number, search?: string, isActive?: string) {
+  static async getAllPartners(
+    page: number,
+    limit: number,
+    search?: string,
+    isActive?: string
+  ) {
     const skip = (page - 1) * limit;
     const where: any = { deletedAt: null };
 
     if (search) {
       where.OR = [
         { partnerName: { contains: search, mode: "insensitive" } },
-        { translations: { some: { description: { contains: search, mode: "insensitive" } } } }
+        {
+          translations: {
+            some: { description: { contains: search, mode: "insensitive" } },
+          },
+        },
       ];
     }
 
@@ -74,34 +77,34 @@ export class PartnerService {
         where,
         include: {
           translations: {
-            orderBy: { locale: "asc" }
+            orderBy: { locale: "asc" },
           },
           logoFile: {
             select: {
               fileId: true,
               filePath: true,
-              altText: true
-            }
+              altText: true,
+            },
           },
           creator: {
             select: {
               userId: true,
               username: true,
-              email: true
-            }
+              email: true,
+            },
           },
           updater: {
             select: {
               userId: true,
               username: true,
-              email: true
-            }
-          }
+              email: true,
+            },
+          },
         },
         orderBy: { displayOrder: "asc" },
         skip,
-        take: limit
-      })
+        take: limit,
+      }),
     ]);
 
     const result = partners.map((partner: any) => ({
@@ -113,13 +116,15 @@ export class PartnerService {
       isActive: partner.isActive,
       createdAt: partner.createdAt,
       updatedAt: partner.updatedAt,
-      logo: partner.logoFile ? {
-        ...partner.logoFile,
-        fileUrl: FileUtil.getFileUrl(partner.logoFile.filePath)
-      } : null,
+      logo: partner.logoFile
+        ? {
+            ...partner.logoFile,
+            fileUrl: FileUtil.getFileUrl(partner.logoFile.filePath),
+          }
+        : null,
       creator: partner.creator,
       updater: partner.updater,
-      translations: mergeAllTranslations(partner.translations)
+      translations: mergeAllTranslations(partner.translations),
     }));
 
     return {
@@ -128,8 +133,8 @@ export class PartnerService {
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / limit)
-      }
+        totalPages: Math.ceil(total / limit),
+      },
     };
   }
 
@@ -137,7 +142,8 @@ export class PartnerService {
    * Create new partner
    */
   static async createPartner(data: any, userId: number) {
-    const { partnerName, logoFileId, websiteUrl, displayOrder, translations } = data;
+    const { partnerName, logoFileId, websiteUrl, displayOrder, translations } =
+      data;
 
     // Validation
     if (!partnerName || displayOrder === undefined) {
@@ -151,7 +157,7 @@ export class PartnerService {
     // Verify logo file exists if provided
     if (logoFileId) {
       const logoFile = await prisma.mediaFile.findUnique({
-        where: { fileId: logoFileId }
+        where: { fileId: logoFileId },
       });
 
       if (!logoFile) {
@@ -173,18 +179,18 @@ export class PartnerService {
           create: [
             {
               locale: Locale.id,
-              description: translations.id.description || null
+              description: translations.id.description || null,
             },
             ...(translations.en
               ? [
-                {
-                  locale: Locale.en,
-                  description: translations.en.description || null
-                }
-              ]
-              : [])
-          ]
-        }
+                  {
+                    locale: Locale.en,
+                    description: translations.en.description || null,
+                  },
+                ]
+              : []),
+          ],
+        },
       },
       include: {
         translations: true,
@@ -192,22 +198,22 @@ export class PartnerService {
           select: {
             fileId: true,
             filePath: true,
-            altText: true
-          }
+            altText: true,
+          },
         },
         creator: {
           select: {
             userId: true,
             username: true,
-            email: true
-          }
-        }
-      }
+            email: true,
+          },
+        },
+      },
     });
 
     return {
       ...partner,
-      translations: mergeAllTranslations(partner.translations)
+      translations: mergeAllTranslations(partner.translations),
     };
   }
 
@@ -215,11 +221,18 @@ export class PartnerService {
    * Update partner
    */
   static async updatePartner(partnerId: number, data: any, userId: number) {
-    const { partnerName, logoFileId, websiteUrl, displayOrder, isActive, translations } = data;
+    const {
+      partnerName,
+      logoFileId,
+      websiteUrl,
+      displayOrder,
+      isActive,
+      translations,
+    } = data;
 
     // Check exists
     const existingPartner = await prisma.partner.findUnique({
-      where: { partnerId }
+      where: { partnerId },
     });
 
     if (!existingPartner || existingPartner.deletedAt) {
@@ -229,7 +242,7 @@ export class PartnerService {
     // Verify logo file exists if provided
     if (logoFileId) {
       const logoFile = await prisma.mediaFile.findUnique({
-        where: { fileId: logoFileId }
+        where: { fileId: logoFileId },
       });
 
       if (!logoFile) {
@@ -239,7 +252,7 @@ export class PartnerService {
 
     // Update partner
     const updateData: any = {
-      updatedBy: userId
+      updatedBy: userId,
     };
 
     if (partnerName) updateData.partnerName = partnerName;
@@ -250,7 +263,7 @@ export class PartnerService {
 
     await prisma.partner.update({
       where: { partnerId },
-      data: updateData
+      data: updateData,
     });
 
     // Update translations if provided
@@ -265,17 +278,17 @@ export class PartnerService {
             where: {
               partnerId_locale: {
                 partnerId,
-                locale
-              }
+                locale,
+              },
             },
             create: {
               partnerId,
               locale,
-              description: transData[locale].description || null
+              description: transData[locale].description || null,
             },
             update: {
-              description: transData[locale].description || null
-            }
+              description: transData[locale].description || null,
+            },
           });
         }
       }
@@ -290,22 +303,22 @@ export class PartnerService {
           select: {
             fileId: true,
             filePath: true,
-            altText: true
-          }
+            altText: true,
+          },
         },
         updater: {
           select: {
             userId: true,
             username: true,
-            email: true
-          }
-        }
-      }
+            email: true,
+          },
+        },
+      },
     });
 
     return {
       ...updatedPartner,
-      translations: mergeAllTranslations(updatedPartner.translations)
+      translations: mergeAllTranslations(updatedPartner.translations),
     };
   }
 
@@ -314,7 +327,7 @@ export class PartnerService {
    */
   static async deletePartner(partnerId: number, userId: number) {
     const partner = await prisma.partner.findUnique({
-      where: { partnerId }
+      where: { partnerId },
     });
 
     if (!partner || partner.deletedAt) {
@@ -326,8 +339,8 @@ export class PartnerService {
       data: {
         deletedAt: new Date(),
         isActive: false,
-        updatedBy: userId
-      }
+        updatedBy: userId,
+      },
     });
   }
 }

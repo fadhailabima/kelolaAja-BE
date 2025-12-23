@@ -31,7 +31,7 @@ class FileUtil {
             const metadata = await (0, sharp_1.default)(filePath).metadata();
             return {
                 width: metadata.width || 0,
-                height: metadata.height || 0
+                height: metadata.height || 0,
             };
         }
         catch (error) {
@@ -105,11 +105,11 @@ class FileUtil {
     static getFileUrl(filePath) {
         if (!filePath)
             return null;
-        if (filePath.startsWith('http://') || filePath.startsWith('https://')) {
+        if (filePath.startsWith("http://") || filePath.startsWith("https://")) {
             return filePath;
         }
-        const baseUrl = process.env.BASE_URL || process.env.API_URL || 'http://localhost:3000';
-        const normalizedPath = filePath.startsWith('/') ? filePath : `/${filePath}`;
+        const baseUrl = process.env.BASE_URL || process.env.API_URL || "http://localhost:3000";
+        const normalizedPath = filePath.startsWith("/") ? filePath : `/${filePath}`;
         return `${baseUrl}${normalizedPath}`;
     }
 }

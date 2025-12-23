@@ -74,32 +74,26 @@ export class IndustryService {
   /**
    * Public formatter for problems/solutions
    */
-  private static formatContentPublic(item: any, locale: Locale) {
-    const translation = extractTranslation(this.normalizeTranslations(item.translations), locale) || {};
+  private static formatContentPublic(item: any) {
     return {
       id: item.problemId ?? item.solutionId,
       displayOrder: item.displayOrder,
-      title: translation.title || "",
-      description: translation.description || ""
+      translations: mergeAllTranslations(item.translations)
     };
   }
 
   /**
    * Public formatter for industry
    */
-  private static formatIndustryPublic(industry: any, locale: Locale) {
-    const translation = extractTranslation(this.normalizeTranslations(industry.translations), locale) || {};
-
+  private static formatIndustryPublic(industry: any) {
     return {
       industryId: industry.industryId,
       industryCode: industry.industryCode,
       slug: industry.slug,
       displayOrder: industry.displayOrder,
-      title: translation?.title || "",
-      description: translation?.description || "",
-      introText: translation?.introText || "",
-      problems: (industry.problems || []).map((problem: any) => this.formatContentPublic(problem, locale)),
-      solutions: (industry.solutions || []).map((solution: any) => this.formatContentPublic(solution, locale)),
+      translations: mergeAllTranslations(industry.translations),
+      problems: (industry.problems || []).map((problem: any) => this.formatContentPublic(problem)),
+      solutions: (industry.solutions || []).map((solution: any) => this.formatContentPublic(solution)),
       media: (industry.media || []).map((mediaItem: any) => ({
         industryMediaId: mediaItem.industryMediaId,
         mediaType: mediaItem.mediaType,
@@ -157,7 +151,7 @@ export class IndustryService {
   /**
    * List industries for public landing
    */
-  static async getPublicIndustries(locale: Locale) {
+  static async getPublicIndustries(_locale: Locale) {
     const industries = await prisma.industry.findMany({
       where: {
         deletedAt: null,
@@ -196,13 +190,13 @@ export class IndustryService {
       orderBy: { displayOrder: "asc" }
     });
 
-    return industries.map(industry => this.formatIndustryPublic(industry, locale));
+    return industries.map(industry => this.formatIndustryPublic(industry));
   }
 
   /**
    * Get single public industry by slug
    */
-  static async getPublicIndustryBySlug(slug: string, locale: Locale) {
+  static async getPublicIndustryBySlug(slug: string, _locale: Locale) {
     const industry = await prisma.industry.findFirst({
       where: {
         slug,
@@ -241,7 +235,7 @@ export class IndustryService {
       throw new NotFoundError("Industry not found");
     }
 
-    return this.formatIndustryPublic(industry, locale);
+    return this.formatIndustryPublic(industry);
   }
 
   /**

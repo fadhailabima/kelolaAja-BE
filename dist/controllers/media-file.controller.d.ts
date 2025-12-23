@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 export declare class MediaFileController {
     static listAll(req: Request, res: Response): Promise<void>;
     static getById(req: Request, res: Response): Promise<void>;

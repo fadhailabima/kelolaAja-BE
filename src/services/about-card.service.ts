@@ -8,43 +8,39 @@ export class AboutCardService {
   /**
    * Get all active about cards (Public)
    */
-  static async getPublicCards(locale: Locale) {
+  static async getPublicCards(_locale: Locale) {
     const cards: any = await prisma.aboutCard.findMany({
       where: {
         isActive: true,
-        deletedAt: null
+        deletedAt: null,
       },
       include: {
-        translations: {
-          where: { locale }
-        },
+        translations: true,
         imageFile: {
           select: {
             fileId: true,
             filePath: true,
-            altText: true
-          }
-        }
+            altText: true,
+          },
+        },
       },
-      orderBy: { displayOrder: "asc" }
+      orderBy: { displayOrder: "asc" },
     });
 
     return cards.map((card: any) => {
-      const translation = card.translations[0] || {};
       return {
         cardId: card.cardId,
         displayOrder: card.displayOrder,
         cardLink: card.cardLink,
-        title: translation.title || "",
-        description: translation.description || "",
+        translations: mergeAllTranslations(card.translations),
         image: card.imageFile
           ? {
               fileId: card.imageFile.fileId,
               filePath: card.imageFile.filePath,
               fileUrl: FileUtil.getFileUrl(card.imageFile.filePath),
-              altText: card.imageFile.altText
+              altText: card.imageFile.altText,
             }
-          : null
+          : null,
       };
     });
   }
@@ -52,15 +48,23 @@ export class AboutCardService {
   /**
    * Get all cards with all translations (Admin)
    */
-  static async getAllCards(page: number, limit: number, search?: string, isActive?: string) {
+  static async getAllCards(
+    page: number,
+    limit: number,
+    search?: string,
+    isActive?: string
+  ) {
     const skip = (page - 1) * limit;
     const where: any = { deletedAt: null };
 
     if (search) {
       where.translations = {
         some: {
-          OR: [{ title: { contains: search, mode: "insensitive" } }, { description: { contains: search, mode: "insensitive" } }]
-        }
+          OR: [
+            { title: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+          ],
+        },
       };
     }
 
@@ -74,34 +78,34 @@ export class AboutCardService {
         where,
         include: {
           translations: {
-            orderBy: { locale: "asc" }
+            orderBy: { locale: "asc" },
           },
           imageFile: {
             select: {
               fileId: true,
               filePath: true,
-              altText: true
-            }
+              altText: true,
+            },
           },
           creator: {
             select: {
               userId: true,
               username: true,
-              email: true
-            }
+              email: true,
+            },
           },
           updater: {
             select: {
               userId: true,
               username: true,
-              email: true
-            }
-          }
+              email: true,
+            },
+          },
         },
         orderBy: { displayOrder: "asc" },
         skip,
-        take: limit
-      })
+        take: limit,
+      }),
     ]);
 
     const result = cards.map((card: any) => ({
@@ -112,13 +116,15 @@ export class AboutCardService {
       isActive: card.isActive,
       createdAt: card.createdAt,
       updatedAt: card.updatedAt,
-      image: card.imageFile ? {
-        ...card.imageFile,
-        fileUrl: FileUtil.getFileUrl(card.imageFile.filePath)
-      } : null,
+      image: card.imageFile
+        ? {
+            ...card.imageFile,
+            fileUrl: FileUtil.getFileUrl(card.imageFile.filePath),
+          }
+        : null,
       creator: card.creator,
       updater: card.updater,
-      translations: mergeAllTranslations(card.translations)
+      translations: mergeAllTranslations(card.translations),
     }));
 
     return {
@@ -127,8 +133,8 @@ export class AboutCardService {
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / limit)
-      }
+        totalPages: Math.ceil(total / limit),
+      },
     };
   }
 
@@ -148,7 +154,7 @@ export class AboutCardService {
 
     if (imageFileId) {
       const imageFile = await prisma.mediaFile.findUnique({
-        where: { fileId: imageFileId }
+        where: { fileId: imageFileId },
       });
 
       if (!imageFile) {
@@ -173,19 +179,19 @@ export class AboutCardService {
             {
               locale: Locale.id,
               title: translations.id.title,
-              description: translations.id.description || null
+              description: translations.id.description || null,
             },
             ...(translations.en
               ? [
                   {
                     locale: Locale.en,
                     title: translations.en.title,
-                    description: translations.en.description || null
-                  }
+                    description: translations.en.description || null,
+                  },
                 ]
-              : [])
-          ]
-        }
+              : []),
+          ],
+        },
       },
       include: {
         translations: true,
@@ -193,22 +199,22 @@ export class AboutCardService {
           select: {
             fileId: true,
             filePath: true,
-            altText: true
-          }
+            altText: true,
+          },
         },
         creator: {
           select: {
             userId: true,
             username: true,
-            email: true
-          }
-        }
-      }
+            email: true,
+          },
+        },
+      },
     });
 
     return {
       ...card,
-      translations: mergeAllTranslations(card.translations)
+      translations: mergeAllTranslations(card.translations),
     };
   }
 
@@ -216,10 +222,11 @@ export class AboutCardService {
    * Update about card
    */
   static async updateCard(cardId: number, data: any, userId: number) {
-    const { displayOrder, cardLink, imageFileId, isActive, translations } = data;
+    const { displayOrder, cardLink, imageFileId, isActive, translations } =
+      data;
 
     const existing = await prisma.aboutCard.findUnique({
-      where: { cardId }
+      where: { cardId },
     });
 
     if (!existing || existing.deletedAt) {
@@ -228,7 +235,7 @@ export class AboutCardService {
 
     if (imageFileId) {
       const imageFile = await prisma.mediaFile.findUnique({
-        where: { fileId: imageFileId }
+        where: { fileId: imageFileId },
       });
 
       if (!imageFile) {
@@ -245,7 +252,7 @@ export class AboutCardService {
 
     await prisma.aboutCard.update({
       where: { cardId },
-      data: updateData
+      data: updateData,
     });
 
     if (translations) {
@@ -255,19 +262,19 @@ export class AboutCardService {
             where: {
               cardId_locale: {
                 cardId,
-                locale
-              }
+                locale,
+              },
             },
             create: {
               cardId,
               locale,
               title: translations[locale].title,
-              description: translations[locale].description || null
+              description: translations[locale].description || null,
             },
             update: {
               title: translations[locale].title,
-              description: translations[locale].description || null
-            }
+              description: translations[locale].description || null,
+            },
           });
         }
       }
@@ -281,22 +288,22 @@ export class AboutCardService {
           select: {
             fileId: true,
             filePath: true,
-            altText: true
-          }
+            altText: true,
+          },
         },
         updater: {
           select: {
             userId: true,
             username: true,
-            email: true
-          }
-        }
-      }
+            email: true,
+          },
+        },
+      },
     });
 
     return {
       ...updated,
-      translations: mergeAllTranslations(updated.translations)
+      translations: mergeAllTranslations(updated.translations),
     };
   }
 
@@ -305,7 +312,7 @@ export class AboutCardService {
    */
   static async deleteCard(cardId: number, userId: number) {
     const card = await prisma.aboutCard.findUnique({
-      where: { cardId }
+      where: { cardId },
     });
 
     if (!card || card.deletedAt) {
@@ -317,8 +324,8 @@ export class AboutCardService {
       data: {
         deletedAt: new Date(),
         isActive: false,
-        updatedBy: userId
-      }
+        updatedBy: userId,
+      },
     });
   }
 }

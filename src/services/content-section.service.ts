@@ -1,5 +1,5 @@
 import { PrismaClient, Locale } from '@prisma/client';
-import { extractTranslation, mergeAllTranslations } from '../utils/translation';
+import { mergeAllTranslations } from '../utils/translation';
 
 const prisma = new PrismaClient();
 
@@ -7,7 +7,7 @@ export class ContentSectionService {
   /**
    * Get all active content sections for public view (with specific locale)
    */
-  static async getPublicSections(locale: Locale, pageLocation?: string) {
+  static async getPublicSections(_locale: Locale, pageLocation?: string) {
     const sections: any = await prisma.contentSection.findMany({
       where: {
         isActive: true,
@@ -15,9 +15,7 @@ export class ContentSectionService {
         ...(pageLocation ? { pageLocation } : {}),
       },
       include: {
-        translations: {
-          where: { locale },
-        },
+        translations: true, // Get all translations, not just specific locale
         media: {
           include: {
             mediaFile: {
@@ -36,41 +34,32 @@ export class ContentSectionService {
       orderBy: { displayOrder: 'asc' },
     });
 
-    return sections.map((section: any) => {
-      const translation = extractTranslation(section.translations, locale);
-      return {
-        sectionId: section.sectionId,
-        sectionType: section.sectionType,
-        sectionKey: section.sectionKey,
-        pageLocation: section.pageLocation,
-        displayOrder: section.displayOrder,
-        metadata: section.metadata,
-        title: translation?.title ?? '',
-        subtitle: translation?.subtitle ?? null,
-        description: translation?.description ?? null,
-        content: translation?.content ?? null,
-        additionalData: translation?.additionalData ?? null,
-        media: section.media.map((m: any) => ({
-          contentMediaId: m.contentMediaId,
-          mediaType: m.mediaType,
-          usage: m.usage,
-          displayOrder: m.displayOrder,
-          file: m.mediaFile,
-        })),
-      };
-    });
+    return sections.map((section: any) => ({
+      sectionId: section.sectionId,
+      sectionType: section.sectionType,
+      sectionKey: section.sectionKey,
+      pageLocation: section.pageLocation,
+      displayOrder: section.displayOrder,
+      metadata: section.metadata,
+      translations: mergeAllTranslations(section.translations), // Return all translations
+      media: section.media.map((m: any) => ({
+        contentMediaId: m.contentMediaId,
+        mediaType: m.mediaType,
+        usage: m.usage,
+        displayOrder: m.displayOrder,
+        file: m.mediaFile,
+      })),
+    }));
   }
 
   /**
    * Get a specific content section by key
    */
-  static async getPublicSectionByKey(sectionKey: string, locale: Locale) {
+  static async getPublicSectionByKey(sectionKey: string, _locale: Locale) {
     const section: any = await prisma.contentSection.findUnique({
       where: { sectionKey },
       include: {
-        translations: {
-          where: { locale },
-        },
+        translations: true, // Get all translations
         media: {
           include: {
             mediaFile: {
@@ -92,7 +81,6 @@ export class ContentSectionService {
       throw new Error('Content section not found');
     }
 
-    const translation = extractTranslation(section.translations, locale);
     return {
       sectionId: section.sectionId,
       sectionType: section.sectionType,
@@ -100,11 +88,7 @@ export class ContentSectionService {
       pageLocation: section.pageLocation,
       displayOrder: section.displayOrder,
       metadata: section.metadata,
-      title: translation?.title ?? '',
-      subtitle: translation?.subtitle ?? null,
-      description: translation?.description ?? null,
-      content: translation?.content ?? null,
-      additionalData: translation?.additionalData ?? null,
+      translations: mergeAllTranslations(section.translations), // Return all translations
       media: section.media.map((m: any) => ({
         contentMediaId: m.contentMediaId,
         mediaType: m.mediaType,

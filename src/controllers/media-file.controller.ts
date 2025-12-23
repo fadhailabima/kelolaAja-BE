@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import { MediaFileService } from '../services/media-file.service';
-import { ResponseUtil } from '../utils/response';
-import { FileUtil } from '../utils/file.util';
+import { Request, Response } from "express";
+import { MediaFileService } from "../services/media-file.service";
+import { ResponseUtil } from "../utils/response";
+import { FileUtil } from "../utils/file.util";
 
 export class MediaFileController {
   /**
@@ -15,14 +15,27 @@ export class MediaFileController {
       const filters = {
         fileType: req.query.fileType as string | undefined,
         mimeType: req.query.mimeType as string | undefined,
-        isPublic: req.query.isPublic === 'true' ? true : req.query.isPublic === 'false' ? false : undefined,
-        uploadedBy: req.query.uploadedBy ? parseInt(req.query.uploadedBy as string) : undefined,
+        isPublic:
+          req.query.isPublic === "true"
+            ? true
+            : req.query.isPublic === "false"
+            ? false
+            : undefined,
+        uploadedBy: req.query.uploadedBy
+          ? parseInt(req.query.uploadedBy as string)
+          : undefined,
       };
 
       const result = await MediaFileService.getAllFiles(page, limit, filters);
       const { data, pagination } = result;
 
-      return ResponseUtil.success(res, 'Media files retrieved successfully', data, 200, pagination);
+      return ResponseUtil.success(
+        res,
+        "Media files retrieved successfully",
+        data,
+        200,
+        pagination
+      );
     } catch (error: any) {
       return ResponseUtil.error(res, error.message);
     }
@@ -36,7 +49,11 @@ export class MediaFileController {
       const fileId = parseInt(req.params.id);
       const file = await MediaFileService.getFileById(fileId);
 
-      return ResponseUtil.success(res, 'Media file retrieved successfully', file);
+      return ResponseUtil.success(
+        res,
+        "Media file retrieved successfully",
+        file
+      );
     } catch (error: any) {
       return ResponseUtil.error(res, error.message);
     }
@@ -49,12 +66,12 @@ export class MediaFileController {
     try {
       const userId = req.user?.userId;
       if (!userId) {
-        return ResponseUtil.unauthorized(res, 'User not authenticated');
+        return ResponseUtil.unauthorized(res, "User not authenticated");
       }
 
       // Check if file was uploaded
       if (!req.file) {
-        return ResponseUtil.error(res, 'No file uploaded', 400);
+        return ResponseUtil.error(res, "No file uploaded", 400);
       }
 
       const uploadedFile = req.file;
@@ -64,7 +81,7 @@ export class MediaFileController {
       // Get image dimensions if it's an image
       let width: number | undefined;
       let height: number | undefined;
-      if (fileType === 'image') {
+      if (fileType === "image") {
         const dimensions = await FileUtil.getImageDimensions(uploadedFile.path);
         if (dimensions) {
           width = dimensions.width;
@@ -81,7 +98,8 @@ export class MediaFileController {
 
       // Get alt text from request body or use filename
       const altText = req.body.altText || uploadedFile.originalname;
-      const isPublic = req.body.isPublic !== undefined ? req.body.isPublic === 'true' : true;
+      const isPublic =
+        req.body.isPublic !== undefined ? req.body.isPublic === "true" : true;
 
       // Create database record
       const file = await MediaFileService.createFile({
@@ -93,12 +111,17 @@ export class MediaFileController {
         width,
         height,
         altText,
-        storageType: 'local',
+        storageType: "local",
         isPublic,
         uploadedBy: userId,
       });
 
-      return ResponseUtil.success(res, 'Media file uploaded successfully', file, 201);
+      return ResponseUtil.success(
+        res,
+        "Media file uploaded successfully",
+        file,
+        201
+      );
     } catch (error: any) {
       return ResponseUtil.error(res, error.message);
     }
@@ -112,7 +135,7 @@ export class MediaFileController {
       const fileId = parseInt(req.params.id);
       const file = await MediaFileService.updateFile(fileId, req.body);
 
-      return ResponseUtil.success(res, 'Media file updated successfully', file);
+      return ResponseUtil.success(res, "Media file updated successfully", file);
     } catch (error: any) {
       return ResponseUtil.error(res, error.message);
     }
@@ -146,7 +169,11 @@ export class MediaFileController {
         totalSizeFormatted: FileUtil.formatFileSize(stats.totalSize),
       };
 
-      return ResponseUtil.success(res, 'File statistics retrieved successfully', serializedStats);
+      return ResponseUtil.success(
+        res,
+        "File statistics retrieved successfully",
+        serializedStats
+      );
     } catch (error: any) {
       return ResponseUtil.error(res, error.message);
     }
@@ -162,21 +189,27 @@ export class MediaFileController {
 
       // Check if file is public or user has access
       if (!file.isPublic && !req.user) {
-        return ResponseUtil.unauthorized(res, 'This file is not public');
+        return ResponseUtil.unauthorized(res, "This file is not public");
       }
 
       // Get absolute path
       const absolutePath = FileUtil.getAbsolutePath(file.filePath);
 
       // Check if file exists
-      const fs = await import('fs');
+      const fs = await import("fs");
       if (!fs.existsSync(absolutePath)) {
-        return ResponseUtil.error(res, 'File not found on server', 404);
+        return ResponseUtil.error(res, "File not found on server", 404);
       }
 
       // Set headers
-      res.setHeader('Content-Type', file.mimeType || 'application/octet-stream');
-      res.setHeader('Content-Disposition', `inline; filename="${file.fileName}"`);
+      res.setHeader(
+        "Content-Type",
+        file.mimeType || "application/octet-stream"
+      );
+      res.setHeader(
+        "Content-Disposition",
+        `inline; filename="${file.fileName}"`
+      );
 
       // Send file
       return res.sendFile(absolutePath);
@@ -195,21 +228,27 @@ export class MediaFileController {
 
       // Check if file is public or user has access
       if (!file.isPublic && !req.user) {
-        return ResponseUtil.unauthorized(res, 'This file is not public');
+        return ResponseUtil.unauthorized(res, "This file is not public");
       }
 
       // Get absolute path
       const absolutePath = FileUtil.getAbsolutePath(file.filePath);
 
       // Check if file exists
-      const fs = await import('fs');
+      const fs = await import("fs");
       if (!fs.existsSync(absolutePath)) {
-        return ResponseUtil.error(res, 'File not found on server', 404);
+        return ResponseUtil.error(res, "File not found on server", 404);
       }
 
       // Set headers for download
-      res.setHeader('Content-Type', file.mimeType || 'application/octet-stream');
-      res.setHeader('Content-Disposition', `attachment; filename="${file.fileName}"`);
+      res.setHeader(
+        "Content-Type",
+        file.mimeType || "application/octet-stream"
+      );
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${file.fileName}"`
+      );
 
       // Send file
       return res.sendFile(absolutePath);

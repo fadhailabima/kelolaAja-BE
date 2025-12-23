@@ -7,16 +7,14 @@ export class OurPhilosophyService {
   /**
    * Get all active philosophies (Public)
    */
-  static async getPublicPhilosophies(locale: Locale) {
+  static async getPublicPhilosophies(_locale: Locale) {
     const philosophies: any = await prisma.ourPhilosophy.findMany({
       where: {
         isActive: true,
         deletedAt: null
       },
       include: {
-        translations: {
-          where: { locale }
-        },
+        translations: true,
         imageFile: {
           select: {
             fileId: true,
@@ -29,13 +27,11 @@ export class OurPhilosophyService {
     });
 
     return philosophies.map((philosophy: any) => {
-      const translation = philosophy.translations[0] || {};
       return {
         philosophyId: philosophy.philosophyId,
         displayOrder: philosophy.displayOrder,
         iconName: philosophy.iconName,
-        title: translation.title || "",
-        description: translation.description || "",
+        translations: mergeAllTranslations(philosophy.translations),
         image: philosophy.imageFile
           ? {
               fileId: philosophy.imageFile.fileId,

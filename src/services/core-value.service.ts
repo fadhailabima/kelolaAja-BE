@@ -7,16 +7,14 @@ export class CoreValueService {
   /**
    * Get all active core values (Public)
    */
-  static async getPublicValues(locale: Locale) {
+  static async getPublicValues(_locale: Locale) {
     const values: any = await prisma.coreValue.findMany({
       where: {
         isActive: true,
         deletedAt: null
       },
       include: {
-        translations: {
-          where: { locale }
-        },
+        translations: true,
         imageFile: {
           select: {
             fileId: true,
@@ -28,21 +26,19 @@ export class CoreValueService {
       orderBy: { displayOrder: "asc" }
     });
 
-    return values.map((value: any) => {
-      const translation = value.translations[0] || {};
-      return {
-        valueId: value.valueId,
-        displayOrder: value.displayOrder,
-        iconName: value.iconName,
-        title: translation.title || "",
-        description: translation.description || "",
-        image: value.imageFile
-          ? {
-              fileId: value.imageFile.fileId,
-              filePath: value.imageFile.filePath,
-              altText: value.imageFile.altText
-            }
-          : null
+    return values.map((value: any) => ({
+      valueId: value.valueId,
+      displayOrder: value.displayOrder,
+      iconName: value.iconName,
+      translations: mergeAllTranslations(value.translations),
+      image: value.imageFile
+        ? {
+            fileId: value.imageFile.fileId,
+            filePath: value.imageFile.filePath,
+            altText: value.imageFile.altText
+          }
+        : null
+    }));
       };
     });
   }

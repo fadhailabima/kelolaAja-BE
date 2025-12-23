@@ -7,16 +7,14 @@ export class PricingService {
   /**
    * Get all active pricing plans for public (locale-aware)
    */
-  static async getPublicPlans(locale: Locale) {
+  static async getPublicPlans(_locale: Locale) {
     const plans: any = await prisma.pricingPlan.findMany({
       where: {
         isActive: true,
         deletedAt: null,
       },
       include: {
-        translations: {
-          where: { locale },
-        },
+        translations: true,
         planFeatures: {
           where: {
             isIncluded: true,
@@ -24,9 +22,7 @@ export class PricingService {
           include: {
             feature: {
               include: {
-                translations: {
-                  where: { locale },
-                },
+                translations: true,
               },
             },
           },
@@ -37,11 +33,9 @@ export class PricingService {
     });
 
     return plans.map((plan: any) => {
-      const translation = plan.translations[0] || {};
       const features = plan.planFeatures.map((pf: any) => ({
         featureCode: pf.feature.featureCode,
-        featureName: pf.feature.translations[0]?.featureName || '',
-        description: pf.feature.translations[0]?.description || '',
+        translations: mergeAllTranslations(pf.feature.translations),
         category: pf.feature.category,
         displayOrder: pf.displayOrder,
       }));
@@ -54,10 +48,7 @@ export class PricingService {
         maxUsers: plan.maxUsers,
         displayOrder: plan.displayOrder,
         badgeColor: plan.badgeColor,
-        planName: translation.planName || '',
-        pricePeriod: translation.pricePeriod || '',
-        userRange: translation.userRange || '',
-        description: translation.description || '',
+        translations: mergeAllTranslations(plan.translations),
         features,
       };
     });
@@ -66,7 +57,7 @@ export class PricingService {
   /**
    * Get single public plan by ID
    */
-  static async getPublicPlanById(planId: number, locale: Locale) {
+  static async getPublicPlanById(planId: number, _locale: Locale) {
     const plan: any = await prisma.pricingPlan.findFirst({
       where: {
         planId,
@@ -74,9 +65,7 @@ export class PricingService {
         deletedAt: null,
       },
       include: {
-        translations: {
-          where: { locale },
-        },
+        translations: true,
         planFeatures: {
           where: {
             isIncluded: true,
@@ -84,9 +73,7 @@ export class PricingService {
           include: {
             feature: {
               include: {
-                translations: {
-                  where: { locale },
-                },
+                translations: true,
               },
             },
           },
@@ -99,11 +86,9 @@ export class PricingService {
       throw new NotFoundError('Pricing plan not found');
     }
 
-    const translation = plan.translations[0] || {};
     const features = plan.planFeatures.map((pf: any) => ({
       featureCode: pf.feature.featureCode,
-      featureName: pf.feature.translations[0]?.featureName || '',
-      description: pf.feature.translations[0]?.description || '',
+      translations: mergeAllTranslations(pf.feature.translations),
       category: pf.feature.category,
       displayOrder: pf.displayOrder,
     }));
@@ -116,10 +101,7 @@ export class PricingService {
       maxUsers: plan.maxUsers,
       displayOrder: plan.displayOrder,
       badgeColor: plan.badgeColor,
-      planName: translation.planName || '',
-      pricePeriod: translation.pricePeriod || '',
-      userRange: translation.userRange || '',
-      description: translation.description || '',
+      translations: mergeAllTranslations(plan.translations),
       features,
     };
   }

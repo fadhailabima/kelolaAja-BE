@@ -7,7 +7,7 @@ export class DetailFeatureSectionService {
   /**
    * Get all active detail feature sections for public view (with specific locale)
    */
-  static async getPublicSections(locale: Locale, category?: string) {
+  static async getPublicSections(_locale: Locale, category?: string) {
     const sections: any = await prisma.detailFeatureSection.findMany({
       where: {
         isActive: true,
@@ -15,9 +15,7 @@ export class DetailFeatureSectionService {
         ...(category ? { category } : {}),
       },
       include: {
-        translations: {
-          where: { locale },
-        },
+        translations: true,
         iconFile: {
           select: {
             fileId: true,
@@ -31,14 +29,12 @@ export class DetailFeatureSectionService {
     });
 
     return sections.map((section: any) => {
-      const translation = extractTranslation(section, locale);
       return {
         sectionId: section.sectionId,
         sectionCode: section.sectionCode,
         category: section.category,
         displayOrder: section.displayOrder,
-        title: translation?.title ?? '',
-        description: translation?.description ?? null,
+        translations: mergeAllTranslations(section.translations),
         icon: section.iconFile
           ? {
               fileId: section.iconFile.fileId,

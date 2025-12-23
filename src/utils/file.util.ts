@@ -27,12 +27,14 @@ export class FileUtil {
   /**
    * Get image dimensions
    */
-  static async getImageDimensions(filePath: string): Promise<{ width: number; height: number } | null> {
+  static async getImageDimensions(
+    filePath: string
+  ): Promise<{ width: number; height: number } | null> {
     try {
       const metadata = await sharp(filePath).metadata();
       return {
         width: metadata.width || 0,
-        height: metadata.height || 0
+        height: metadata.height || 0,
       };
     } catch (error) {
       return null;
@@ -143,18 +145,19 @@ export class FileUtil {
    */
   static getFileUrl(filePath: string | null): string | null {
     if (!filePath) return null;
-    
+
     // If it's already a full URL, return as is
-    if (filePath.startsWith('http://') || filePath.startsWith('https://')) {
+    if (filePath.startsWith("http://") || filePath.startsWith("https://")) {
       return filePath;
     }
-    
+
     // Get the base URL from environment or use default
-    const baseUrl = process.env.BASE_URL || process.env.API_URL || 'http://localhost:3000';
-    
+    const baseUrl =
+      process.env.BASE_URL || process.env.API_URL || "http://localhost:3000";
+
     // Ensure filePath starts with /
-    const normalizedPath = filePath.startsWith('/') ? filePath : `/${filePath}`;
-    
+    const normalizedPath = filePath.startsWith("/") ? filePath : `/${filePath}`;
+
     // Combine base URL with file path
     return `${baseUrl}${normalizedPath}`;
   }

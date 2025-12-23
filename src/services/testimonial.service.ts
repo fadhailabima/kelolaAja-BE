@@ -7,7 +7,7 @@ export class TestimonialService {
   /**
    * Get all active testimonials for public (locale-aware)
    */
-  static async getPublicTestimonials(locale: Locale, isFeatured?: boolean) {
+  static async getPublicTestimonials(_locale: Locale, isFeatured?: boolean) {
     const where: any = {
       isActive: true,
       deletedAt: null
@@ -20,9 +20,7 @@ export class TestimonialService {
     const testimonials: any = await prisma.testimonial.findMany({
       where,
       include: {
-        translations: {
-          where: { locale }
-        },
+        translations: true,
         photoFile: {
           select: {
             fileId: true,
@@ -34,32 +32,29 @@ export class TestimonialService {
       orderBy: { displayOrder: "asc" }
     });
 
-    return testimonials.map((testimonial: any) => {
-      const translation = testimonial.translations[0] || {};
-      return {
-        testimonialId: testimonial.testimonialId,
-        name: testimonial.name,
-        title: testimonial.title,
-        company: testimonial.company,
-        rating: testimonial.rating,
-        isFeatured: testimonial.isFeatured,
-        displayOrder: testimonial.displayOrder,
-        quote: translation.quote || "",
-        photo: testimonial.photoFile
-          ? {
-              fileId: testimonial.photoFile.fileId,
-              filePath: testimonial.photoFile.filePath,
-              altText: testimonial.photoFile.altText
-            }
-          : null
-      };
-    });
+    return testimonials.map((testimonial: any) => ({
+      testimonialId: testimonial.testimonialId,
+      name: testimonial.name,
+      title: testimonial.title,
+      company: testimonial.company,
+      rating: testimonial.rating,
+      isFeatured: testimonial.isFeatured,
+      displayOrder: testimonial.displayOrder,
+      translations: mergeAllTranslations(testimonial.translations),
+      photo: testimonial.photoFile
+        ? {
+            fileId: testimonial.photoFile.fileId,
+            filePath: testimonial.photoFile.filePath,
+            altText: testimonial.photoFile.altText
+          }
+        : null
+    }));
   }
 
   /**
    * Get single public testimonial by ID
    */
-  static async getPublicTestimonialById(testimonialId: number, locale: Locale) {
+  static async getPublicTestimonialById(testimonialId: number, _locale: Locale) {
     const testimonial: any = await prisma.testimonial.findFirst({
       where: {
         testimonialId,
@@ -67,9 +62,7 @@ export class TestimonialService {
         deletedAt: null
       },
       include: {
-        translations: {
-          where: { locale }
-        },
+        translations: true,
         photoFile: {
           select: {
             fileId: true,
@@ -84,7 +77,6 @@ export class TestimonialService {
       throw new NotFoundError("Testimonial not found");
     }
 
-    const translation = testimonial.translations[0] || {};
     return {
       testimonialId: testimonial.testimonialId,
       name: testimonial.name,
@@ -93,7 +85,7 @@ export class TestimonialService {
       rating: testimonial.rating,
       isFeatured: testimonial.isFeatured,
       displayOrder: testimonial.displayOrder,
-      quote: translation.quote || "",
+      translations: mergeAllTranslations(testimonial.translations),
       photo: testimonial.photoFile
         ? {
             fileId: testimonial.photoFile.fileId,

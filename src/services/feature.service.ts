@@ -7,7 +7,7 @@ export class FeatureService {
   /**
    * Get all active features for public (locale-aware)
    */
-  static async getPublicFeatures(locale: Locale, category?: string) {
+  static async getPublicFeatures(_locale: Locale, category?: string) {
     const where: any = {
       isActive: true,
       deletedAt: null
@@ -20,30 +20,24 @@ export class FeatureService {
     const features: any = await prisma.featureMaster.findMany({
       where,
       include: {
-        translations: {
-          where: { locale }
-        }
+        translations: true
       },
       orderBy: [{ category: "asc" }, { displayOrder: "asc" }]
     });
 
-    return features.map((feature: any) => {
-      const translation = feature.translations[0] || {};
-      return {
-        featureId: feature.featureId,
-        featureCode: feature.featureCode,
-        category: feature.category,
-        displayOrder: feature.displayOrder,
-        featureName: translation.featureName || "",
-        description: translation.description || ""
-      };
-    });
+    return features.map((feature: any) => ({
+      featureId: feature.featureId,
+      featureCode: feature.featureCode,
+      category: feature.category,
+      displayOrder: feature.displayOrder,
+      translations: mergeAllTranslations(feature.translations)
+    }));
   }
 
   /**
    * Get single public feature by ID
    */
-  static async getPublicFeatureById(featureId: number, locale: Locale) {
+  static async getPublicFeatureById(featureId: number, _locale: Locale) {
     const feature: any = await prisma.featureMaster.findFirst({
       where: {
         featureId,
@@ -51,9 +45,7 @@ export class FeatureService {
         deletedAt: null
       },
       include: {
-        translations: {
-          where: { locale }
-        }
+        translations: true
       }
     });
 
@@ -61,14 +53,12 @@ export class FeatureService {
       throw new NotFoundError("Feature not found");
     }
 
-    const translation = feature.translations[0] || {};
     return {
       featureId: feature.featureId,
       featureCode: feature.featureCode,
       category: feature.category,
       displayOrder: feature.displayOrder,
-      featureName: translation.featureName || "",
-      description: translation.description || ""
+      translations: mergeAllTranslations(feature.translations)
     };
   }
 

@@ -7,16 +7,14 @@ export class AdvancedFeatureService {
   /**
    * Get all active advanced features (Public)
    */
-  static async getPublicFeatures(locale: Locale) {
+  static async getPublicFeatures(_locale: Locale) {
     const features: any = await prisma.advancedFeature.findMany({
       where: {
         isActive: true,
         deletedAt: null
       },
       include: {
-        translations: {
-          where: { locale }
-        },
+        translations: true,
         imageFile: {
           select: {
             fileId: true,
@@ -28,21 +26,19 @@ export class AdvancedFeatureService {
       orderBy: { displayOrder: "asc" }
     });
 
-    return features.map((feature: any) => {
-      const translation = feature.translations[0] || {};
-      return {
-        featureId: feature.featureId,
-        displayOrder: feature.displayOrder,
-        linkUrl: feature.linkUrl,
-        title: translation.title || "",
-        description: translation.description || "",
-        image: feature.imageFile
-          ? {
-              fileId: feature.imageFile.fileId,
-              filePath: feature.imageFile.filePath,
-              altText: feature.imageFile.altText
-            }
-          : null
+    return features.map((feature: any) => ({
+      featureId: feature.featureId,
+      displayOrder: feature.displayOrder,
+      linkUrl: feature.linkUrl,
+      translations: mergeAllTranslations(feature.translations),
+      image: feature.imageFile
+        ? {
+            fileId: feature.imageFile.fileId,
+            filePath: feature.imageFile.filePath,
+            altText: feature.imageFile.altText
+          }
+        : null
+    }));
       };
     });
   }

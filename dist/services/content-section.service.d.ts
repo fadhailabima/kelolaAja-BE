@@ -1,18 +1,14 @@
 import { Locale } from '@prisma/client';
 export declare class ContentSectionService {
-    static getPublicSections(locale: Locale, pageLocation?: string): Promise<any>;
-    static getPublicSectionByKey(sectionKey: string, locale: Locale): Promise<{
+    static getPublicSections(_locale: Locale, pageLocation?: string): Promise<any>;
+    static getPublicSectionByKey(sectionKey: string, _locale: Locale): Promise<{
         sectionId: any;
         sectionType: any;
         sectionKey: any;
         pageLocation: any;
         displayOrder: any;
         metadata: any;
-        title: any;
-        subtitle: any;
-        description: any;
-        content: any;
-        additionalData: any;
+        translations: Record<import(".prisma/client").$Enums.Locale, Omit<import("../utils/translation").Translation, "locale">>;
         media: any;
     }>;
     static getAllSections(page?: number, limit?: number, pageLocation?: string): Promise<{

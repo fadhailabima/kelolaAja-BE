@@ -91,9 +91,7 @@ export class FeaturePageService {
     return file;
   }
 
-  private static formatPagePublic(page: any, locale: Locale) {
-    const translation = extractTranslation(this.normalizeTranslations(page.translations), locale) || {};
-
+  private static formatPagePublic(page: any) {
     return {
       pageId: page.pageId,
       pageCode: page.pageCode,
@@ -106,29 +104,16 @@ export class FeaturePageService {
             altText: page.heroImageFile.altText
           }
         : null,
-      heroTitle: translation.heroTitle || "",
-      heroSubtitle: translation.heroSubtitle || "",
-      heroDescription: translation.heroDescription || "",
-      aboutTitle: translation.aboutTitle || "",
-      aboutSubtitle: translation.aboutSubtitle || "",
-      aboutDescription1: translation.aboutDescription1 || "",
-      aboutDescription2: translation.aboutDescription2 || "",
-      ctaTitle: translation.ctaTitle || "",
-      ctaDescription: translation.ctaDescription || "",
-      ctaButtonText: translation.ctaButtonText || ""
+      translations: mergeAllTranslations(page.translations)
     };
   }
 
-  private static formatItemPublic(item: any, locale: Locale) {
-    const translation = extractTranslation(this.normalizeTranslations(item.translations), locale) || {};
-
+  private static formatItemPublic(item: any) {
     return {
       itemId: item.itemId,
       itemType: item.itemType,
       displayOrder: item.displayOrder,
-      title: translation.title || "",
-      description: translation.description || "",
-      shortDescription: translation.shortDescription || "",
+      translations: mergeAllTranslations(item.translations),
       image: item.imageFile
         ? {
             fileId: item.imageFile.fileId,
@@ -142,7 +127,7 @@ export class FeaturePageService {
   /**
    * Public - list pages
    */
-  static async getPublicPages(locale: Locale, featureId?: number) {
+  static async getPublicPages(_locale: Locale, featureId?: number) {
     const pages = await prisma.featurePage.findMany({
       where: {
         deletedAt: null,
@@ -162,13 +147,13 @@ export class FeaturePageService {
       orderBy: { createdAt: "asc" }
     });
 
-    return pages.map(page => this.formatPagePublic(page, locale));
+    return pages.map(page => this.formatPagePublic(page));
   }
 
   /**
    * Public - get single page by slug
    */
-  static async getPublicPageBySlug(slug: string, locale: Locale) {
+  static async getPublicPageBySlug(slug: string, _locale: Locale) {
     const page = await prisma.featurePage.findFirst({
       where: {
         slug,
@@ -205,10 +190,10 @@ export class FeaturePageService {
       throw new NotFoundError("Feature page not found");
     }
 
-    const base = this.formatPagePublic(page, locale);
+    const base = this.formatPagePublic(page);
     return {
       ...base,
-      items: page.items.map(item => this.formatItemPublic(item, locale))
+      items: page.items.map(item => this.formatItemPublic(item))
     };
   }
 

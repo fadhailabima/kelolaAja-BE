@@ -45,12 +45,18 @@ class MediaFileController {
             const filters = {
                 fileType: req.query.fileType,
                 mimeType: req.query.mimeType,
-                isPublic: req.query.isPublic === 'true' ? true : req.query.isPublic === 'false' ? false : undefined,
-                uploadedBy: req.query.uploadedBy ? parseInt(req.query.uploadedBy) : undefined,
+                isPublic: req.query.isPublic === "true"
+                    ? true
+                    : req.query.isPublic === "false"
+                        ? false
+                        : undefined,
+                uploadedBy: req.query.uploadedBy
+                    ? parseInt(req.query.uploadedBy)
+                    : undefined,
             };
             const result = await media_file_service_1.MediaFileService.getAllFiles(page, limit, filters);
             const { data, pagination } = result;
-            return response_1.ResponseUtil.success(res, 'Media files retrieved successfully', data, 200, pagination);
+            return response_1.ResponseUtil.success(res, "Media files retrieved successfully", data, 200, pagination);
         }
         catch (error) {
             return response_1.ResponseUtil.error(res, error.message);
@@ -60,7 +66,7 @@ class MediaFileController {
         try {
             const fileId = parseInt(req.params.id);
             const file = await media_file_service_1.MediaFileService.getFileById(fileId);
-            return response_1.ResponseUtil.success(res, 'Media file retrieved successfully', file);
+            return response_1.ResponseUtil.success(res, "Media file retrieved successfully", file);
         }
         catch (error) {
             return response_1.ResponseUtil.error(res, error.message);
@@ -70,17 +76,17 @@ class MediaFileController {
         try {
             const userId = req.user?.userId;
             if (!userId) {
-                return response_1.ResponseUtil.unauthorized(res, 'User not authenticated');
+                return response_1.ResponseUtil.unauthorized(res, "User not authenticated");
             }
             if (!req.file) {
-                return response_1.ResponseUtil.error(res, 'No file uploaded', 400);
+                return response_1.ResponseUtil.error(res, "No file uploaded", 400);
             }
             const uploadedFile = req.file;
             const fileType = file_util_1.FileUtil.getFileType(uploadedFile.mimetype);
             const relativePath = file_util_1.FileUtil.getRelativePath(uploadedFile.path);
             let width;
             let height;
-            if (fileType === 'image') {
+            if (fileType === "image") {
                 const dimensions = await file_util_1.FileUtil.getImageDimensions(uploadedFile.path);
                 if (dimensions) {
                     width = dimensions.width;
@@ -93,7 +99,7 @@ class MediaFileController {
                 });
             }
             const altText = req.body.altText || uploadedFile.originalname;
-            const isPublic = req.body.isPublic !== undefined ? req.body.isPublic === 'true' : true;
+            const isPublic = req.body.isPublic !== undefined ? req.body.isPublic === "true" : true;
             const file = await media_file_service_1.MediaFileService.createFile({
                 fileName: uploadedFile.originalname,
                 filePath: relativePath,
@@ -103,11 +109,11 @@ class MediaFileController {
                 width,
                 height,
                 altText,
-                storageType: 'local',
+                storageType: "local",
                 isPublic,
                 uploadedBy: userId,
             });
-            return response_1.ResponseUtil.success(res, 'Media file uploaded successfully', file, 201);
+            return response_1.ResponseUtil.success(res, "Media file uploaded successfully", file, 201);
         }
         catch (error) {
             return response_1.ResponseUtil.error(res, error.message);
@@ -117,7 +123,7 @@ class MediaFileController {
         try {
             const fileId = parseInt(req.params.id);
             const file = await media_file_service_1.MediaFileService.updateFile(fileId, req.body);
-            return response_1.ResponseUtil.success(res, 'Media file updated successfully', file);
+            return response_1.ResponseUtil.success(res, "Media file updated successfully", file);
         }
         catch (error) {
             return response_1.ResponseUtil.error(res, error.message);
@@ -141,7 +147,7 @@ class MediaFileController {
                 totalSize: stats.totalSize.toString(),
                 totalSizeFormatted: file_util_1.FileUtil.formatFileSize(stats.totalSize),
             };
-            return response_1.ResponseUtil.success(res, 'File statistics retrieved successfully', serializedStats);
+            return response_1.ResponseUtil.success(res, "File statistics retrieved successfully", serializedStats);
         }
         catch (error) {
             return response_1.ResponseUtil.error(res, error.message);
@@ -152,15 +158,15 @@ class MediaFileController {
             const fileId = parseInt(req.params.id);
             const file = await media_file_service_1.MediaFileService.getFileById(fileId);
             if (!file.isPublic && !req.user) {
-                return response_1.ResponseUtil.unauthorized(res, 'This file is not public');
+                return response_1.ResponseUtil.unauthorized(res, "This file is not public");
             }
             const absolutePath = file_util_1.FileUtil.getAbsolutePath(file.filePath);
-            const fs = await Promise.resolve().then(() => __importStar(require('fs')));
+            const fs = await Promise.resolve().then(() => __importStar(require("fs")));
             if (!fs.existsSync(absolutePath)) {
-                return response_1.ResponseUtil.error(res, 'File not found on server', 404);
+                return response_1.ResponseUtil.error(res, "File not found on server", 404);
             }
-            res.setHeader('Content-Type', file.mimeType || 'application/octet-stream');
-            res.setHeader('Content-Disposition', `inline; filename="${file.fileName}"`);
+            res.setHeader("Content-Type", file.mimeType || "application/octet-stream");
+            res.setHeader("Content-Disposition", `inline; filename="${file.fileName}"`);
             return res.sendFile(absolutePath);
         }
         catch (error) {
@@ -172,15 +178,15 @@ class MediaFileController {
             const fileId = parseInt(req.params.id);
             const file = await media_file_service_1.MediaFileService.getFileById(fileId);
             if (!file.isPublic && !req.user) {
-                return response_1.ResponseUtil.unauthorized(res, 'This file is not public');
+                return response_1.ResponseUtil.unauthorized(res, "This file is not public");
             }
             const absolutePath = file_util_1.FileUtil.getAbsolutePath(file.filePath);
-            const fs = await Promise.resolve().then(() => __importStar(require('fs')));
+            const fs = await Promise.resolve().then(() => __importStar(require("fs")));
             if (!fs.existsSync(absolutePath)) {
-                return response_1.ResponseUtil.error(res, 'File not found on server', 404);
+                return response_1.ResponseUtil.error(res, "File not found on server", 404);
             }
-            res.setHeader('Content-Type', file.mimeType || 'application/octet-stream');
-            res.setHeader('Content-Disposition', `attachment; filename="${file.fileName}"`);
+            res.setHeader("Content-Type", file.mimeType || "application/octet-stream");
+            res.setHeader("Content-Disposition", `attachment; filename="${file.fileName}"`);
             return res.sendFile(absolutePath);
         }
         catch (error) {

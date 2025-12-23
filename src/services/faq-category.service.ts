@@ -7,16 +7,14 @@ export class FAQCategoryService {
   /**
    * Get all active FAQ categories (Public)
    */
-  static async getPublicCategories(locale: Locale) {
+  static async getPublicCategories(_locale: Locale) {
     const categories: any = await prisma.fAQCategory.findMany({
       where: {
         isActive: true,
         deletedAt: null
       },
       include: {
-        translations: {
-          where: { locale }
-        },
+        translations: true,
         faqs: {
           where: {
             isActive: true,
@@ -31,12 +29,11 @@ export class FAQCategoryService {
     });
 
     return categories.map((category: any) => {
-      const translation = category.translations[0] || {};
       return {
         categoryId: category.categoryId,
         categoryCode: category.categoryCode,
         displayOrder: category.displayOrder,
-        categoryName: translation.categoryName || "",
+        translations: mergeAllTranslations(category.translations),
         faqCount: category.faqs.length
       };
     });

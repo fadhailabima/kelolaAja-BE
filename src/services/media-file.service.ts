@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import { FileUtil } from '../utils/file.util';
+import { PrismaClient } from "@prisma/client";
+import { FileUtil } from "../utils/file.util";
 
 const prisma = new PrismaClient();
 
@@ -40,7 +40,7 @@ export class MediaFileService {
             },
           },
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         skip,
         take: limit,
       }),
@@ -48,10 +48,10 @@ export class MediaFileService {
     ]);
 
     // Convert BigInt to Number for JSON serialization and add file URLs
-    const serializedFiles = files.map(file => ({
+    const serializedFiles = files.map((file) => ({
       ...file,
       fileSize: file.fileSize ? Number(file.fileSize) : 0,
-      fileUrl: FileUtil.getFileUrl(file.filePath)
+      fileUrl: FileUtil.getFileUrl(file.filePath),
     }));
 
     return {
@@ -83,13 +83,13 @@ export class MediaFileService {
     });
 
     if (!file || file.deletedAt) {
-      throw new Error('Media file not found');
+      throw new Error("Media file not found");
     }
 
     return {
       ...file,
       fileSize: file.fileSize ? Number(file.fileSize) : 0,
-      fileUrl: FileUtil.getFileUrl(file.filePath)
+      fileUrl: FileUtil.getFileUrl(file.filePath),
     };
   }
 
@@ -120,7 +120,7 @@ export class MediaFileService {
         width: data.width,
         height: data.height,
         altText: data.altText,
-        storageType: data.storageType || 'local',
+        storageType: data.storageType || "local",
         storageUrl: data.storageUrl,
         isPublic: data.isPublic ?? true,
         uploadedBy: data.uploadedBy,
@@ -140,7 +140,7 @@ export class MediaFileService {
     return {
       ...file,
       fileSize: file.fileSize ? Number(file.fileSize) : 0,
-      fileUrl: FileUtil.getFileUrl(file.filePath)
+      fileUrl: FileUtil.getFileUrl(file.filePath),
     };
   }
 
@@ -160,7 +160,7 @@ export class MediaFileService {
     });
 
     if (!file || file.deletedAt) {
-      throw new Error('Media file not found');
+      throw new Error("Media file not found");
     }
 
     const updatedFile = await prisma.mediaFile.update({
@@ -185,7 +185,7 @@ export class MediaFileService {
     return {
       ...updatedFile,
       fileSize: updatedFile.fileSize ? Number(updatedFile.fileSize) : 0,
-      fileUrl: FileUtil.getFileUrl(updatedFile.filePath)
+      fileUrl: FileUtil.getFileUrl(updatedFile.filePath),
     };
   }
 
@@ -198,7 +198,7 @@ export class MediaFileService {
     });
 
     if (!file || file.deletedAt) {
-      throw new Error('Media file not found');
+      throw new Error("Media file not found");
     }
 
     // Soft delete in database
@@ -211,7 +211,7 @@ export class MediaFileService {
     // const absolutePath = FileUtil.getAbsolutePath(file.filePath);
     // FileUtil.deleteFile(absolutePath);
 
-    return { message: 'Media file deleted successfully' };
+    return { message: "Media file deleted successfully" };
   }
 
   /**
@@ -223,7 +223,7 @@ export class MediaFileService {
     });
 
     if (!file) {
-      throw new Error('Media file not found');
+      throw new Error("Media file not found");
     }
 
     // Delete physical file
@@ -235,7 +235,7 @@ export class MediaFileService {
       where: { fileId },
     });
 
-    return { message: 'Media file permanently deleted' };
+    return { message: "Media file permanently deleted" };
   }
 
   /**
@@ -253,7 +253,7 @@ export class MediaFileService {
         },
       }),
       prisma.mediaFile.groupBy({
-        by: ['fileType'],
+        by: ["fileType"],
         where: { deletedAt: null },
         _count: {
           fileId: true,
@@ -265,7 +265,7 @@ export class MediaFileService {
       totalFiles,
       totalSize: totalSize._sum.fileSize || BigInt(0),
       filesByType: filesByType.map((item) => ({
-        fileType: item.fileType || 'unknown',
+        fileType: item.fileType || "unknown",
         count: item._count.fileId,
       })),
     };

@@ -7,16 +7,14 @@ export class ProcessStepService {
   /**
    * Get all active process steps (Public)
    */
-  static async getPublicSteps(locale: Locale) {
+  static async getPublicSteps(_locale: Locale) {
     const steps: any = await prisma.processStep.findMany({
       where: {
         isActive: true,
         deletedAt: null
       },
       include: {
-        translations: {
-          where: { locale }
-        },
+        translations: true,
         imageFile: {
           select: {
             fileId: true,
@@ -28,21 +26,18 @@ export class ProcessStepService {
       orderBy: { displayOrder: "asc" }
     });
 
-    return steps.map((step: any) => {
-      const translation = step.translations[0] || {};
-      return {
-        stepId: step.stepId,
-        displayOrder: step.displayOrder,
-        title: translation.title || "",
-        description: translation.description || "",
-        image: step.imageFile
-          ? {
-              fileId: step.imageFile.fileId,
-              filePath: step.imageFile.filePath,
-              altText: step.imageFile.altText
-            }
-          : null
-      };
+    return steps.map((step: any) => ({
+      stepId: step.stepId,
+      displayOrder: step.displayOrder,
+      translations: mergeAllTranslations(step.translations),
+      image: step.imageFile
+        ? {
+            fileId: step.imageFile.fileId,
+            filePath: step.imageFile.filePath,
+            altText: step.imageFile.altText
+          }
+        : null
+    }));
     });
   }
 

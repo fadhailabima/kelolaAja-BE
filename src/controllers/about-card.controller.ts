@@ -7,16 +7,20 @@ export class AboutCardController {
   /**
    * Get all active about cards (Public)
    */
-  static async listPublicCards(req: Request, res: Response, next: NextFunction) {
+  static async listPublicCards(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const locale = req.locale || Locale.id;
       const cards = await AboutCardService.getPublicCards(locale);
-      
+
       // Set cache-control headers to ensure fresh data
-      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-      res.setHeader('Pragma', 'no-cache');
-      res.setHeader('Expires', '0');
-      
+      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.setHeader("Pragma", "no-cache");
+      res.setHeader("Expires", "0");
+
       ResponseUtil.success(res, "About cards retrieved successfully", cards);
     } catch (error) {
       next(error);
@@ -33,8 +37,19 @@ export class AboutCardController {
       const search = req.query.search as string;
       const isActive = req.query.is_active as string;
 
-      const result = await AboutCardService.getAllCards(page, limit, search, isActive);
-      ResponseUtil.success(res, "Cards retrieved successfully", result.data, 200, result.pagination);
+      const result = await AboutCardService.getAllCards(
+        page,
+        limit,
+        search,
+        isActive
+      );
+      ResponseUtil.success(
+        res,
+        "Cards retrieved successfully",
+        result.data,
+        200,
+        result.pagination
+      );
     } catch (error) {
       next(error);
     }

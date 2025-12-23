@@ -5,7 +5,7 @@ const client_1 = require("@prisma/client");
 const translation_1 = require("../utils/translation");
 const prisma = new client_1.PrismaClient();
 class ContentSectionService {
-    static async getPublicSections(locale, pageLocation) {
+    static async getPublicSections(_locale, pageLocation) {
         const sections = await prisma.contentSection.findMany({
             where: {
                 isActive: true,
@@ -13,9 +13,7 @@ class ContentSectionService {
                 ...(pageLocation ? { pageLocation } : {}),
             },
             include: {
-                translations: {
-                    where: { locale },
-                },
+                translations: true,
                 media: {
                     include: {
                         mediaFile: {
@@ -33,37 +31,28 @@ class ContentSectionService {
             },
             orderBy: { displayOrder: 'asc' },
         });
-        return sections.map((section) => {
-            const translation = (0, translation_1.extractTranslation)(section.translations, locale);
-            return {
-                sectionId: section.sectionId,
-                sectionType: section.sectionType,
-                sectionKey: section.sectionKey,
-                pageLocation: section.pageLocation,
-                displayOrder: section.displayOrder,
-                metadata: section.metadata,
-                title: translation?.title ?? '',
-                subtitle: translation?.subtitle ?? null,
-                description: translation?.description ?? null,
-                content: translation?.content ?? null,
-                additionalData: translation?.additionalData ?? null,
-                media: section.media.map((m) => ({
-                    contentMediaId: m.contentMediaId,
-                    mediaType: m.mediaType,
-                    usage: m.usage,
-                    displayOrder: m.displayOrder,
-                    file: m.mediaFile,
-                })),
-            };
-        });
+        return sections.map((section) => ({
+            sectionId: section.sectionId,
+            sectionType: section.sectionType,
+            sectionKey: section.sectionKey,
+            pageLocation: section.pageLocation,
+            displayOrder: section.displayOrder,
+            metadata: section.metadata,
+            translations: (0, translation_1.mergeAllTranslations)(section.translations),
+            media: section.media.map((m) => ({
+                contentMediaId: m.contentMediaId,
+                mediaType: m.mediaType,
+                usage: m.usage,
+                displayOrder: m.displayOrder,
+                file: m.mediaFile,
+            })),
+        }));
     }
-    static async getPublicSectionByKey(sectionKey, locale) {
+    static async getPublicSectionByKey(sectionKey, _locale) {
         const section = await prisma.contentSection.findUnique({
             where: { sectionKey },
             include: {
-                translations: {
-                    where: { locale },
-                },
+                translations: true,
                 media: {
                     include: {
                         mediaFile: {
@@ -83,7 +72,6 @@ class ContentSectionService {
         if (!section || !section.isActive || section.deletedAt) {
             throw new Error('Content section not found');
         }
-        const translation = (0, translation_1.extractTranslation)(section.translations, locale);
         return {
             sectionId: section.sectionId,
             sectionType: section.sectionType,
@@ -91,11 +79,7 @@ class ContentSectionService {
             pageLocation: section.pageLocation,
             displayOrder: section.displayOrder,
             metadata: section.metadata,
-            title: translation?.title ?? '',
-            subtitle: translation?.subtitle ?? null,
-            description: translation?.description ?? null,
-            content: translation?.content ?? null,
-            additionalData: translation?.additionalData ?? null,
+            translations: (0, translation_1.mergeAllTranslations)(section.translations),
             media: section.media.map((m) => ({
                 contentMediaId: m.contentMediaId,
                 mediaType: m.mediaType,

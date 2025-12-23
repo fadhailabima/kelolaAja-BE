@@ -7,7 +7,7 @@ export class FAQService {
   /**
    * Get all active FAQs (Public)
    */
-  static async getPublicFAQs(locale: Locale, categoryId?: number) {
+  static async getPublicFAQs(_locale: Locale, categoryId?: number) {
     const where: any = {
       isActive: true,
       deletedAt: null,
@@ -20,14 +20,10 @@ export class FAQService {
     const faqs: any = await prisma.fAQ.findMany({
       where,
       include: {
-        translations: {
-          where: { locale },
-        },
+        translations: true,
         category: {
           include: {
-            translations: {
-              where: { locale },
-            },
+            translations: true,
           },
         },
       },
@@ -35,19 +31,15 @@ export class FAQService {
     });
 
     return faqs.map((faq: any) => {
-      const translation = faq.translations[0] || {};
-      const categoryTranslation = faq.category?.translations[0] || {};
-      
       return {
         faqId: faq.faqId,
         displayOrder: faq.displayOrder,
-        question: translation.question || '',
-        answer: translation.answer || '',
+        translations: mergeAllTranslations(faq.translations),
         category: faq.category
           ? {
               categoryId: faq.category.categoryId,
               categoryCode: faq.category.categoryCode,
-              categoryName: categoryTranslation.categoryName || '',
+              translations: mergeAllTranslations(faq.category.translations),
             }
           : null,
       };
@@ -57,25 +49,21 @@ export class FAQService {
   /**
    * Get FAQs grouped by category (Public)
    */
-  static async getPublicFAQsByCategory(locale: Locale) {
+  static async getPublicFAQsByCategory(_locale: Locale) {
     const categories: any = await prisma.fAQCategory.findMany({
       where: {
         isActive: true,
         deletedAt: null,
       },
       include: {
-        translations: {
-          where: { locale },
-        },
+        translations: true,
         faqs: {
           where: {
             isActive: true,
             deletedAt: null,
           },
           include: {
-            translations: {
-              where: { locale },
-            },
+            translations: true,
           },
           orderBy: { displayOrder: 'asc' },
         },
@@ -84,20 +72,16 @@ export class FAQService {
     });
 
     return categories.map((category: any) => {
-      const categoryTranslation = category.translations[0] || {};
-      
       return {
         categoryId: category.categoryId,
         categoryCode: category.categoryCode,
-        categoryName: categoryTranslation.categoryName || '',
+        translations: mergeAllTranslations(category.translations),
         displayOrder: category.displayOrder,
         faqs: category.faqs.map((faq: any) => {
-          const translation = faq.translations[0] || {};
           return {
             faqId: faq.faqId,
             displayOrder: faq.displayOrder,
-            question: translation.question || '',
-            answer: translation.answer || '',
+            translations: mergeAllTranslations(faq.translations),
           };
         }),
       };
@@ -107,7 +91,7 @@ export class FAQService {
   /**
    * Get single public FAQ by ID
    */
-  static async getPublicFAQById(faqId: number, locale: Locale) {
+  static async getPublicFAQById(faqId: number, _locale: Locale) {
     const faq: any = await prisma.fAQ.findFirst({
       where: {
         faqId,
@@ -115,14 +99,10 @@ export class FAQService {
         deletedAt: null,
       },
       include: {
-        translations: {
-          where: { locale },
-        },
+        translations: true,
         category: {
           include: {
-            translations: {
-              where: { locale },
-            },
+            translations: true,
           },
         },
       },
@@ -132,19 +112,15 @@ export class FAQService {
       throw new NotFoundError('FAQ not found');
     }
 
-    const translation = faq.translations[0] || {};
-    const categoryTranslation = faq.category?.translations[0] || {};
-
     return {
       faqId: faq.faqId,
       displayOrder: faq.displayOrder,
-      question: translation.question || '',
-      answer: translation.answer || '',
+      translations: mergeAllTranslations(faq.translations),
       category: faq.category
         ? {
             categoryId: faq.category.categoryId,
             categoryCode: faq.category.categoryCode,
-            categoryName: categoryTranslation.categoryName || '',
+            translations: mergeAllTranslations(faq.category.translations),
           }
         : null,
     };

@@ -7,16 +7,14 @@ export class ERPBenefitService {
   /**
    * Get all active ERP benefits (Public)
    */
-  static async getPublicBenefits(locale: Locale) {
+  static async getPublicBenefits(_locale: Locale) {
     const benefits: any = await prisma.eRPBenefit.findMany({
       where: {
         isActive: true,
         deletedAt: null
       },
       include: {
-        translations: {
-          where: { locale }
-        },
+        translations: true,
         imageFile: {
           select: {
             fileId: true,
@@ -28,21 +26,18 @@ export class ERPBenefitService {
       orderBy: { displayOrder: "asc" }
     });
 
-    return benefits.map((benefit: any) => {
-      const translation = benefit.translations[0] || {};
-      return {
-        benefitId: benefit.benefitId,
-        displayOrder: benefit.displayOrder,
-        title: translation.title || "",
-        description: translation.description || "",
-        image: benefit.imageFile
-          ? {
-              fileId: benefit.imageFile.fileId,
-              filePath: benefit.imageFile.filePath,
-              altText: benefit.imageFile.altText
-            }
-          : null
-      };
+    return benefits.map((benefit: any) => ({
+      benefitId: benefit.benefitId,
+      displayOrder: benefit.displayOrder,
+      translations: mergeAllTranslations(benefit.translations),
+      image: benefit.imageFile
+        ? {
+            fileId: benefit.imageFile.fileId,
+            filePath: benefit.imageFile.filePath,
+            altText: benefit.imageFile.altText
+          }
+        : null
+    }));
     });
   }
 

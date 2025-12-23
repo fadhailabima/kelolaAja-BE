@@ -7,29 +7,24 @@ export class BenefitStatService {
   /**
    * Get all active benefit stats (Public)
    */
-  static async getPublicStats(locale: Locale) {
+  static async getPublicStats(_locale: Locale) {
     const stats: any = await prisma.benefitStat.findMany({
       where: {
         isActive: true,
         deletedAt: null
       },
       include: {
-        translations: {
-          where: { locale }
-        }
+        translations: true
       },
       orderBy: { displayOrder: "asc" }
     });
 
-    return stats.map((stat: any) => {
-      const translation = stat.translations[0] || {};
-      return {
-        statId: stat.statId,
-        value: stat.statValue,
-        displayOrder: stat.displayOrder,
-        label: translation.label || ""
-      };
-    });
+    return stats.map((stat: any) => ({
+      statId: stat.statId,
+      value: stat.statValue,
+      displayOrder: stat.displayOrder,
+      translations: mergeAllTranslations(stat.translations)
+    }));
   }
 
   /**

@@ -7,30 +7,24 @@ export class KelolaAjaFeatureService {
   /**
    * Get all active KelolaAja features (Public)
    */
-  static async getPublicFeatures(locale: Locale) {
+  static async getPublicFeatures(_locale: Locale) {
     const features: any = await prisma.kelolaAjaFeature.findMany({
       where: {
         isActive: true,
         deletedAt: null
       },
       include: {
-        translations: {
-          where: { locale }
-        }
+        translations: true
       },
       orderBy: { displayOrder: "asc" }
     });
 
-    return features.map((feature: any) => {
-      const translation = feature.translations[0] || {};
-      return {
-        featureId: feature.featureId,
-        displayOrder: feature.displayOrder,
-        iconName: feature.iconName,
-        title: translation.title || "",
-        description: translation.description || ""
-      };
-    });
+    return features.map((feature: any) => ({
+      featureId: feature.featureId,
+      displayOrder: feature.displayOrder,
+      iconName: feature.iconName,
+      translations: mergeAllTranslations(feature.translations)
+    }));
   }
 
   /**
