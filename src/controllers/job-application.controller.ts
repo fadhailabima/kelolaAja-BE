@@ -11,7 +11,7 @@ export class JobApplicationController {
     try {
       // Handle CV file upload if present
       let cvFileId: number | undefined;
-      
+
       if (req.file) {
         const { FileUtil } = await import("../utils/file.util");
         const { MediaFileService } = await import("../services/media-file.service");
@@ -53,16 +53,25 @@ export class JobApplicationController {
         githubUrl: req.body.githubUrl,
         referralSource: req.body.referralSource,
       };
-      
+
       const ipAddress = req.ip;
       const userAgent = req.get("user-agent");
 
       const application = await jobApplicationService.createJobApplication(data, ipAddress, userAgent);
 
+      // Serialize BigInt fields before sending response
+      const serializedApplication = {
+        ...application,
+        cvFile: application.cvFile ? {
+          ...application.cvFile,
+          fileSize: Number(application.cvFile.fileSize)
+        } : null
+      };
+
       res.status(201).json({
         success: true,
         message: "Application submitted successfully",
-        data: application,
+        data: serializedApplication,
       });
     } catch (error) {
       next(error);
