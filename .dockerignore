@@ -1,0 +1,79 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Environment files
+.env*
+!.env.docker
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Logs
+logs/
+*.log
+
+# Test files
+coverage/
+.nyc_output/
+test/
+tests/
+__tests__/
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+jest.config.*
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Docker
+.dockerignore
+docker-compose*.yml
+Dockerfile*
+
+# Postman
+*.postman_collection.json
+*.postman_environment.json
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Uploads (recreated at runtime)
+uploads/
+
+# Cache
+.cache/
+.npm/
+.eslintcache
+
+# Config
+.prettierrc*
+.eslintrc*
+.editorconfig

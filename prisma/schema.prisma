@@ -1,0 +1,1345 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ADMIN & AUTHENTICATION
+// ============================================
+
+enum UserRole {
+  Admin
+  Editor
+  Viewer
+}
+
+enum Locale {
+  id
+  en
+}
+
+model AdminUser {
+  // Fields
+  userId         Int           @id @default(autoincrement()) @map("user_id")
+  username       String        @unique @db.VarChar(255)
+  email          String        @unique @db.VarChar(255)
+  passwordHash   String        @map("password_hash") @db.VarChar(255)
+  role           UserRole      @default(Viewer)
+  fullName       String?       @map("full_name") @db.VarChar(255)
+  isActive       Boolean       @default(true) @map("is_active")
+  lastLogin      DateTime?     @map("last_login") @db.Timestamp(3)
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt      DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  
+  // Self-Reference (CreatedBy)
+  createdBy      Int?          @map("created_by")
+  creator        AdminUser?    @relation("AdminUserCreatedBy", fields: [createdBy], references: [userId])
+
+  // Relations
+  createdUsers         AdminUser[] @relation("AdminUserCreatedBy")
+  
+  createdPricingPlans  PricingPlan[]       @relation("CreatedByPricingAdmin")
+  updatedPricingPlans  PricingPlan[]       @relation("UpdatedByPricingAdmin")
+  createdFeatures      FeatureMaster[]     @relation("CreatedFeatureByAdmin")
+  updatedFeatures      FeatureMaster[]     @relation("UpdatedFeatureByAdmin")
+  createdFeaturePages  FeaturePage[]       @relation("CreatedFeaturePageByAdmin")
+  updatedFeaturePages  FeaturePage[]       @relation("UpdatedFeaturePageByAdmin")
+  createdDetailSections DetailFeatureSection[] @relation("CreatedDetailSectionByAdmin")
+  updatedDetailSections DetailFeatureSection[] @relation("UpdatedDetailSectionByAdmin")
+  createdContents      ContentSection[]    @relation("CreatedContentByAdmin")
+  updatedContents      ContentSection[]    @relation("UpdatedContentByAdmin")
+  createdTestimonials  Testimonial[]       @relation("CreatedTestimonialByAdmin")
+  updatedTestimonials  Testimonial[]       @relation("UpdatedTestimonialByAdmin")
+  createdIndustries    Industry[]          @relation("CreatedIndustryByAdmin")
+  updatedIndustries    Industry[]          @relation("UpdatedIndustryByAdmin")
+  createdBenefitStats  BenefitStat[]       @relation("CreatedBenefitStatByAdmin")
+  updatedBenefitStats  BenefitStat[]       @relation("UpdatedBenefitStatByAdmin")
+  createdProcessSteps  ProcessStep[]       @relation("CreatedProcessStepByAdmin")
+  updatedProcessSteps  ProcessStep[]       @relation("UpdatedProcessStepByAdmin")
+  createdErpBenefits   ERPBenefit[]        @relation("CreatedErpBenefitByAdmin")
+  updatedErpBenefits   ERPBenefit[]        @relation("UpdatedErpBenefitByAdmin")
+  createdPartners      Partner[]           @relation("CreatedPartnerByAdmin")
+  updatedPartners      Partner[]           @relation("UpdatedPartnerByAdmin")
+  createdAdvancedFeatures AdvancedFeature[] @relation("CreatedAdvancedFeatureByAdmin")
+  updatedAdvancedFeatures AdvancedFeature[] @relation("UpdatedAdvancedFeatureByAdmin")
+  createdFaqs          FAQ[]               @relation("CreatedFAQByAdmin")
+  updatedFaqs          FAQ[]               @relation("UpdatedFAQByAdmin")
+  createdAboutCards    AboutCard[]         @relation("CreatedAboutCardByAdmin")
+  updatedAboutCards    AboutCard[]         @relation("UpdatedAboutCardByAdmin")
+  createdKelolaAjaFeatures KelolaAjaFeature[] @relation("CreatedKelolaAjaFeatureByAdmin")
+  updatedKelolaAjaFeatures KelolaAjaFeature[] @relation("UpdatedKelolaAjaFeatureByAdmin")
+  createdCoreValues    CoreValue[]         @relation("CreatedCoreValueByAdmin")
+  updatedCoreValues    CoreValue[]         @relation("UpdatedCoreValueByAdmin")
+  createdOurPhilosophies OurPhilosophy[]   @relation("CreatedOurPhilosophyByAdmin")
+  updatedOurPhilosophies OurPhilosophy[]   @relation("UpdatedOurPhilosophyByAdmin")
+  createdFaqCategories FAQCategory[]       @relation("CreatedFaqCategoryByAdmin")
+  updatedFaqCategories FAQCategory[]       @relation("UpdatedFaqCategoryByAdmin")
+
+  uploadedMediaFiles   MediaFile[]         @relation("UploadedByAdmin")
+  auditLogs            AuditLog[]          @relation("AdminUserAuditLog")
+  assignedSubmissions  ContactSubmission[] @relation("AssignedToAdmin")
+  updatedSiteConfigs   SiteConfig[]        @relation("UpdatedSiteConfigByAdmin")
+  createdJobPostings   JobPosting[]        @relation("CreatedJobPostingByAdmin")
+  updatedJobPostings   JobPosting[]        @relation("UpdatedJobPostingByAdmin")
+  
+  @@map("ADMIN_USER")
+}
+
+// ============================================
+// PRICING & FEATURES
+// ============================================
+
+model PricingPlan {
+  planId            Int                  @id @default(autoincrement()) @map("plan_id")
+  planCode          String               @unique @map("plan_code") @db.VarChar(50)
+  pricePerUserMonth Int                  @map("price_per_user_month")
+  minUsers          Int                  @map("min_users")
+  maxUsers          Int?                 @map("max_users")
+  displayOrder      Int                  @map("display_order")
+  badgeColor        String?              @map("badge_color") @db.VarChar(50)
+  isActive          Boolean              @default(true) @map("is_active")
+  createdAt         DateTime             @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt         DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt         DateTime?            @map("deleted_at") @db.Timestamp(3)
+
+  createdBy         Int                  @map("created_by")
+  creator           AdminUser            @relation("CreatedByPricingAdmin", fields: [createdBy], references: [userId])
+  updatedBy         Int                  @map("updated_by")
+  updater           AdminUser            @relation("UpdatedByPricingAdmin", fields: [updatedBy], references: [userId])
+
+  translations      PricingTranslation[]
+  planFeatures      PlanFeatureList[]
+
+  @@map("PRICING_PLAN")
+}
+
+model PricingTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  planId        Int      @map("plan_id")
+  locale        Locale   @default(id)
+  planName      String?  @map("plan_name") @db.VarChar(255)
+  pricePeriod   String?  @map("price_period") @db.VarChar(255)
+  userRange     String?  @map("user_range") @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  plan          PricingPlan @relation(fields: [planId], references: [planId])
+
+  @@unique([planId, locale], map: "unique_pricing_translation")
+  @@map("PRICING_TRANSLATION")
+}
+
+model FeatureMaster {
+  featureId        Int                  @id @default(autoincrement()) @map("feature_id")
+  featureCode      String               @unique @map("feature_code") @db.VarChar(100)
+  category         String?              @db.VarChar(50)
+  displayOrder     Int                  @map("display_order")
+  isActive         Boolean              @default(true) @map("is_active")
+  createdAt        DateTime             @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt        DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt        DateTime?            @map("deleted_at") @db.Timestamp(3)
+
+  createdBy        Int                  @map("created_by")
+  creator          AdminUser            @relation("CreatedFeatureByAdmin", fields: [createdBy], references: [userId])
+  updatedBy        Int                  @map("updated_by")
+  updater          AdminUser            @relation("UpdatedFeatureByAdmin", fields: [updatedBy], references: [userId])
+
+  translations     FeatureTranslation[]
+  planFeatureLists PlanFeatureList[]
+  featurePages     FeaturePage[]
+
+  @@map("FEATURE_MASTER")
+}
+
+model FeatureTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  featureId     Int      @map("feature_id")
+  locale        Locale   @default(id)
+  featureName   String?  @map("feature_name") @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  feature       FeatureMaster @relation(fields: [featureId], references: [featureId])
+
+  @@unique([featureId, locale], map: "unique_feature_translation")
+  @@map("FEATURE_TRANSLATION")
+}
+
+model PlanFeatureList {
+  listId       Int         @id @default(autoincrement()) @map("list_id")
+  planId       Int         @map("plan_id")
+  featureId    Int         @map("feature_id")
+  isIncluded   Boolean     @default(true) @map("is_included")
+  displayOrder Int         @map("display_order")
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  plan         PricingPlan @relation(fields: [planId], references: [planId])
+  feature      FeatureMaster @relation(fields: [featureId], references: [featureId])
+
+  @@unique([planId, featureId], map: "unique_plan_feature")
+  @@map("PLAN_FEATURE_LIST")
+}
+
+// ============================================
+// FEATURE PAGES (New)
+// ============================================
+
+model FeaturePage {
+  pageId              Int                     @id @default(autoincrement()) @map("page_id")
+  featureId           Int                     @map("feature_id")
+  pageCode            String                  @unique @map("page_code") @db.VarChar(100)
+  slug                String                  @unique @db.VarChar(100)
+  heroImageFileId     Int?                    @map("hero_image_file_id")
+  isActive            Boolean                 @default(true) @map("is_active")
+  createdAt           DateTime                @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt           DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt           DateTime?               @map("deleted_at") @db.Timestamp(3)
+
+  createdBy           Int                     @map("created_by")
+  creator             AdminUser               @relation("CreatedFeaturePageByAdmin", fields: [createdBy], references: [userId])
+  updatedBy           Int                     @map("updated_by")
+  updater             AdminUser               @relation("UpdatedFeaturePageByAdmin", fields: [updatedBy], references: [userId])
+  featureMaster       FeatureMaster           @relation(fields: [featureId], references: [featureId])
+  heroImageFile       MediaFile?              @relation("FeaturePageHeroImage", fields: [heroImageFileId], references: [fileId])
+
+  translations        FeaturePageTranslation[]
+  items               FeaturePageItem[]
+
+  @@map("FEATURE_PAGE")
+}
+
+model FeaturePageTranslation {
+  translationId       Int         @id @default(autoincrement()) @map("translation_id")
+  pageId              Int         @map("page_id")
+  locale              String      @db.VarChar(5)
+  heroTitle           String?     @map("hero_title") @db.VarChar(255)
+  heroSubtitle        String?     @map("hero_subtitle") @db.VarChar(255)
+  heroDescription     String?     @map("hero_description") @db.Text
+  aboutTitle          String?     @map("about_title") @db.Text
+  aboutSubtitle       String?     @map("about_subtitle") @db.Text
+  aboutDescription1   String?     @map("about_description1") @db.Text
+  aboutDescription2   String?     @map("about_description2") @db.Text
+  ctaTitle            String?     @map("cta_title") @db.VarChar(255)
+  ctaDescription      String?     @map("cta_description") @db.Text
+  ctaButtonText       String?     @map("cta_button_text") @db.VarChar(255)
+  createdAt           DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt           DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  page                FeaturePage @relation(fields: [pageId], references: [pageId])
+
+  @@unique([pageId, locale], map: "unique_feature_page_translation")
+  @@map("FEATURE_PAGE_TRANSLATION")
+}
+
+model FeaturePageItem {
+  itemId            Int                         @id @default(autoincrement()) @map("item_id")
+  pageId            Int                         @map("page_id")
+  imageFileId       Int?                        @map("image_file_id")
+  itemType          String?                     @map("item_type") @db.VarChar(50) // feature/benefit/image_section
+  displayOrder      Int                         @map("display_order")
+  isActive          Boolean                     @default(true) @map("is_active")
+  createdAt         DateTime                    @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt         DateTime                    @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  page              FeaturePage                 @relation(fields: [pageId], references: [pageId])
+  imageFile         MediaFile?                  @relation("FeaturePageItemImage", fields: [imageFileId], references: [fileId])
+
+  translations      FeaturePageItemTranslation[]
+
+  @@map("FEATURE_PAGE_ITEM")
+}
+
+model FeaturePageItemTranslation {
+  translationId     Int      @id @default(autoincrement()) @map("translation_id")
+  itemId            Int      @map("item_id")
+  locale            String   @db.VarChar(5)
+  title             String?  @db.VarChar(255)
+  description       String?  @db.Text
+  shortDescription  String?  @map("short_description") @db.Text
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  item              FeaturePageItem @relation(fields: [itemId], references: [itemId])
+
+  @@unique([itemId, locale], map: "unique_feature_page_item_translation")
+  @@map("FEATURE_PAGE_ITEM_TRANSLATION")
+}
+
+// ============================================
+// DETAIL FEATURES (Reused from previous)
+// ============================================
+
+model DetailFeatureSection {
+  sectionId        Int                       @id @default(autoincrement()) @map("section_id")
+  sectionCode      String                    @unique @map("section_code") @db.VarChar(100)
+  category         String?                   @db.VarChar(50)
+  displayOrder     Int                       @map("display_order")
+  iconFileId       Int?                      @map("icon_file_id")
+  isActive         Boolean                   @default(true) @map("is_active")
+  createdAt        DateTime                  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt        DateTime                  @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt        DateTime?                 @map("deleted_at") @db.Timestamp(3)
+
+  iconFile         MediaFile?                @relation("DetailFeatureIcon", fields: [iconFileId], references: [fileId])
+  createdBy        Int                       @map("created_by")
+  creator          AdminUser                 @relation("CreatedDetailSectionByAdmin", fields: [createdBy], references: [userId])
+  updatedBy        Int                       @map("updated_by")
+  updater          AdminUser                 @relation("UpdatedDetailSectionByAdmin", fields: [updatedBy], references: [userId])
+
+  translations     DetailFeatureTranslation[]
+
+  @@map("DETAIL_FEATURE_SECTION")
+}
+
+model DetailFeatureTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  sectionId     Int      @map("section_id")
+  locale        Locale   @default(id)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  section       DetailFeatureSection @relation(fields: [sectionId], references: [sectionId])
+
+  @@unique([sectionId, locale], map: "unique_detail_feature_translation")
+  @@map("DETAIL_FEATURE_TRANSLATION")
+}
+
+// ============================================
+// CONTENT MANAGEMENT (Reused from previous)
+// ============================================
+
+model ContentSection {
+  sectionId      Int                  @id @default(autoincrement()) @map("section_id")
+  sectionType    String               @map("section_type") @db.VarChar(100)
+  sectionKey     String               @unique @map("section_key") @db.VarChar(100)
+  pageLocation   String?              @map("page_location") @db.VarChar(50)
+  displayOrder   Int                  @map("display_order")
+  isActive       Boolean              @default(true) @map("is_active")
+  metadata       Json?                @db.JsonB
+  createdAt      DateTime             @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt      DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt      DateTime?            @map("deleted_at") @db.Timestamp(3)
+
+  createdBy      Int                  @map("created_by")
+  creator        AdminUser            @relation("CreatedContentByAdmin", fields: [createdBy], references: [userId])
+  updatedBy      Int                  @map("updated_by")
+  updater        AdminUser            @relation("UpdatedContentByAdmin", fields: [updatedBy], references: [userId])
+
+  translations   ContentTranslation[]
+  media          ContentMedia[]
+
+  @@map("CONTENT_SECTION")
+}
+
+model ContentTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  sectionId     Int      @map("section_id")
+  locale        Locale   @default(id)
+  title         String?  @db.VarChar(255)
+  subtitle      String?  @db.VarChar(255)
+  description   String?  @db.Text
+  content       String?  @db.Text
+  additionalData Json?   @map("additional_data") @db.JsonB
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  section       ContentSection @relation(fields: [sectionId], references: [sectionId])
+
+  @@unique([sectionId, locale], map: "unique_content_translation")
+  @@map("CONTENT_TRANSLATION")
+}
+
+model ContentMedia {
+  contentMediaId Int      @id @default(autoincrement()) @map("content_media_id")
+  sectionId      Int      @map("section_id")
+  fileId         Int      @map("file_id")
+  mediaType      String?  @map("media_type") @db.VarChar(50)
+  usage          String?  @db.VarChar(50)
+  displayOrder   Int?     @map("display_order")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+
+  section        ContentSection @relation(fields: [sectionId], references: [sectionId])
+  mediaFile      MediaFile @relation("ContentMediaFile", fields: [fileId], references: [fileId])
+
+  @@map("CONTENT_MEDIA")
+}
+
+// ============================================
+// TESTIMONIALS (Reused from previous)
+// ============================================
+
+model Testimonial {
+  testimonialId Int      @id @default(autoincrement()) @map("testimonial_id")
+  name          String   @db.VarChar(255)
+  title         String?  @db.VarChar(255)
+  company       String?  @db.VarChar(255)
+  photoFileId   Int?     @map("photo_file_id")
+  displayOrder  Int      @map("display_order")
+  rating        Int?
+  isFeatured    Boolean  @default(false) @map("is_featured")
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt     DateTime? @map("deleted_at") @db.Timestamp(3)
+
+  photoFile     MediaFile? @relation("TestimonialPhoto", fields: [photoFileId], references: [fileId])
+  createdBy     Int      @map("created_by")
+  creator       AdminUser @relation("CreatedTestimonialByAdmin", fields: [createdBy], references: [userId])
+  updatedBy     Int      @map("updated_by")
+  updater       AdminUser @relation("UpdatedTestimonialByAdmin", fields: [updatedBy], references: [userId])
+
+  translations  TestimonialTranslation[]
+
+  @@map("TESTIMONIAL")
+}
+
+model TestimonialTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  testimonialId Int      @map("testimonial_id")
+  locale        Locale   @default(id)
+  quote         String   @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  testimonial   Testimonial @relation(fields: [testimonialId], references: [testimonialId])
+
+  @@unique([testimonialId, locale], map: "unique_testimonial_translation")
+  @@map("TESTIMONIAL_TRANSLATION")
+}
+
+// ============================================
+// INDUSTRIES (Reused from previous)
+// ============================================
+
+model Industry {
+  industryId   Int                  @id @default(autoincrement()) @map("industry_id")
+  industryCode String               @unique @map("industry_code") @db.VarChar(100)
+  slug         String               @unique @db.VarChar(100)
+  iconName     String?              @map("icon_name") @db.VarChar(100)
+  displayOrder Int                  @map("display_order")
+  isActive     Boolean              @default(true) @map("is_active")
+  createdAt    DateTime             @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?            @map("deleted_at") @db.Timestamp(3)
+
+  createdBy    Int                  @map("created_by")
+  creator      AdminUser            @relation("CreatedIndustryByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                  @map("updated_by")
+  updater      AdminUser            @relation("UpdatedIndustryByAdmin", fields: [updatedBy], references: [userId])
+
+  translations IndustryTranslation[]
+  solutions    IndustrySolution[]
+  problems     IndustryProblem[]
+  media        IndustryMedia[]
+
+  @@map("INDUSTRY")
+}
+
+model IndustryTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  industryId    Int      @map("industry_id")
+  locale        String   @db.VarChar(5)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  introText     String?  @map("intro_text") @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  industry      Industry @relation(fields: [industryId], references: [industryId])
+
+  @@unique([industryId, locale], map: "unique_industry_translation")
+  @@map("INDUSTRY_TRANSLATION")
+}
+
+model IndustryProblem {
+  problemId    Int                   @id @default(autoincrement()) @map("problem_id")
+  industryId   Int                   @map("industry_id")
+  displayOrder Int                   @map("display_order")
+  isActive     Boolean               @default(true) @map("is_active")
+  createdAt    DateTime              @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime              @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  industry     Industry              @relation(fields: [industryId], references: [industryId])
+
+  translations IndustryProblemTranslation[]
+
+  @@map("INDUSTRY_PROBLEM")
+}
+
+model IndustryProblemTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  problemId     Int      @map("problem_id")
+  locale        String   @db.VarChar(5)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  problem       IndustryProblem @relation(fields: [problemId], references: [problemId])
+
+  @@unique([problemId, locale], map: "unique_industry_problem_translation")
+  @@map("INDUSTRY_PROBLEM_TRANSLATION")
+}
+
+model IndustrySolution {
+  solutionId   Int                       @id @default(autoincrement()) @map("solution_id")
+  industryId   Int                       @map("industry_id")
+  displayOrder Int                       @map("display_order")
+  isActive     Boolean                   @default(true) @map("is_active")
+  createdAt    DateTime                  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime                  @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  industry     Industry                  @relation(fields: [industryId], references: [industryId])
+
+  translations IndustrySolutionTranslation[]
+
+  @@map("INDUSTRY_SOLUTION")
+}
+
+model IndustrySolutionTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  solutionId    Int      @map("solution_id")
+  locale        String   @db.VarChar(5)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  solution      IndustrySolution @relation(fields: [solutionId], references: [solutionId])
+
+  @@unique([solutionId, locale], map: "unique_industry_solution_translation")
+  @@map("INDUSTRY_SOLUTION_TRANSLATION")
+}
+
+model IndustryMedia {
+  industryMediaId Int      @id @default(autoincrement()) @map("industry_media_id")
+  industryId      Int      @map("industry_id")
+  fileId          Int      @map("file_id")
+  mediaType       String?  @map("media_type") @db.VarChar(50)
+  usage           String?  @db.VarChar(50)
+  displayOrder    Int?     @map("display_order")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+
+  industry        Industry @relation(fields: [industryId], references: [industryId])
+  mediaFile       MediaFile @relation("IndustryMediaFile", fields: [fileId], references: [fileId])
+
+  @@map("INDUSTRY_MEDIA")
+}
+
+// ============================================
+// BENEFIT STATS (New)
+// ============================================
+
+model BenefitStat {
+  statId       Int                   @id @default(autoincrement()) @map("stat_id")
+  statCode     String                @unique @map("stat_code") @db.VarChar(100)
+  statValue    String?               @map("stat_value") @db.VarChar(50)
+  displayOrder Int                   @map("display_order")
+  isActive     Boolean               @default(true) @map("is_active")
+  createdAt    DateTime              @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime              @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?             @map("deleted_at") @db.Timestamp(3)
+
+  createdBy    Int                   @map("created_by")
+  creator      AdminUser             @relation("CreatedBenefitStatByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                   @map("updated_by")
+  updater      AdminUser             @relation("UpdatedBenefitStatByAdmin", fields: [updatedBy], references: [userId])
+
+  translations BenefitStatTranslation[]
+
+  @@map("BENEFIT_STAT")
+}
+
+model BenefitStatTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  statId        Int      @map("stat_id")
+  locale        Locale   @default(id)
+  label         String?  @db.VarChar(255)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  stat          BenefitStat @relation(fields: [statId], references: [statId])
+
+  @@unique([statId, locale], map: "unique_benefit_stat_translation")
+  @@map("BENEFIT_STAT_TRANSLATION")
+}
+
+// ============================================
+// PROCESS STEPS (New)
+// ============================================
+
+model ProcessStep {
+  stepId       Int                      @id @default(autoincrement()) @map("step_id")
+  stepCode     String                   @unique @map("step_code") @db.VarChar(100)
+  iconName     String?                  @map("icon_name") @db.VarChar(100)
+  displayOrder Int                      @map("display_order")
+  imageFileId  Int?                     @map("image_file_id")
+  isActive     Boolean                  @default(true) @map("is_active")
+  createdAt    DateTime                 @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime                 @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?                @map("deleted_at") @db.Timestamp(3)
+
+  imageFile    MediaFile?               @relation("ProcessStepImage", fields: [imageFileId], references: [fileId])
+  createdBy    Int                      @map("created_by")
+  creator      AdminUser                @relation("CreatedProcessStepByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                      @map("updated_by")
+  updater      AdminUser                @relation("UpdatedProcessStepByAdmin", fields: [updatedBy], references: [userId])
+
+  translations ProcessStepTranslation[]
+
+  @@map("PROCESS_STEP")
+}
+
+model ProcessStepTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  stepId        Int      @map("step_id")
+  locale        Locale   @default(id)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  step          ProcessStep @relation(fields: [stepId], references: [stepId])
+
+  @@unique([stepId, locale], map: "unique_process_step_translation")
+  @@map("PROCESS_STEP_TRANSLATION")
+}
+
+// ============================================
+// ERP BENEFITS (New)
+// ============================================
+
+model ERPBenefit {
+  benefitId    Int                      @id @default(autoincrement()) @map("benefit_id")
+  benefitCode  String                   @unique @map("benefit_code") @db.VarChar(100)
+  imageFileId  Int?                     @map("image_file_id")
+  displayOrder Int                      @map("display_order")
+  isActive     Boolean                  @default(true) @map("is_active")
+  createdAt    DateTime                 @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime                 @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?                @map("deleted_at") @db.Timestamp(3)
+
+  imageFile    MediaFile?               @relation("ERPBenefitImage", fields: [imageFileId], references: [fileId])
+  createdBy    Int                      @map("created_by")
+  creator      AdminUser                @relation("CreatedErpBenefitByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                      @map("updated_by")
+  updater      AdminUser                @relation("UpdatedErpBenefitByAdmin", fields: [updatedBy], references: [userId])
+
+  translations ERPBenefitTranslation[]
+
+  @@map("ERP_BENEFIT")
+}
+
+model ERPBenefitTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  benefitId     Int      @map("benefit_id")
+  locale        Locale   @default(id)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  benefit       ERPBenefit @relation(fields: [benefitId], references: [benefitId])
+
+  @@unique([benefitId, locale], map: "unique_erp_benefit_translation")
+  @@map("ERP_BENEFIT_TRANSLATION")
+}
+
+// ============================================
+// PARTNERS (New)
+// ============================================
+
+model Partner {
+  partnerId    Int                 @id @default(autoincrement()) @map("partner_id")
+  partnerName  String              @unique @map("partner_name") @db.VarChar(255)
+  websiteUrl   String?             @map("website_url") @db.VarChar(255)
+  logoFileId   Int?                @map("logo_file_id")
+  displayOrder Int                 @map("display_order")
+  isActive     Boolean             @default(true) @map("is_active")
+  createdAt    DateTime            @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?           @map("deleted_at") @db.Timestamp(3)
+
+  logoFile     MediaFile?          @relation("PartnerLogo", fields: [logoFileId], references: [fileId])
+  createdBy    Int                 @map("created_by")
+  creator      AdminUser           @relation("CreatedPartnerByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                 @map("updated_by")
+  updater      AdminUser           @relation("UpdatedPartnerByAdmin", fields: [updatedBy], references: [userId])
+
+  translations PartnerTranslation[]
+
+  @@map("PARTNER")
+}
+
+model PartnerTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  partnerId     Int      @map("partner_id")
+  locale        Locale   @default(id)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  partner       Partner @relation(fields: [partnerId], references: [partnerId])
+
+  @@unique([partnerId, locale], map: "unique_partner_translation")
+  @@map("PARTNER_TRANSLATION")
+}
+
+// ============================================
+// ABOUT CARDS (New)
+// ============================================
+
+model AboutCard {
+  cardId       Int                    @id @default(autoincrement()) @map("card_id")
+  cardCode     String                 @unique @map("card_code") @db.VarChar(100)
+  cardLink     String?                @map("card_link") @db.VarChar(255)
+  imageFileId  Int?                   @map("image_file_id")
+  displayOrder Int                    @map("display_order")
+  isActive     Boolean                @default(true) @map("is_active")
+  createdAt    DateTime               @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime               @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?              @map("deleted_at") @db.Timestamp(3)
+
+  imageFile    MediaFile?             @relation("AboutCardImage", fields: [imageFileId], references: [fileId])
+  createdBy    Int                    @map("created_by")
+  creator      AdminUser              @relation("CreatedAboutCardByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                    @map("updated_by")
+  updater      AdminUser              @relation("UpdatedAboutCardByAdmin", fields: [updatedBy], references: [userId])
+
+  translations AboutCardTranslation[]
+
+  @@map("ABOUT_CARD")
+}
+
+model AboutCardTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  cardId        Int      @map("card_id")
+  locale        Locale   @default(id)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  card          AboutCard @relation(fields: [cardId], references: [cardId])
+
+  @@unique([cardId, locale], map: "unique_about_card_translation")
+  @@map("ABOUT_CARD_TRANSLATION")
+}
+
+// ============================================
+// ADVANCED FEATURES (New)
+// ============================================
+
+model AdvancedFeature {
+  featureId    Int                           @id @default(autoincrement()) @map("feature_id")
+  featureCode  String                        @unique @map("feature_code") @db.VarChar(100)
+  imageFileId  Int?                          @map("image_file_id")
+  linkUrl      String?                       @map("link_url") @db.VarChar(255)
+  displayOrder Int                           @map("display_order")
+  isActive     Boolean                       @default(true) @map("is_active")
+  createdAt    DateTime                      @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime                      @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?                     @map("deleted_at") @db.Timestamp(3)
+
+  imageFile    MediaFile?                    @relation("AdvancedFeatureImage", fields: [imageFileId], references: [fileId])
+  createdBy    Int                           @map("created_by")
+  creator      AdminUser                     @relation("CreatedAdvancedFeatureByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                           @map("updated_by")
+  updater      AdminUser                     @relation("UpdatedAdvancedFeatureByAdmin", fields: [updatedBy], references: [userId])
+
+  translations AdvancedFeatureTranslation[]
+
+  @@map("ADVANCED_FEATURE")
+}
+
+model AdvancedFeatureTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  featureId     Int      @map("feature_id")
+  locale        Locale   @default(id)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  feature       AdvancedFeature @relation(fields: [featureId], references: [featureId])
+
+  @@unique([featureId, locale], map: "unique_advanced_feature_translation")
+  @@map("ADVANCED_FEATURE_TRANSLATION")
+}
+
+// ============================================
+// FAQ (New)
+// ============================================
+
+model FAQCategory {
+  categoryId    Int                       @id @default(autoincrement()) @map("category_id")
+  categoryCode  String                    @unique @map("category_code") @db.VarChar(100)
+  displayOrder  Int                       @map("display_order")
+  isActive      Boolean                   @default(true) @map("is_active")
+  createdAt     DateTime                  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime                  @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt     DateTime?                 @map("deleted_at") @db.Timestamp(3)
+
+  createdBy     Int                       @map("created_by")
+  creator       AdminUser                 @relation("CreatedFaqCategoryByAdmin", fields: [createdBy], references: [userId])
+  updatedBy     Int                       @map("updated_by")
+  updater       AdminUser                 @relation("UpdatedFaqCategoryByAdmin", fields: [updatedBy], references: [userId])
+
+  translations  FAQCategoryTranslation[]
+  faqs          FAQ[]
+
+  @@map("FAQ_CATEGORY")
+}
+
+model FAQCategoryTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  categoryId    Int      @map("category_id")
+  locale        Locale   @default(id)
+  categoryName  String?  @map("category_name") @db.VarChar(255)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  category      FAQCategory @relation(fields: [categoryId], references: [categoryId])
+
+  @@unique([categoryId, locale], map: "unique_faq_category_translation")
+  @@map("FAQ_CATEGORY_TRANSLATION")
+}
+
+model FAQ {
+  faqId        Int              @id @default(autoincrement()) @map("faq_id")
+  categoryId   Int              @map("category_id")
+  displayOrder Int              @map("display_order")
+  isActive     Boolean          @default(true) @map("is_active")
+  createdAt    DateTime         @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?        @map("deleted_at") @db.Timestamp(3)
+
+  createdBy    Int              @map("created_by")
+  creator      AdminUser        @relation("CreatedFAQByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int              @map("updated_by")
+  updater      AdminUser        @relation("UpdatedFAQByAdmin", fields: [updatedBy], references: [userId])
+
+  category     FAQCategory      @relation(fields: [categoryId], references: [categoryId])
+  translations FAQTranslation[]
+
+  @@map("FAQ")
+}
+
+model FAQTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  faqId         Int      @map("faq_id")
+  locale        Locale   @default(id)
+  question      String   @db.VarChar(255)
+  answer        String   @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  faq           FAQ @relation(fields: [faqId], references: [faqId])
+
+  @@unique([faqId, locale], map: "unique_faq_translation")
+  @@map("FAQ_TRANSLATION")
+}
+
+// ============================================
+// KELOLA AJA FEATURES (New)
+// ============================================
+
+model KelolaAjaFeature {
+  featureId    Int                            @id @default(autoincrement()) @map("feature_id")
+  featureCode  String                         @unique @map("feature_code") @db.VarChar(100)
+  iconName     String?                        @map("icon_name") @db.VarChar(100)
+  displayOrder Int                            @map("display_order")
+  isActive     Boolean                        @default(true) @map("is_active")
+  createdAt    DateTime                       @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime                       @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?                      @map("deleted_at") @db.Timestamp(3)
+
+  createdBy    Int                            @map("created_by")
+  creator      AdminUser                      @relation("CreatedKelolaAjaFeatureByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                            @map("updated_by")
+  updater      AdminUser                      @relation("UpdatedKelolaAjaFeatureByAdmin", fields: [updatedBy], references: [userId])
+
+  translations KelolaAjaFeatureTranslation[]
+
+  @@map("KELOLA_AJA_FEATURE")
+}
+
+model KelolaAjaFeatureTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  featureId     Int      @map("feature_id")
+  locale        Locale   @default(id)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  feature       KelolaAjaFeature @relation(fields: [featureId], references: [featureId])
+
+  @@unique([featureId, locale], map: "unique_kelola_aja_feature_translation")
+  @@map("KELOLA_AJA_FEATURE_TRANSLATION")
+}
+
+// ============================================
+// CORE VALUES & OUR PHILOSOPHY (New)
+// ============================================
+
+model CoreValue {
+  valueId      Int                      @id @default(autoincrement()) @map("value_id")
+  valueCode    String                   @unique @map("value_code") @db.VarChar(100)
+  iconName     String?                  @map("icon_name") @db.VarChar(100)
+  imageFileId  Int?                     @map("image_file_id")
+  displayOrder Int                      @map("display_order")
+  isActive     Boolean                  @default(true) @map("is_active")
+  createdAt    DateTime                 @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime                 @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?                @map("deleted_at") @db.Timestamp(3)
+
+  imageFile    MediaFile?               @relation("CoreValueImage", fields: [imageFileId], references: [fileId])
+  createdBy    Int                      @map("created_by")
+  creator      AdminUser                @relation("CreatedCoreValueByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                      @map("updated_by")
+  updater      AdminUser                @relation("UpdatedCoreValueByAdmin", fields: [updatedBy], references: [userId])
+
+  translations CoreValueTranslation[]
+
+  @@map("CORE_VALUE")
+}
+
+model CoreValueTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  valueId       Int      @map("value_id")
+  locale        Locale   @default(id)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  coreValue     CoreValue @relation(fields: [valueId], references: [valueId])
+
+  @@unique([valueId, locale], map: "unique_core_value_translation")
+  @@map("CORE_VALUE_TRANSLATION")
+}
+
+model OurPhilosophy {
+  philosophyId Int                         @id @default(autoincrement()) @map("philosophy_id")
+  philosophyCode String                    @unique @map("philosophy_code") @db.VarChar(100)
+  iconName     String?                     @map("icon_name") @db.VarChar(100)
+  imageFileId  Int?                        @map("image_file_id")
+  displayOrder Int                         @map("display_order")
+  isActive     Boolean                     @default(true) @map("is_active")
+  createdAt    DateTime                    @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime                    @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?                   @map("deleted_at") @db.Timestamp(3)
+
+  imageFile    MediaFile?                  @relation("OurPhilosophyImage", fields: [imageFileId], references: [fileId])
+  createdBy    Int                         @map("created_by")
+  creator      AdminUser                   @relation("CreatedOurPhilosophyByAdmin", fields: [createdBy], references: [userId])
+  updatedBy    Int                         @map("updated_by")
+  updater      AdminUser                   @relation("UpdatedOurPhilosophyByAdmin", fields: [updatedBy], references: [userId])
+
+  translations OurPhilosophyTranslation[]
+
+  @@map("OUR_PHILOSOPHY")
+}
+
+model OurPhilosophyTranslation {
+  translationId Int      @id @default(autoincrement()) @map("translation_id")
+  philosophyId  Int      @map("philosophy_id")
+  locale        Locale   @default(id)
+  title         String?  @db.VarChar(255)
+  description   String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  philosophy    OurPhilosophy @relation(fields: [philosophyId], references: [philosophyId])
+
+  @@unique([philosophyId, locale], map: "unique_our_philosophy_translation")
+  @@map("OUR_PHILOSOPHY_TRANSLATION")
+}
+
+// ============================================
+// MEDIA FILE (Reused from previous)
+// ============================================
+
+model MediaFile {
+  fileId          Int      @id @default(autoincrement()) @map("file_id")
+  fileName        String   @map("file_name") @db.VarChar(255)
+  filePath        String   @map("file_path") @db.VarChar(255)
+  fileType        String?  @map("file_type") @db.VarChar(100)
+  mimeType        String?  @map("mime_type") @db.VarChar(100)
+  fileSize        BigInt?  @map("file_size")
+  width           Int?
+  height          Int?
+  altText         String?  @map("alt_text") @db.VarChar(255)
+  storageType     String?  @map("storage_type") @db.VarChar(50)
+  storageUrl      String?  @map("storage_url") @db.VarChar(255)
+  isPublic        Boolean  @default(true) @map("is_public")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamp(3)
+
+  uploadedBy      Int?     @map("uploaded_by")
+  uploader        AdminUser? @relation("UploadedByAdmin", fields: [uploadedBy], references: [userId])
+
+  // Relations (Daftar semua relasi yang menggunakan MediaFile)
+  contentMedia    ContentMedia[] @relation("ContentMediaFile")
+  testimonialPhoto Testimonial[] @relation("TestimonialPhoto")
+  industryMedia   IndustryMedia[] @relation("IndustryMediaFile")
+  detailFeatureIcon DetailFeatureSection[] @relation("DetailFeatureIcon")
+
+  // New Relations
+  featurePageHero FeaturePage[] @relation("FeaturePageHeroImage")
+  featurePageItemImages FeaturePageItem[] @relation("FeaturePageItemImage")
+  processStepImages ProcessStep[] @relation("ProcessStepImage")
+  erpBenefitImages ERPBenefit[] @relation("ERPBenefitImage")
+  partnerLogos    Partner[] @relation("PartnerLogo")
+  aboutCardImages AboutCard[] @relation("AboutCardImage")
+  advancedFeatureImages AdvancedFeature[] @relation("AdvancedFeatureImage")
+  coreValueImages CoreValue[] @relation("CoreValueImage")
+  ourPhilosophyImages OurPhilosophy[] @relation("OurPhilosophyImage")
+  jobApplicationCVs JobApplication[] @relation("JobApplicationCV")
+
+  @@map("MEDIA_FILE")
+}
+
+// ============================================
+// VISITOR & ANALYTICS (Reused from previous)
+// ============================================
+
+model Visitor {
+  visitorId    Int                 @id @default(autoincrement()) @map("visitor_id")
+  ipAddress    String?             @map("ip_address") @db.VarChar(45)
+  userAgent    String?             @map("user_agent") @db.Text
+  referrer     String?             @db.Text
+  countryCode  String?             @map("country_code") @db.VarChar(2)
+  city         String?             @db.VarChar(100)
+  deviceType   String?             @map("device_type") @db.VarChar(50)
+  browser      String?             @db.VarChar(50)
+  os           String?             @db.VarChar(50)
+  isBot        Boolean             @default(false) @map("is_bot")
+  firstVisit   DateTime            @default(now()) @map("first_visit") @db.Timestamp(3)
+  lastVisit    DateTime            @default(now()) @map("last_visit") @db.Timestamp(3)
+  visitCount   Int                 @default(1) @map("visit_count")
+
+  pageViews    PageView[]
+  submissions  ContactSubmission[]
+
+  @@map("VISITOR")
+}
+
+model PageView {
+  viewId          Int                @id @default(autoincrement()) @map("view_id")
+  visitorId       Int                @map("visitor_id")
+  pagePath        String             @map("page_path") @db.VarChar(255)
+  pageTitle       String?            @map("page_title") @db.VarChar(255)
+  referrer        String?            @db.VarChar(255)
+  durationSeconds Int?               @map("duration_seconds")
+  scrollDepth     Int?               @map("scroll_depth")
+  viewedAt        DateTime           @default(now()) @map("viewed_at") @db.Timestamp(3)
+
+  visitor         Visitor            @relation(fields: [visitorId], references: [visitorId])
+
+  events          PageViewEvent[]
+
+  @@map("PAGE_VIEW")
+}
+
+model PageViewEvent {
+  eventId     Int      @id @default(autoincrement()) @map("event_id")
+  viewId      Int      @map("view_id")
+  eventType   String   @map("event_type") @db.VarChar(100)
+  eventTarget String?  @map("event_target") @db.VarChar(255)
+  eventData   Json?    @map("event_data") @db.JsonB
+  eventTime   DateTime @default(now()) @map("event_time") @db.Timestamp(3)
+
+  pageView    PageView @relation(fields: [viewId], references: [viewId])
+
+  @@map("PAGE_VIEW_EVENT")
+}
+
+model ContactSubmission {
+  submissionId  Int        @id @default(autoincrement()) @map("submission_id")
+  visitorId     Int?       @map("visitor_id")
+  name          String     @db.VarChar(255)
+  email         String?    @db.VarChar(255)
+  phone         String?    @db.VarChar(50)
+  message       String     @db.Text
+  source        String?    @db.VarChar(100)
+  status        String?    @default("pending") @db.VarChar(50)
+  adminNotes    String?    @map("admin_notes") @db.Text
+  assignedTo    Int?       @map("assigned_to")
+  createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamp(3)
+  contactedAt   DateTime?  @map("contacted_at") @db.Timestamp(3)
+  resolvedAt    DateTime?  @map("resolved_at") @db.Timestamp(3)
+  deletedAt     DateTime?  @map("deleted_at") @db.Timestamp(3)
+
+  visitor       Visitor?   @relation(fields: [visitorId], references: [visitorId])
+  assignee      AdminUser? @relation("AssignedToAdmin", fields: [assignedTo], references: [userId])
+
+  @@map("CONTACT_SUBMISSION")
+}
+
+// ============================================
+// AUDIT & CONFIG (Reused from previous)
+// ============================================
+
+model AuditLog {
+  logId       Int      @id @default(autoincrement()) @map("log_id")
+  userId      Int      @map("user_id")
+  actionType  String   @map("action_type") @db.VarChar(50)
+  entityType  String   @map("entity_type") @db.VarChar(100)
+  entityId    Int?     @map("entity_id")
+  oldValues   Json?    @map("old_values") @db.JsonB
+  newValues   Json?    @map("new_values") @db.JsonB
+  ipAddress   String?  @map("ip_address") @db.VarChar(45)
+  userAgent   String?  @map("user_agent") @db.Text
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+
+  user        AdminUser @relation("AdminUserAuditLog", fields: [userId], references: [userId])
+
+  @@map("AUDIT_LOG")
+}
+
+model SiteConfig {
+  configId     Int      @id @default(autoincrement()) @map("config_id")
+  configKey    String   @unique @map("config_key") @db.VarChar(100)
+  configValue  String?  @map("config_value") @db.Text
+  valueType    String?  @map("value_type") @db.VarChar(50)
+  category     String?  @db.VarChar(50)
+  description  String?  @db.Text
+  updatedBy    Int?     @map("updated_by")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  updater      AdminUser? @relation("UpdatedSiteConfigByAdmin", fields: [updatedBy], references: [userId])
+
+  @@map("SITE_CONFIG")
+}
+
+// ============================================
+// CAREER & JOB POSTINGS
+// ============================================
+
+enum JobType {
+  FullTime     @map("full_time")
+  PartTime     @map("part_time")
+  Contract     @map("contract")
+  Internship   @map("internship")
+  Freelance    @map("freelance")
+}
+
+enum JobLevel {
+  EntryLevel   @map("entry_level")
+  Junior       @map("junior")
+  MidLevel     @map("mid_level")
+  Senior       @map("senior")
+  Lead         @map("lead")
+  Manager      @map("manager")
+  Director     @map("director")
+  Executive    @map("executive")
+}
+
+enum WorkLocation {
+  OnSite       @map("on_site")
+  Remote       @map("remote")
+  Hybrid       @map("hybrid")
+}
+
+enum ApplicationStatus {
+  Pending      @map("pending")
+  Reviewed     @map("reviewed")
+  Shortlisted  @map("shortlisted")
+  Interview    @map("interview")
+  Offered      @map("offered")
+  Rejected     @map("rejected")
+  Accepted     @map("accepted")
+}
+
+model JobPosting {
+  jobId              Int                  @id @default(autoincrement()) @map("job_id")
+  jobCode            String               @unique @map("job_code") @db.VarChar(100)
+  slug               String               @unique @db.VarChar(150)
+  department         String?              @db.VarChar(100)
+  jobType            JobType              @map("job_type")
+  jobLevel           JobLevel             @map("job_level")
+  workLocation       WorkLocation         @map("work_location")
+  city               String?              @db.VarChar(100)
+  country            String?              @db.VarChar(100)
+  salaryMin          Int?                 @map("salary_min")
+  salaryMax          Int?                 @map("salary_max")
+  salaryCurrency     String?              @default("IDR") @map("salary_currency") @db.VarChar(10)
+  salaryPeriod       String?              @default("monthly") @map("salary_period") @db.VarChar(20) // monthly, yearly
+  showSalary         Boolean              @default(false) @map("show_salary")
+  positions          Int                  @default(1) // jumlah posisi tersedia
+  experienceYears    Int?                 @map("experience_years") // minimum tahun pengalaman
+  applicationDeadline DateTime?           @map("application_deadline") @db.Timestamp(3)
+  isActive           Boolean              @default(true) @map("is_active")
+  isFeatured         Boolean              @default(false) @map("is_featured")
+  viewCount          Int                  @default(0) @map("view_count")
+  applicationCount   Int                  @default(0) @map("application_count")
+  createdAt          DateTime             @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt          DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  publishedAt        DateTime?            @map("published_at") @db.Timestamp(3)
+  closedAt           DateTime?            @map("closed_at") @db.Timestamp(3)
+  deletedAt          DateTime?            @map("deleted_at") @db.Timestamp(3)
+
+  createdBy          Int                  @map("created_by")
+  creator            AdminUser            @relation("CreatedJobPostingByAdmin", fields: [createdBy], references: [userId])
+  updatedBy          Int                  @map("updated_by")
+  updater            AdminUser            @relation("UpdatedJobPostingByAdmin", fields: [updatedBy], references: [userId])
+
+  translations       JobPostingTranslation[]
+  requirements       JobRequirement[]
+  responsibilities   JobResponsibility[]
+  benefits           JobBenefit[]
+  applications       JobApplication[]
+
+  @@index([isActive, publishedAt])
+  @@index([jobType, jobLevel])
+  @@index([workLocation])
+  @@map("JOB_POSTING")
+}
+
+model JobPostingTranslation {
+  translationId      Int         @id @default(autoincrement()) @map("translation_id")
+  jobId              Int         @map("job_id")
+  locale             Locale      @default(id)
+  title              String      @db.VarChar(255)
+  shortDescription   String?     @map("short_description") @db.Text
+  description        String?     @db.Text
+  qualifications     String?     @db.Text
+  additionalInfo     String?     @map("additional_info") @db.Text
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt          DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+
+  job                JobPosting  @relation(fields: [jobId], references: [jobId], onDelete: Cascade)
+
+  @@unique([jobId, locale], map: "unique_job_posting_translation")
+  @@map("JOB_POSTING_TRANSLATION")
+}
+
+model JobRequirement {
+  requirementId      Int         @id @default(autoincrement()) @map("requirement_id")
+  jobId              Int         @map("job_id")
+  displayOrder       Int         @map("display_order")
+  isRequired         Boolean     @default(true) @map("is_required")
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  job                JobPosting  @relation(fields: [jobId], references: [jobId], onDelete: Cascade)
+  translations       JobRequirementTranslation[]
+
+  @@map("JOB_REQUIREMENT")
+}
+
+model JobRequirementTranslation {
+  translationId      Int         @id @default(autoincrement()) @map("translation_id")
+  requirementId      Int         @map("requirement_id")
+  locale             Locale      @default(id)
+  requirement        String      @db.Text
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  jobRequirement     JobRequirement @relation(fields: [requirementId], references: [requirementId], onDelete: Cascade)
+
+  @@unique([requirementId, locale], map: "unique_job_requirement_translation")
+  @@map("JOB_REQUIREMENT_TRANSLATION")
+}
+
+model JobResponsibility {
+  responsibilityId   Int         @id @default(autoincrement()) @map("responsibility_id")
+  jobId              Int         @map("job_id")
+  displayOrder       Int         @map("display_order")
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  job                JobPosting  @relation(fields: [jobId], references: [jobId], onDelete: Cascade)
+  translations       JobResponsibilityTranslation[]
+
+  @@map("JOB_RESPONSIBILITY")
+}
+
+model JobResponsibilityTranslation {
+  translationId      Int         @id @default(autoincrement()) @map("translation_id")
+  responsibilityId   Int         @map("responsibility_id")
+  locale             Locale      @default(id)
+  responsibility     String      @db.Text
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  jobResponsibility  JobResponsibility @relation(fields: [responsibilityId], references: [responsibilityId], onDelete: Cascade)
+
+  @@unique([responsibilityId, locale], map: "unique_job_responsibility_translation")
+  @@map("JOB_RESPONSIBILITY_TRANSLATION")
+}
+
+model JobBenefit {
+  benefitId          Int         @id @default(autoincrement()) @map("benefit_id")
+  jobId              Int         @map("job_id")
+  displayOrder       Int         @map("display_order")
+  iconName           String?     @map("icon_name") @db.VarChar(100)
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  job                JobPosting  @relation(fields: [jobId], references: [jobId], onDelete: Cascade)
+  translations       JobBenefitTranslation[]
+
+  @@map("JOB_BENEFIT")
+}
+
+model JobBenefitTranslation {
+  translationId      Int         @id @default(autoincrement()) @map("translation_id")
+  benefitId          Int         @map("benefit_id")
+  locale             Locale      @default(id)
+  benefit            String      @db.VarChar(255)
+  description        String?     @db.Text
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+
+  jobBenefit         JobBenefit  @relation(fields: [benefitId], references: [benefitId], onDelete: Cascade)
+
+  @@unique([benefitId, locale], map: "unique_job_benefit_translation")
+  @@map("JOB_BENEFIT_TRANSLATION")
+}
+
+model JobApplication {
+  applicationId      Int                 @id @default(autoincrement()) @map("application_id")
+  jobId              Int                 @map("job_id")
+  applicantName      String              @map("applicant_name") @db.VarChar(255)
+  applicantEmail     String              @map("applicant_email") @db.VarChar(255)
+  applicantPhone     String?             @map("applicant_phone") @db.VarChar(50)
+  currentCompany     String?             @map("current_company") @db.VarChar(255)
+  currentPosition    String?             @map("current_position") @db.VarChar(255)
+  yearsOfExperience  Int?                @map("years_of_experience")
+  expectedSalary     Int?                @map("expected_salary")
+  salaryCurrency     String?             @default("IDR") @map("salary_currency") @db.VarChar(10)
+  availableFrom      DateTime?           @map("available_from") @db.Date
+  coverLetter        String?             @map("cover_letter") @db.Text
+  cvFileId           Int?                @map("cv_file_id")
+  portfolioUrl       String?             @map("portfolio_url") @db.VarChar(255)
+  linkedinUrl        String?             @map("linkedin_url") @db.VarChar(255)
+  githubUrl          String?             @map("github_url") @db.VarChar(255)
+  referralSource     String?             @map("referral_source") @db.VarChar(100) // website, linkedin, referral, etc
+  status             ApplicationStatus   @default(Pending)
+  rating             Int?                // 1-5 rating dari recruiter
+  adminNotes         String?             @map("admin_notes") @db.Text
+  rejectionReason    String?             @map("rejection_reason") @db.Text
+  ipAddress          String?             @map("ip_address") @db.VarChar(45)
+  userAgent          String?             @map("user_agent") @db.Text
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt          DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamp(3)
+  reviewedAt         DateTime?           @map("reviewed_at") @db.Timestamp(3)
+  interviewedAt      DateTime?           @map("interviewed_at") @db.Timestamp(3)
+  deletedAt          DateTime?           @map("deleted_at") @db.Timestamp(3)
+
+  job                JobPosting          @relation(fields: [jobId], references: [jobId])
+  cvFile             MediaFile?          @relation("JobApplicationCV", fields: [cvFileId], references: [fileId])
+
+  @@index([jobId, status])
+  @@index([applicantEmail])
+  @@index([status, createdAt])
+  @@map("JOB_APPLICATION")
+}
