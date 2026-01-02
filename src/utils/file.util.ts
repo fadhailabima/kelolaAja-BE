@@ -156,6 +156,9 @@ export class FileUtil {
     let baseUrl =
       process.env.BASE_URL || process.env.API_URL || "http://localhost:8080";
 
+    // Sanitize baseUrl: Remove non-ASCII characters (like ↗ from copy-paste) and whitespace
+    baseUrl = baseUrl.replace(/[^\x00-\x7F]/g, "").trim();
+
     // Ensure baseUrl has protocol
     if (!baseUrl.startsWith("http")) {
       baseUrl = `https://${baseUrl}`;
