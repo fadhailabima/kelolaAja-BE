@@ -114,10 +114,20 @@ export class JobApplicationController {
 
       const result = await jobApplicationService.getJobApplications(filters, page, limit);
 
+      // Serialize BigInt fields in the list
+      const serializedData = result.data.map(app => ({
+        ...app,
+        cvFile: app.cvFile ? {
+          ...app.cvFile,
+          fileSize: Number(app.cvFile.fileSize)
+        } : null
+      }));
+
       res.json({
         success: true,
         message: "Applications retrieved successfully",
         ...result,
+        data: serializedData
       });
     } catch (error) {
       next(error);
@@ -138,10 +148,19 @@ export class JobApplicationController {
         return;
       }
 
+      // Serialize BigInt
+      const serializedApplication = {
+        ...application,
+        cvFile: application.cvFile ? {
+          ...application.cvFile,
+          fileSize: Number(application.cvFile.fileSize)
+        } : null
+      };
+
       res.json({
         success: true,
         message: "Application retrieved successfully",
-        data: application,
+        data: serializedApplication,
       });
     } catch (error) {
       next(error);
@@ -156,10 +175,20 @@ export class JobApplicationController {
 
       const result = await jobApplicationService.getApplicationsByJob(jobId, page, limit);
 
+      // Serialize BigInt fields
+      const serializedData = result.data.map(app => ({
+        ...app,
+        cvFile: app.cvFile ? {
+          ...app.cvFile,
+          fileSize: Number(app.cvFile.fileSize)
+        } : null
+      }));
+
       res.json({
         success: true,
         message: "Job applications retrieved successfully",
         ...result,
+        data: serializedData
       });
     } catch (error) {
       next(error);
