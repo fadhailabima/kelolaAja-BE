@@ -24,7 +24,10 @@ const corsOptions = {
     if (!origin) return callback(null, true);
 
     // Check if origin is allowed
-    if (allowedOrigins.includes(origin)) {
+    // Allow vercel.app domains for deployments
+    const isVercel = origin.endsWith(".vercel.app");
+
+    if (allowedOrigins.includes(origin) || isVercel) {
       callback(null, true);
     } else {
       console.warn(`CORS blocked origin: ${origin}`);
