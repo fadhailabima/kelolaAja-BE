@@ -3,6 +3,7 @@
 import { Request, Response, NextFunction } from "express";
 import { JobApplicationService } from "../services/job-application.service";
 import { CreateJobApplicationDTO, UpdateJobApplicationDTO, JobApplicationFilters } from "../types/job-posting.types";
+import { FileUtil } from "../utils/file.util";
 
 const jobApplicationService = new JobApplicationService();
 
@@ -162,7 +163,8 @@ export class JobApplicationController {
         ...application,
         cvFile: application.cvFile ? {
           ...application.cvFile,
-          fileSize: Number(application.cvFile.fileSize)
+          fileSize: Number(application.cvFile.fileSize),
+          fileUrl: FileUtil.getFileUrl(application.cvFile.filePath)
         } : null
       };
 
@@ -189,7 +191,8 @@ export class JobApplicationController {
         ...app,
         cvFile: app.cvFile ? {
           ...app.cvFile,
-          fileSize: Number(app.cvFile.fileSize)
+          fileSize: Number(app.cvFile.fileSize),
+          fileUrl: FileUtil.getFileUrl(app.cvFile.filePath)
         } : null
       }));
 
