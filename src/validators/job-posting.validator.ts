@@ -221,7 +221,7 @@ export const updateJobPostingSchema = z.object({
 
 export const createJobApplicationSchema = z.object({
   body: z.object({
-    jobId: z
+    jobId: z.coerce
       .number()
       .int()
       .positive(),
@@ -245,12 +245,12 @@ export const createJobApplicationSchema = z.object({
       .string()
       .max(255)
       .optional(),
-    yearsOfExperience: z
+    yearsOfExperience: z.coerce
       .number()
       .int()
       .min(0)
       .optional(),
-    expectedSalary: z
+    expectedSalary: z.coerce
       .number()
       .int()
       .min(0)
@@ -266,7 +266,7 @@ export const createJobApplicationSchema = z.object({
       .optional()
       .or(z.date().optional()),
     coverLetter: z.string().optional(),
-    cvFileId: z
+    cvFileId: z.coerce
       .number()
       .int()
       .positive()

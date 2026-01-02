@@ -10,11 +10,15 @@ import { ResponseUtil } from "../utils/response";
 export const validate = (schema: ZodTypeAny) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      await schema.parseAsync({
+      const validatedData = await schema.parseAsync({
         body: req.body,
         query: req.query,
         params: req.params
-      });
+      }) as any;
+
+      req.body = validatedData.body;
+      req.query = validatedData.query;
+      req.params = validatedData.params;
       next();
     } catch (error) {
       if (error instanceof ZodError) {
