@@ -152,13 +152,36 @@ export class FileUtil {
     }
 
     // Get the base URL from environment or use default
+    // Priorities: BASE_URL (explicit) > API_URL (fallback) > localhost
     const baseUrl =
-      process.env.BASE_URL || process.env.API_URL || "http://localhost:3000";
+      process.env.BASE_URL || process.env.API_URL || "http://localhost:8080";
 
-    // Ensure filePath starts with /
-    const normalizedPath = filePath.startsWith("/") ? filePath : `/${filePath}`;
+    // Normalize path to ensure it starts with /uploads/
+    let relativePath = filePath;
+
+    // If it is an absolute path (starts with /), try to make it relative
+    if (path.isAbsolute(filePath) || filePath.includes("uploads")) {
+      // Check if it matches our upload directory structure
+      const uploadDir = "uploads";
+      const index = filePath.indexOf(uploadDir);
+
+      if (index !== -1) {
+        // Extract everything after uploads/ (including uploads/)
+        relativePath = filePath.substring(index); // "uploads/2026/..."
+      } else {
+        // Fallback: assume it's just the filename or relative path
+        relativePath = `uploads/${path.basename(filePath)}`;
+      }
+    } else if (!filePath.startsWith("uploads/")) {
+      relativePath = `uploads/${filePath}`;
+    }
+
+    // Ensure it starts with /
+    if (!relativePath.startsWith("/")) {
+      relativePath = `/${relativePath}`;
+    }
 
     // Combine base URL with file path
-    return `${baseUrl}${normalizedPath}`;
+    return `${baseUrl}${relativePath}`;
   }
 }
