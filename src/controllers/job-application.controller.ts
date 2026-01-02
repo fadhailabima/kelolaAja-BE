@@ -90,10 +90,19 @@ export class JobApplicationController {
 
       const application = await jobApplicationService.updateJobApplication(applicationId, data);
 
+      // Serialize BigInt
+      const serializedApplication = {
+        ...application,
+        cvFile: application.cvFile ? {
+          ...application.cvFile,
+          fileSize: Number(application.cvFile.fileSize)
+        } : null
+      };
+
       res.json({
         success: true,
         message: "Application updated successfully",
-        data: application,
+        data: serializedApplication,
       });
     } catch (error) {
       next(error);
