@@ -153,8 +153,18 @@ export class FileUtil {
 
     // Get the base URL from environment or use default
     // Priorities: BASE_URL (explicit) > API_URL (fallback) > localhost
-    const baseUrl =
+    let baseUrl =
       process.env.BASE_URL || process.env.API_URL || "http://localhost:8080";
+
+    // Ensure baseUrl has protocol
+    if (!baseUrl.startsWith("http")) {
+      baseUrl = `https://${baseUrl}`;
+    }
+
+    // Remove trailing slash from baseUrl if present
+    if (baseUrl.endsWith("/")) {
+      baseUrl = baseUrl.slice(0, -1);
+    }
 
     // Normalize path to ensure it starts with /uploads/
     let relativePath = filePath;
